@@ -1,0 +1,82 @@
+import ACTIONS, {
+	LOGIN,
+	LIKE,
+	UNLIKE,
+	CONNECTIONS,
+	CONNECTION_STREAM,
+	COMMENT,
+	DELETE_COMMENT,
+	DELETE_POST,
+	CREATE_POST,
+} from './constants';
+
+const api = async (action: ACTIONS, jwt: string, body = {}, id = '') => {
+	const req = {
+		method: '',
+		body: JSON.stringify(body),
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: '',
+		},
+	};
+	let uri = '';
+
+	switch (action) {
+		case ACTIONS.login:
+			uri = LOGIN;
+			req.method = 'POST';
+			break;
+		case ACTIONS.connections:
+			uri = CONNECTIONS;
+			req.method = 'GET';
+			req.headers.Authorization = `Bearer ${jwt}`;
+			break;
+		case ACTIONS.like:
+			uri = LIKE;
+			req.method = 'POST';
+			req.headers.Authorization = `Bearer ${jwt}`;
+			break;
+		case ACTIONS.unlike:
+			uri = UNLIKE(id);
+			req.method = 'DELETE';
+			req.headers.Authorization = `Bearer ${jwt}`;
+			break;
+		case ACTIONS.connectionStream:
+			uri = CONNECTION_STREAM(id);
+			req.method = 'GET';
+			req.headers.Authorization = `Bearer ${jwt}`;
+			delete req.body;
+			break;
+		case ACTIONS.comment:
+			uri = COMMENT;
+			req.method = 'POST';
+			req.headers.Authorization = `Bearer ${jwt}`;
+			break;
+		case ACTIONS.deleteComment:
+			uri = DELETE_COMMENT(id);
+			req.method = 'DELETE';
+			req.headers.Authorization = `Bearer ${jwt}`;
+			delete req.body;
+			break;
+		case ACTIONS.deletePost:
+			uri = DELETE_POST(id);
+			req.method = 'DELETE';
+			req.headers.Authorization = `Bearer ${jwt}`;
+			delete req.body;
+			break;
+		case ACTIONS.createPost:
+			uri = CREATE_POST;
+			req.method = 'POST';
+			req.headers.Authorization = `Bearer ${jwt}`;
+			break;
+	}
+
+	return await fetch(uri, req)
+		.catch(err => {
+			console.log(err);
+			throw new Error();
+		})
+		.then(response => response.json());
+};
+
+export default api;
