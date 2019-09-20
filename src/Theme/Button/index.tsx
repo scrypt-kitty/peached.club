@@ -14,16 +14,16 @@ const ButtonLink = styled.a`
 `;
 
 const ButtonStyle = styled.button<{ color?: string; lg?: boolean }>`
-	background: ${props => props.color || 'pink'};
-	border: 1px solid ${props => props.color || 'pink'};
+	background: ${props => props.color || '#fe4f72'};
+	border: 1px solid ${props => props.color || '#fe4f72'};
 	padding: 0.5rem 1rem;
 	border-radius: 0.25rem;
 	text-align: center;
 	color: white;
 	font-size: ${props => (props.lg ? '1.1rem' : '1rem')};
 	:hover {
-		background: #e197a4;
-		border-color: #e197a4;
+		background: #fe4f72;
+		border-color: #fe4f72;
 	}
 	transition: 0.25s all ease;
 `;

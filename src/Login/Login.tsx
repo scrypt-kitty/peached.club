@@ -10,7 +10,7 @@ import {
 	Button,
 	ButtonCenter,
 } from './style';
-import { LoginResponse, LoginStream } from '../api/interfaces';
+import { LoginResponse } from '../api/interfaces';
 import { LOGIN } from '../api/constants';
 enum loginErrors {
 	OK,
@@ -38,7 +38,7 @@ const Login: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
 			peachContext.setCurUser(JSON.parse(user));
 			history.push('/feed');
 		}
-	}, []);
+	}, [peachContext]);
 
 	const buttonOnClick = () => {
 		if (email.indexOf('@') < 1 || email.length < 1 || pw.length < 1) {

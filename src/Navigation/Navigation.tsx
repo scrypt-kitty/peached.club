@@ -63,7 +63,7 @@ const Navigation = (props: {
 				</AppLinks>
 				{props.curFeed && curFeedIndex !== -1 ? (
 					<FeedControls>
-						{curFeedIndex > 0 && peachFeedIds.length > 0 ? (
+						{showLeftArrow ? (
 							<Link>
 								<RouterLink
 									to={`/friend/${

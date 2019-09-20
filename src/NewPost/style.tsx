@@ -5,7 +5,7 @@ export const NewPostButton = styled.div`
 	position: fixed;
 	bottom: 2rem;
 	right: 2rem;
-	background: pink;
+	background: #fe4f72;
 	padding: 1.5rem;
 	border-radius: 50%;
 	width: 1rem;
