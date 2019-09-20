@@ -54,20 +54,17 @@ export const Image = styled.img`
 	display: block;
 	margin-bottom: 1rem;
 	@media screen and (max-width: 1000px) {
-		max-width: 80%;
-	}
-	@media screen and (max-width: 500px) {
 		max-width: 100%;
 	}
 `;
 
 export const LinkText = styled.a`
 	text-decoration: none;
-	color: teal;
+	color: #fe4f72;
 
 	:visited {
 		text-decoration: none;
-		color: teal;
+		color: #fe4f72;
 	}
 
 	> a:first-child {
