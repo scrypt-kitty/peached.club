@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { Input, AddCommentContainer, Button } from './style';
+import { Input, AddCommentContainer, ButtonStyled } from './style';
 
 interface AddCommentProps {
 	onSubmit: (txt: string) => void;
@@ -16,8 +16,7 @@ const AddComment: React.FC<AddCommentProps> = ({ onSubmit, darkMode }) => {
 				ref={newCommentRef}
 				placeholder='Write a comment...'
 			/>
-			<Button
-				color='purple'
+			<ButtonStyled
 				onClick={() => {
 					if (newCommentRef && newCommentRef.current) {
 						onSubmit(newCommentRef.current.value);
@@ -27,7 +26,7 @@ const AddComment: React.FC<AddCommentProps> = ({ onSubmit, darkMode }) => {
 				link='#'
 			>
 				Submit
-			</Button>
+			</ButtonStyled>
 		</AddCommentContainer>
 	);
 };

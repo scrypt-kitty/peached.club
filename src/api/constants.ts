@@ -15,6 +15,8 @@ export const CREATE_POST = PROXY + 'https://v1.peachapi.com/post';
 export const MARK_FEED_READ = (id: string) =>
 	`${PROXY}https://v1.peachapi.com/stream/id/${id}/read`;
 export const ACTIVITY_FEED = PROXY + 'https://v1.peachapi.com/activity';
+export const FRIENDS_OF_FRIENDS = (username: string) =>
+	`${PROXY}https://v1.peachapi.com/stream/n/${username}/connections`;
 
 enum ACTIONS {
 	login,
@@ -28,6 +30,7 @@ enum ACTIONS {
 	createPost,
 	markFeedRead,
 	getActivityFeed,
+	getFriendsOfFriends,
 }
 
 export default ACTIONS;

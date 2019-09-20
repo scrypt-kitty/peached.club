@@ -10,6 +10,7 @@ import ACTIONS, {
 	CREATE_POST,
 	MARK_FEED_READ,
 	ACTIVITY_FEED,
+	FRIENDS_OF_FRIENDS,
 } from './constants';
 
 const api = async (action: ACTIONS, jwt: string, body = {}, id = '') => {
@@ -82,6 +83,12 @@ const api = async (action: ACTIONS, jwt: string, body = {}, id = '') => {
 			break;
 		case ACTIONS.getActivityFeed:
 			uri = ACTIVITY_FEED;
+			req.method = 'GET';
+			req.headers.Authorization = `Bearer ${jwt}`;
+			delete req.body;
+			break;
+		case ACTIONS.getFriendsOfFriends:
+			uri = FRIENDS_OF_FRIENDS(id);
 			req.method = 'GET';
 			req.headers.Authorization = `Bearer ${jwt}`;
 			delete req.body;

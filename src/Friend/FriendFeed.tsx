@@ -19,6 +19,8 @@ import {
 	User,
 	Comment,
 	CommentResponse,
+	MutualFriend,
+	FriendsOfFriendsResponse,
 } from '../api/interfaces';
 import ACTIONS, { LIKE, UNLIKE } from '../api/constants';
 import {
@@ -80,6 +82,7 @@ interface FriendFeedProps extends Post {
 	deletePost: (id: string) => void;
 	author: string;
 	darkMode: boolean;
+	otherFriends: MutualFriend[];
 }
 
 export const FriendFeedContainer = (props: FriendFeedProps) => {
@@ -140,7 +143,6 @@ export const FriendFeedContainer = (props: FriendFeedProps) => {
 			.then(response => response.json())
 			.catch(err => console.log(err))
 			.then((response: LikePostResponse) => {
-				console.log(response);
 				if (response.error) {
 					console.log('whoops');
 					return;
@@ -251,6 +253,7 @@ export const FriendFeedContainer = (props: FriendFeedProps) => {
 					updateComments={updateComments}
 					requester={props.requester}
 					deleteComment={deleteComment}
+					mutualFriends={props.otherFriends}
 				/>
 			) : null}
 		</PostWrapper>
@@ -275,6 +278,7 @@ const FriendFeed = (
 		peachFeed ? peachFeed[props.match.params['id']] || null : null
 	);
 	const [curFeedId, setCurFeedId] = useState<string>('');
+	const [otherFriends, setOtherFriends] = useState<MutualFriend[]>([]);
 
 	useEffect(() => {
 		if (!jwt || !peachFeed) {
@@ -292,6 +296,24 @@ const FriendFeed = (
 						resp.data.posts = resp.data.posts.reverse();
 						setCurUserProfile(resp.data);
 						setPosts(resp.data.posts);
+						api(
+							ACTIONS.getFriendsOfFriends,
+							jwt,
+							{},
+							resp.data.name
+						).then(
+							(response: { data: FriendsOfFriendsResponse }) => {
+								if (
+									response.data &&
+									response.data.connections
+								) {
+									setOtherFriends(response.data.connections);
+									console.log(response.data.connections);
+								} else {
+									console.log('ugh');
+								}
+							}
+						);
 					}
 
 					if (curUser) {
@@ -390,6 +412,7 @@ const FriendFeed = (
 									deletePost={deletePost}
 									author={viewingUser.id}
 									darkMode={peachContext.darkMode}
+									otherFriends={otherFriends}
 								/>
 							))
 						) : (

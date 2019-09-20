@@ -9,7 +9,7 @@ import {
 	MiniMenu,
 } from '../Friend/style';
 
-import { Button as Butt } from '../Login/style';
+import Button from '../Theme/Button';
 import { ModalContainer, ModalBackdrop } from '../Theme/Modal';
 import { DisplayName3 } from '../Theme/Profile';
 
@@ -53,8 +53,12 @@ export const DeletePrompt = (props: DeletePromptProps) => (
 		<DeletePromptContainer darkMode={props.darkMode}>
 			{props.children}
 			<DeleteOptions>
-				<Button onClick={() => props.onDelete()}>Delete</Button>
-				<Button onClick={() => props.onCancel()}>Cancel</Button>
+				<ButtonStyled onClick={() => props.onDelete()}>
+					Delete
+				</ButtonStyled>
+				<ButtonStyled onClick={() => props.onCancel()}>
+					Cancel
+				</ButtonStyled>
 			</DeleteOptions>
 		</DeletePromptContainer>
 	</ModalBackdrop>
@@ -114,7 +118,7 @@ export const Input = styled.textarea<{ darkMode: boolean }>`
 		Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 `;
 
-export const Button = styled(Butt)`
+export const ButtonStyled = styled(Button)`
 	flex: 1;
 `;
 

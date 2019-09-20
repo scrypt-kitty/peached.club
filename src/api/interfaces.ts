@@ -202,3 +202,13 @@ export interface ActivityResponse {
 	unreadActivityItemCount: number;
 	lastRead: number;
 }
+
+export interface MutualFriend extends CurUser {
+	youFollow: boolean;
+	followsYou: boolean;
+	lastRead: number;
+}
+
+export interface FriendsOfFriendsResponse {
+	connections: MutualFriend[];
+}
