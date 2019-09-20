@@ -116,6 +116,7 @@ export const Input = styled.textarea<{ darkMode: boolean }>`
 	border: 1px solid #cacaca;
 	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
 		Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+	font-size: 1rem;
 `;
 
 export const ButtonStyled = styled(Button)`
@@ -129,15 +130,22 @@ const AvatarStyled = styled(Avatar)`
 		width: 100px;
 	}
 
-	@media screen and (max-width: 500px) {
+	@media screen and (max-width: 800px) {
 		> img {
 			width: 50px;
 			height: auto;
 		}
+		margin-top: 0.5rem;
 	}
 `;
 
 const ProfileLink = styled.span`
+	@media screen and (max-width: 800px) {
+		> a > h3 {
+			margin-top: 0.5rem;
+		}
+	}
+
 	> a {
 		text-decoration: none;
 		color: unset;
@@ -147,6 +155,14 @@ const ProfileLink = styled.span`
 		:hover {
 			text-decoration: none;
 		}
+	}
+
+	> a > h3 {
+		border-radius: 0.25rem;
+	}
+
+	:hover > a > h3 {
+		background: #cacaca;
 	}
 `;
 

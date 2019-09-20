@@ -97,11 +97,13 @@ const Login: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
 					onChange={e => setEmail(e.target.value)}
 					key='email'
 					type='text'
+					placeholder='email'
 				/>
 				<AuthInput
 					onChange={e => setPw(e.target.value)}
 					key='password'
 					type='password'
+					placeholder='password'
 				/>
 				<ButtonCenter>
 					<Button onClick={buttonOnClick} link='#' lg>

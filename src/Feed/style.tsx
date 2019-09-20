@@ -51,6 +51,7 @@ export const FeedPostWrapper = styled.div<{
 		padding: 1rem 1.5rem;
 	}
 	transition: 0.25s border ease-in;
+	word-wrap: break-word;
 `;
 
 export const ProfileLink = styled.a`

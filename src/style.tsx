@@ -8,5 +8,6 @@ export const GlobalStyle = createGlobalStyle<{ darkMode: boolean }>`
         height: 100%;
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 		background: ${props => (props.darkMode ? 'black' : '#fff0e6')};
+		transition: 0.25s all ease;
     }
 `;

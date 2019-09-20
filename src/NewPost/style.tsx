@@ -28,8 +28,12 @@ export const TextArea = styled(OldInput)<{ darkMode: boolean }>`
 	padding: 0.5rem;
 	background: ${props => (props.darkMode ? '#262628' : 'white')};
 	color: ${props => (props.darkMode ? 'white' : '#262628')};
+	font-size: 1rem;
+	margin-bottom: 1rem;
 `;
 
-export const Header = styled.h2`
+export const Header = styled.h2<{ darkMode: boolean }>`
 	margin-bottom: 1rem;
+	margin-top: 0;
+	color: ${props => (props.darkMode ? 'white' : 'black')};
 `;

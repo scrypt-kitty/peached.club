@@ -10,6 +10,9 @@ export const FeedPostWrapperStyled = styled(FeedPostWrapper)`
 
 export const Title = styled.h1<{ darkMode: boolean }>`
 	color: ${props => (props.darkMode ? 'white' : 'black')};
+	@media screen and (max-width: 700px) {
+		margin: 2.5rem 1rem 1rem;
+	}
 `;
 
 export const PostPreview = styled.p`

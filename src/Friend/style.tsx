@@ -115,6 +115,10 @@ export const ProfileHeaderContainer = styled.div<{ darkMode: boolean }>`
 	display: flex;
 	margin-bottom: 1rem;
 	color: ${props => (props.darkMode ? 'white' : 'black')};
+
+	@media screen and (max-width: 700px) {
+		margin: 3rem 1rem 1rem;
+	}
 `;
 
 export const Avatar = styled.div`

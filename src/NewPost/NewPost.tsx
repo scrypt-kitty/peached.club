@@ -68,7 +68,7 @@ const NewPost = (props: {}) => {
 					darkMode={darkMode}
 					onKeyDown={() => setShowComposer(false)}
 				>
-					<Header>Create a new post</Header>
+					<Header darkMode={darkMode}>Create a new post</Header>
 					<ComposerForm darkMode={darkMode} onSubmit={outputPost} />
 				</Modal>
 			) : null}

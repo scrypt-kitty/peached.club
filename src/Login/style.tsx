@@ -10,14 +10,16 @@ export const Moat = styled.div`
 `;
 
 export const Heading = styled.h1`
-	margin-top: 0;
+	margin: 0 0 1rem;
 	text-align: center;
 `;
 
 export const Castle = styled.div`
 	background: #fff0e6;
-	/* border-radius: 5px; */
-	/* padding: 1rem; */
+
+	@media screen and (max-width: 800px) {
+		width: 70%;
+	}
 `;
 
 export const AuthInput = styled.input`
@@ -26,6 +28,8 @@ export const AuthInput = styled.input`
 	margin-bottom: 0.5rem;
 	border-radius: 5px;
 	border: 1px solid #cacaca;
+	font-size: 1rem;
+	width: 100%;
 `;
 
 export const DangerTxt = styled.p`
@@ -58,6 +62,7 @@ const ButtonStyle = styled.button<{ color?: string; lg?: boolean }>`
 		border-color: #e197a4;
 	}
 	transition: 0.25s all ease;
+	margin-top: 0.5rem;
 `;
 
 interface ButtonProps {
