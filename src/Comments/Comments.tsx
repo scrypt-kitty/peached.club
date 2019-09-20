@@ -3,9 +3,9 @@ import { Comment as CommentType, User } from '../api/interfaces';
 import { PeachContext } from '../PeachContext';
 
 import AddComment from './AddComment';
-// import { Modal, Comment, AllComments } from './style';
 import { Comment, AllComments } from './style';
 import Modal from '../Theme/Modal';
+import Loading from '../Loading';
 
 interface CommentsProps {
 	comments?: CommentType[];
@@ -64,25 +64,31 @@ const Comments: React.FC<CommentsProps> = ({
 	}, [peachContext.peachFeed, comments]);
 
 	return (
-		<Modal onKeyDown={onDismissComments}>
+		<Modal darkMode={peachContext.darkMode} onKeyDown={onDismissComments}>
 			<>
 				<AllComments>
-					{commentsLoading
-						? 'loadin'
-						: comments.map(c => (
-								<Comment
-									isRequester={
-										requester !== null &&
-										c.author.id === requester.id
-									}
-									key={c.id}
-									avatarSrc={processedComments[c.author.id]}
-									{...c}
-									deleteComment={deleteComment}
-								/>
-						  ))}
+					{commentsLoading ? (
+						<Loading />
+					) : (
+						comments.map(c => (
+							<Comment
+								darkMode={peachContext.darkMode}
+								isRequester={
+									requester !== null &&
+									c.author.id === requester.id
+								}
+								key={c.id}
+								avatarSrc={processedComments[c.author.id]}
+								{...c}
+								deleteComment={deleteComment}
+							/>
+						))
+					)}
 				</AllComments>
-				<AddComment onSubmit={updateComments} />
+				<AddComment
+					darkMode={peachContext.darkMode}
+					onSubmit={updateComments}
+				/>
 			</>
 		</Modal>
 	);

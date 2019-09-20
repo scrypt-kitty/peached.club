@@ -1,16 +1,21 @@
-import React, { useState, useRef } from 'react';
+import React, { useRef } from 'react';
 import { Input, AddCommentContainer, Button } from './style';
 
 interface AddCommentProps {
 	onSubmit: (txt: string) => void;
+	darkMode: boolean;
 }
 
-const AddComment: React.FC<AddCommentProps> = ({ onSubmit }) => {
+const AddComment: React.FC<AddCommentProps> = ({ onSubmit, darkMode }) => {
 	const newCommentRef = useRef<HTMLTextAreaElement>(null);
 
 	return (
-		<AddCommentContainer>
-			<Input ref={newCommentRef} placeholder='Write a comment...' />
+		<AddCommentContainer darkMode={darkMode}>
+			<Input
+				darkMode={darkMode}
+				ref={newCommentRef}
+				placeholder='Write a comment...'
+			/>
 			<Button
 				color='purple'
 				onClick={() => {

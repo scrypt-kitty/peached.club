@@ -8,6 +8,10 @@ interface PeachContextTypes {
 	setPeachFeed: (peachFeed: PeachFeed) => void;
 	curUser: LoginStream | null;
 	setCurUser: (newUser: LoginStream) => void;
+	curFeedIndex: number;
+	setCurFeedIndex: (newIndex: number) => void;
+	darkMode: boolean;
+	toggleDarkMode: () => void;
 }
 
 const defaults = {
@@ -17,6 +21,18 @@ const defaults = {
 	setPeachFeed: (peachFeed: PeachFeed) => {},
 	curUser: null,
 	setCurUser: (newUser: LoginStream) => {},
+	curFeedIndex: 0,
+	setCurFeedIndex: (newIndex: number) => {},
+	darkMode: true,
+	toggleDarkMode: () => {},
 };
+
+export interface GlobalContextProps {
+	jwt: string;
+	peachFeed: PeachFeed | null;
+	curUser: LoginStream | null;
+	setCurFeedIndex: (newIndex: number) => void;
+	setPeachFeed: (peachFeed: PeachFeed) => void;
+}
 
 export const PeachContext = React.createContext<PeachContextTypes>(defaults);

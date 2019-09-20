@@ -1,11 +1,11 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { withRouter, RouteComponentProps } from 'react-router';
+import { withRouter, RouteComponentProps, Redirect } from 'react-router';
 import api from '../api';
 import Loading from '../Loading';
 
 import Comments from '../Comments';
 
-import { DisableBodyScroll, DeletePrompt } from '../Comments/style';
+import { DeletePrompt } from '../Comments/style';
 import DeleteIcon from '../Comments/DeleteIcon.svg';
 
 import NewPost from '../NewPost';
@@ -14,7 +14,6 @@ import { Page } from '../Theme/Layout';
 import {
 	TextMessage,
 	ImageMessage,
-	LinkMessage,
 	Post,
 	LikePostResponse,
 	User,
@@ -40,15 +39,17 @@ import {
 } from './style';
 import Liked from './Liked.svg';
 import Unliked from './Unliked.svg';
-import LikeHover from './Unliked.svg';
+import UnlikedDarkMode from './UnlikedDarkMode.svg';
+// import LikeHover from './Unliked.svg';
 import CommentIcon from './CommentIcon.svg';
+import CommentIconDarkMode from './CommentIconDarkMode.svg';
 import LinkIcon from './LinkIcon.svg';
-import { PeachContext } from '../PeachContext';
+import LinkIconDarkMode from './LinkIconDarkMode.svg';
+import { PeachContext, GlobalContextProps } from '../PeachContext';
+
+import Navigation from '../Navigation';
 
 /*eslint-disable */
-function isLink(object: any): object is LinkMessage {
-	return 'imageURL' in object;
-}
 function isText(object: any): object is TextMessage {
 	return 'text' in object;
 }
@@ -67,14 +68,18 @@ const addNewlines = (txt: string) =>
 				</span>
 		  ));
 
-const LikeButton = (props: { liked: boolean }) => (
-	<img src={props.liked ? Liked : Unliked} alt='Like' />
+const LikeButton = (props: { liked: boolean; darkMode: boolean }) => (
+	<img
+		src={props.liked ? Liked : props.darkMode ? UnlikedDarkMode : Unliked}
+		alt='Like'
+	/>
 );
 
 interface FriendFeedProps extends Post {
 	requester: User;
 	deletePost: (id: string) => void;
 	author: string;
+	darkMode: boolean;
 }
 
 export const FriendFeedContainer = (props: FriendFeedProps) => {
@@ -103,7 +108,11 @@ export const FriendFeedContainer = (props: FriendFeedProps) => {
 			return (
 				<div key={msgKey}>
 					<LinkText href={obj.url}>
-						<img src={LinkIcon} alt='Link' /> {obj.title}
+						<img
+							src={props.darkMode ? LinkIconDarkMode : LinkIcon}
+							alt='Link'
+						/>{' '}
+						{obj.title}
 						<LinkInfo>
 							<i>{obj.description}</i>
 							<Image
@@ -179,7 +188,6 @@ export const FriendFeedContainer = (props: FriendFeedProps) => {
 		api(ACTIONS.deleteComment, peachContext.jwt, {}, id).then(
 			(response: { success: number }) => {
 				if (response.success === 1) {
-					const oldComments = comments;
 					setComments(comments.filter(c => c.id !== id));
 				}
 			}
@@ -187,7 +195,7 @@ export const FriendFeedContainer = (props: FriendFeedProps) => {
 	};
 
 	return (
-		<PostWrapper>
+		<PostWrapper darkMode={peachContext.darkMode}>
 			<>
 				{props.requester.id === props.author ? (
 					<>
@@ -199,6 +207,7 @@ export const FriendFeedContainer = (props: FriendFeedProps) => {
 						</MiniMenu>
 						{deletePromptShowing ? (
 							<DeletePrompt
+								darkMode={peachContext.darkMode}
 								onDelete={() => props.deletePost(props.id)}
 								onCancel={() => setDeletePromptShowing(false)}
 							>
@@ -210,12 +219,28 @@ export const FriendFeedContainer = (props: FriendFeedProps) => {
 				<FriendPostContent>{msgs}</FriendPostContent>
 			</>
 			<PostInteraction>
-				<InteractionArea onClick={e => onClickLike()}>
-					<LikeButton liked={liked} />{' '}
+				<InteractionArea
+					onClick={e => onClickLike()}
+					darkMode={peachContext.darkMode}
+				>
+					<LikeButton
+						liked={liked}
+						darkMode={peachContext.darkMode}
+					/>{' '}
 					<InteractionInfo>{likeCount}</InteractionInfo>
 				</InteractionArea>
-				<InteractionArea onClick={e => onClickComments()}>
-					<img src={CommentIcon} alt='Comment' />
+				<InteractionArea
+					onClick={e => onClickComments()}
+					darkMode={peachContext.darkMode}
+				>
+					<img
+						src={
+							peachContext.darkMode
+								? CommentIconDarkMode
+								: CommentIcon
+						}
+						alt='Comment'
+					/>
 					<InteractionInfo>{comments.length}</InteractionInfo>
 				</InteractionArea>
 			</PostInteraction>
@@ -238,15 +263,23 @@ const EmptyState = () => (
 	</EmptyStateWrapper>
 );
 
-const FriendFeed = (props: RouteComponentProps<{ id: string }>) => {
-	const [viewingUser, setCurUserProfile] = useState<User | null>(null);
+const FriendFeed = (
+	props: RouteComponentProps<{ id: string }> & GlobalContextProps
+) => {
+	const peachContext = useContext(PeachContext);
 	const [posts, setPosts] = useState<Post[]>([]);
 	const [requester, setRequester] = useState<User | null>(null);
+	const { jwt, curUser, peachFeed } = props;
 
-	const jwt = useContext(PeachContext).jwt;
-	const curUser = useContext(PeachContext).curUser;
+	const [viewingUser, setCurUserProfile] = useState<User | null>(
+		peachFeed ? peachFeed[props.match.params['id']] || null : null
+	);
+	const [curFeedId, setCurFeedId] = useState<string>('');
 
 	useEffect(() => {
+		if (!jwt || !peachFeed) {
+			return;
+		}
 		const getUserProfile = async () => {
 			try {
 				api(
@@ -265,7 +298,6 @@ const FriendFeed = (props: RouteComponentProps<{ id: string }>) => {
 						if (resp.data.id === curUser.id) {
 							setRequester(resp.data);
 						} else {
-							console.log('doesnt match');
 							api(
 								ACTIONS.connectionStream,
 								jwt,
@@ -276,6 +308,8 @@ const FriendFeed = (props: RouteComponentProps<{ id: string }>) => {
 									setRequester(resp.data);
 								}
 							});
+
+							setCurFeedId(props.match.params['id']);
 						}
 					} else {
 						console.log('cant set curuser');
@@ -287,7 +321,25 @@ const FriendFeed = (props: RouteComponentProps<{ id: string }>) => {
 		};
 
 		getUserProfile();
-	}, [jwt, props.match.params, curUser]);
+	}, [props.match.params]);
+
+	useEffect(() => {
+		try {
+			if (curUser !== null) {
+				const markRead = async () => {
+					api(
+						ACTIONS.markFeedRead,
+						jwt,
+						{},
+						props.match.params['id']
+					);
+				};
+				markRead();
+			}
+		} catch (_error) {
+			alert('cant mark as read!');
+		}
+	}, [curUser, jwt]);
 
 	const deletePost = (id: string) => {
 		api(ACTIONS.deletePost, jwt, {}, id).then(
@@ -299,47 +351,57 @@ const FriendFeed = (props: RouteComponentProps<{ id: string }>) => {
 		);
 	};
 
+	if (!jwt || !peachFeed) {
+		return <Redirect push to='/feed' />;
+	}
+
 	return (
-		<Page>
-			{viewingUser && requester ? (
-				<>
-					<ProfileHeaderContainer>
-						<Avatar>
-							<img
-								src={
-									viewingUser.avatarSrc ||
-									'https://i.imgur.com/J9tsyuW.png'
-								}
-								alt={`${viewingUser.name}'s avatar`}
-							/>
-						</Avatar>
-						<ProfileHeaderText>
-							<h2>{viewingUser.displayName}</h2>
-							<ProfileHeaderHandle>
-								@{viewingUser.name}
-							</ProfileHeaderHandle>
-							<p>{viewingUser.bio}</p>
-						</ProfileHeaderText>
-					</ProfileHeaderContainer>
-					{posts.length > 0 ? (
-						posts.map(post => (
-							<FriendFeedContainer
-								{...post}
-								key={post.id}
-								requester={requester}
-								deletePost={deletePost}
-								author={viewingUser.id}
-							/>
-						))
-					) : (
-						<EmptyState />
-					)}
-					<NewPost />
-				</>
-			) : (
-				<Loading />
-			)}
-		</Page>
+		<>
+			<Navigation curFeed={curFeedId} peachFeed={peachFeed} />
+			<Page>
+				{viewingUser && requester ? (
+					<>
+						<ProfileHeaderContainer
+							darkMode={peachContext.darkMode}
+						>
+							<Avatar>
+								<img
+									src={
+										viewingUser.avatarSrc ||
+										'https://i.imgur.com/J9tsyuW.png'
+									}
+									alt={`${viewingUser.name}'s avatar`}
+								/>
+							</Avatar>
+							<ProfileHeaderText>
+								<h2>{viewingUser.displayName}</h2>
+								<ProfileHeaderHandle>
+									@{viewingUser.name}
+								</ProfileHeaderHandle>
+								<p>{viewingUser.bio}</p>
+							</ProfileHeaderText>
+						</ProfileHeaderContainer>
+						{posts.length > 0 ? (
+							posts.map(post => (
+								<FriendFeedContainer
+									{...post}
+									key={post.id}
+									requester={requester}
+									deletePost={deletePost}
+									author={viewingUser.id}
+									darkMode={peachContext.darkMode}
+								/>
+							))
+						) : (
+							<EmptyState />
+						)}
+						<NewPost />
+					</>
+				) : (
+					<Loading />
+				)}
+			</Page>
+		</>
 	);
 };
 

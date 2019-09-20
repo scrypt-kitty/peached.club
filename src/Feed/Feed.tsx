@@ -1,24 +1,25 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { RouteComponentProps } from 'react-router';
 
-import { PeachContext } from '../PeachContext';
+import Navigation from '../Navigation';
+import Loading from '../Loading';
+
+import { PeachContext, GlobalContextProps } from '../PeachContext';
 import {
 	Connections,
 	PeachFeed,
 	TextMessage,
 	LinkMessage,
 	ImageMessage,
-	isText,
-	isImage,
-	isLink,
 } from '../api/interfaces';
 import { CONNECTIONS } from '../api/constants';
 
 import FeedPreview from './style';
 import { Page } from '../Theme/Layout';
+import { createPostPreview } from '../utils';
 
-const Feed = (props: RouteComponentProps) => {
-	const { history } = props;
+const Feed = (props: RouteComponentProps & GlobalContextProps) => {
+	const { jwt, curUser, setCurFeedIndex, history, setPeachFeed } = props;
 	const [connections, setConnections] = useState<
 		Connections['data']['connections'] | null
 	>(null);
@@ -29,19 +30,19 @@ const Feed = (props: RouteComponentProps) => {
 				method: 'GET',
 				headers: {
 					'Content-Type': 'application/json',
-					Authorization: `Bearer ${peachContext.jwt}`,
+					Authorization: `Bearer ${jwt}`,
 				},
 			})
 				.then(response => response.json())
 				.then((response: Connections) => {
 					if (response.data) {
 						setConnections(response.data.connections);
-						const peachFeed: PeachFeed = {};
+						const newPeachFeed: PeachFeed = {};
 						for (const user of response.data.connections) {
-							peachFeed[user.id] = user;
-							peachFeed[user.id].posts = user.posts.reverse();
+							newPeachFeed[user.id] = user;
+							newPeachFeed[user.id].posts = user.posts.reverse();
 						}
-						peachContext.setPeachFeed(peachFeed);
+						setPeachFeed(newPeachFeed);
 					}
 				});
 		};
@@ -52,23 +53,21 @@ const Feed = (props: RouteComponentProps) => {
 		history.push(`/friend/${id}`);
 	};
 
-	const createPostPreview = (
-		post: TextMessage | ImageMessage | LinkMessage
-	) => {
-		if (isText(post)) {
-			if (post.text.length > 300) {
-				return post.text.slice(0, 300) + '...';
-			} else {
-				return post.text;
-			}
-		} else if (isImage(post)) return 'Image post';
-		else return 'Link post';
-	};
+	// return (
+	// <>
+	// <Navigation />
+	// <Page>
+	// <Loading />
+	// </Page>
+	// </>
+	// );
 
 	return (
-		<Page>
-			{connections
-				? connections.map(user => (
+		<>
+			<Navigation />
+			<Page>
+				{connections ? (
+					connections.map(user => (
 						<FeedPreview
 							key={user.id}
 							avatarSrc={user.avatarSrc}
@@ -82,10 +81,14 @@ const Feed = (props: RouteComponentProps) => {
 									: ''
 							}
 							isUnread={user.unreadPostCount > 0}
+							darkMode={peachContext.darkMode}
 						/>
-				  ))
-				: null}
-		</Page>
+					))
+				) : (
+					<Loading />
+				)}
+			</Page>
+		</>
 	);
 };
 

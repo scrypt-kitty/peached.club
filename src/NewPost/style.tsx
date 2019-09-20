@@ -23,9 +23,11 @@ export const NewPostButton = styled.div`
 	}
 `;
 
-export const TextArea = styled(OldInput)`
+export const TextArea = styled(OldInput)<{ darkMode: boolean }>`
 	margin-right: 0;
 	padding: 0.5rem;
+	background: ${props => (props.darkMode ? '#262628' : 'white')};
+	color: ${props => (props.darkMode ? 'white' : '#262628')};
 `;
 
 export const Header = styled.h2`

@@ -18,14 +18,24 @@ export const MiniMenu = styled.div<MiniMenuProps>`
 	}
 `;
 
-export const PostWrapper = styled.div`
-	background: white;
-	padding: 2rem 3rem;
+export const PostWrapper = styled.div<{ darkMode?: boolean }>`
+	background: ${props => (props.darkMode ? '#262628' : 'white')};
+	color: ${props => (props.darkMode ? 'white' : 'black')}
+	padding: 2rem 3rem 0 3rem;
+	:last-child {
+		padding-bottom: 2rem;
+	}
 
 	:hover {
 		> ${MiniMenu} {
 			visibility: visible;
 		}
+	}
+	@media screen and (max-width: 500px) {
+		padding: 1rem 1.5rem 0 1.5rem;
+	:last-child {
+		padding-bottom: 1rem;
+	}
 	}
 `;
 
@@ -42,6 +52,13 @@ export const PostInteraction = styled.div`
 export const Image = styled.img`
 	max-width: 50%;
 	display: block;
+	margin-bottom: 1rem;
+	@media screen and (max-width: 1000px) {
+		max-width: 80%;
+	}
+	@media screen and (max-width: 500px) {
+		max-width: 100%;
+	}
 `;
 
 export const LinkText = styled.a`
@@ -78,7 +95,7 @@ export const InteractionInfo = styled.p`
 	margin-left: 0.5rem;
 `;
 
-export const InteractionArea = styled.div`
+export const InteractionArea = styled.div<{ darkMode: boolean }>`
 	display: inline-flex;
 	align-items: center;
 	padding: 0.5rem 0.5rem;
@@ -89,7 +106,7 @@ export const InteractionArea = styled.div`
 	}
 	:hover {
 		cursor: pointer;
-		background: #cacaca;
+		background: ${props => (props.darkMode ? '#cacaca30' : '#cacaca')};
 	}
 `;
 
@@ -97,9 +114,10 @@ export const InteractionArea = styled.div`
  * profile header stuff
  */
 
-export const ProfileHeaderContainer = styled.div`
+export const ProfileHeaderContainer = styled.div<{ darkMode: boolean }>`
 	display: flex;
 	margin-bottom: 1rem;
+	color: ${props => (props.darkMode ? 'white' : 'black')};
 `;
 
 export const Avatar = styled.div`

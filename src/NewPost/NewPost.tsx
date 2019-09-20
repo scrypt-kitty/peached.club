@@ -36,7 +36,7 @@ const ComposerForm = (props: ComposerProps) => {
 
 const NewPost = (props: {}) => {
 	const [showComposer, setShowComposer] = useState<boolean>(false);
-	const jwt = useContext(PeachContext).jwt;
+	const { jwt, darkMode } = useContext(PeachContext);
 	const outputPost = (content: string) => {
 		if (content && content.length > 0) {
 			content.split('\n').map(i => console.log(i));
@@ -59,7 +59,10 @@ const NewPost = (props: {}) => {
 	return (
 		<>
 			{showComposer ? (
-				<Modal onKeyDown={() => setShowComposer(false)}>
+				<Modal
+					darkMode={darkMode}
+					onKeyDown={() => setShowComposer(false)}
+				>
 					<Header>Create a new post</Header>
 					<ComposerForm onSubmit={outputPost} />
 				</Modal>

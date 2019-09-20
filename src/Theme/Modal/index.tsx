@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
 
-const ModalBackdrop = styled.div<{ entering: boolean }>`
+export const ModalBackdrop = styled.div<{ entering: boolean }>`
 	top: 0;
 	left: 0;
 	position: fixed;
@@ -37,8 +37,8 @@ const DisableBodyScroll = createGlobalStyle`
 
 `;
 
-const ModalContainer = styled.div`
-	background: white;
+export const ModalContainer = styled.div<{ darkMode: boolean }>`
+	background: ${props => (props.darkMode ? '#262628' : 'white')};
 	margin: 0;
 	padding: 1rem 2rem;
 	width: 50%;
@@ -55,28 +55,13 @@ const ModalContainer = styled.div`
 	justify-content: space-between;
 `;
 
-const DeletePromptContainer = styled(ModalContainer)`
-	width: 30%;
-	height: auto;
-	text-align: center;
-	@media screen and (max-width: 800px) {
-		width: 30%;
-	}
-`;
-
-const DeleteOptions = styled.div`
-	display: flex;
-	flex-direction: row;
-	justify-content: space-evenly;
-	margin-top: 1rem;
-`;
-
 interface ModalProps {
 	children: React.ReactNode;
 	onKeyDown: () => void;
+	darkMode: boolean;
 }
 
-const Modal: React.FC<ModalProps> = ({ children, onKeyDown }) => {
+const Modal: React.FC<ModalProps> = ({ children, onKeyDown, darkMode }) => {
 	const [entering, setEntering] = useState<boolean>(true);
 	const keepModalOpen = (e: React.MouseEvent<HTMLDivElement>) => {
 		// This stops the event from bubbling up.
@@ -104,7 +89,10 @@ const Modal: React.FC<ModalProps> = ({ children, onKeyDown }) => {
 				onClick={e => keepModalOpen(e)}
 				entering={entering}
 			>
-				<ModalContainer onClick={e => e.stopPropagation()}>
+				<ModalContainer
+					darkMode={darkMode}
+					onClick={e => e.stopPropagation()}
+				>
 					{children}
 				</ModalContainer>
 			</ModalBackdrop>

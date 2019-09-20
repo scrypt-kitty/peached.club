@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
+import { Link } from 'react-router-dom';
 
 import { Comment as PostCommentProps } from '../api/interfaces';
 import {
@@ -9,48 +10,15 @@ import {
 } from '../Friend/style';
 
 import { Button as Butt } from '../Login/style';
+import { ModalContainer, ModalBackdrop } from '../Theme/Modal';
+import { DisplayName3 } from '../Theme/Profile';
 
 import DeleteIcon from './DeleteIcon.svg';
 
-const ModalBackdrop = styled.div`
-	top: 0;
-	left: 0;
-	position: fixed;
-	background: rgba(0, 0, 0, 0.3);
-	width: 100vw;
-	display: flex;
-	align-items: center;
-	align-content: center;
-	justify-content: center;
-	height: 100%;
-	padding: 0;
-	margin: 0;
-
-	overflow: hidden;
-`;
-
 export const DisableBodyScroll = createGlobalStyle`
-body {
-overflow: hidden;
-}
-`;
-
-const ModalContainer = styled.div`
-	background: white;
-	margin: 0;
-	padding: 1rem 2rem;
-	width: 50%;
-	height: 60%;
-	max-height: 80%;
-	overflow: scroll;
-	border-radius: 0.5rem;
-	@media screen and (max-width: 800px) {
-		width: 80%;
+	body {
+		overflow: hidden;
 	}
-
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
 `;
 
 const DeletePromptContainer = styled(ModalContainer)`
@@ -77,11 +45,12 @@ interface DeletePromptProps {
 	onDelete: () => void;
 	onCancel: () => void;
 	children: React.ReactNode;
+	darkMode: boolean;
 }
 
 export const DeletePrompt = (props: DeletePromptProps) => (
-	<ModalBackdrop>
-		<DeletePromptContainer>
+	<ModalBackdrop entering>
+		<DeletePromptContainer darkMode={props.darkMode}>
 			{props.children}
 			<DeleteOptions>
 				<Button onClick={() => props.onDelete()}>Delete</Button>
@@ -104,6 +73,12 @@ const CommentContainer = styled.div`
 			visibility: visible;
 		}
 	}
+	@media screen and (max-width: 500px) {
+		padding: 0;
+		:first-child {
+			padding-top: 0.5rem;
+		}
+	}
 `;
 
 const CommentText = styled.div`
@@ -112,17 +87,24 @@ const CommentText = styled.div`
 	> a > h3 {
 		margin-bottom: 0;
 	}
+	@media screen and (max-width: 500px) {
+		> a > h3 {
+			margin-top: 0;
+		}
+	}
 `;
 
-export const AddCommentContainer = styled.div`
+export const AddCommentContainer = styled.div<{ darkMode: boolean }>`
 	display: flex;
 	padding-bottom: 0;
 	padding-top: 1rem;
 	width: 100%;
-	background: white;
+	background: ${props => (props.darkMode ? '#262628' : 'white')};
 `;
 
-export const Input = styled.textarea`
+export const Input = styled.textarea<{ darkMode: boolean }>`
+	background: ${props => (props.darkMode ? '#262628' : 'white')};
+	color: ${props => (props.darkMode ? 'white' : 'black')};
 	flex: 9;
 	margin-right: 1rem;
 	resize: none;
@@ -142,16 +124,25 @@ const AvatarStyled = styled(Avatar)`
 		border-radius: 50%;
 		width: 100px;
 	}
+
+	@media screen and (max-width: 500px) {
+		> img {
+			width: 50px;
+			height: auto;
+		}
+	}
 `;
 
-const ProfileLink = styled.a`
-	text-decoration: none;
-	color: unset;
-	:visited {
+const ProfileLink = styled.span`
+	> a {
 		text-decoration: none;
-	}
-	:hover {
-		text-decoration: none;
+		color: unset;
+		:visited {
+			text-decoration: none;
+		}
+		:hover {
+			text-decoration: none;
+		}
 	}
 `;
 
@@ -159,6 +150,7 @@ interface CommentProps extends PostCommentProps {
 	avatarSrc: string;
 	isRequester: boolean;
 	deleteComment: (id: string) => void;
+	darkMode: boolean;
 }
 
 export const Comment: React.FC<CommentProps> = (props: CommentProps) => {
@@ -167,15 +159,22 @@ export const Comment: React.FC<CommentProps> = (props: CommentProps) => {
 	);
 	return (
 		<CommentContainer>
-			<ProfileLink href={`/friend/${props.author.id}`}>
-				<AvatarStyled>
-					<img src={props.avatarSrc} alt={props.author.displayName} />
-				</AvatarStyled>
+			<ProfileLink>
+				<Link to={`/friend/${props.author.id}`}>
+					<AvatarStyled>
+						<img
+							src={props.avatarSrc}
+							alt={props.author.displayName}
+						/>
+					</AvatarStyled>
+				</Link>
 			</ProfileLink>
 			<CommentText>
-				<ProfileLink href={`/friend/${props.author.id}`}>
-					<h3>{props.author.displayName}</h3>
-					<Handle>@{props.author.name}</Handle>
+				<ProfileLink>
+					<Link to={`/friend/${props.author.id}`}>
+						<DisplayName3>{props.author.displayName}</DisplayName3>
+						<Handle>@{props.author.name}</Handle>
+					</Link>
 				</ProfileLink>
 				<p>{props.body}</p>
 			</CommentText>
@@ -186,6 +185,7 @@ export const Comment: React.FC<CommentProps> = (props: CommentProps) => {
 					</MiniMenu>
 					{deletePromptShowing ? (
 						<DeletePrompt
+							darkMode={props.darkMode}
 							onDelete={() => props.deleteComment(props.id)}
 							onCancel={() => setDeletePromptShowing(false)}
 						>
@@ -195,24 +195,5 @@ export const Comment: React.FC<CommentProps> = (props: CommentProps) => {
 				</>
 			) : null}
 		</CommentContainer>
-	);
-};
-
-interface ModalProps {
-	children: React.ReactNode;
-	onKeyDown: () => void;
-}
-
-export const Modal: React.FC<ModalProps> = ({ children, onKeyDown }) => {
-	return (
-		<ModalBackdrop
-			tabIndex={0}
-			onKeyDown={(e: React.KeyboardEvent<HTMLDivElement>) =>
-				e.key === 'Escape' && onKeyDown()
-			}
-		>
-			<DisableBodyScroll />
-			<ModalContainer>{children}</ModalContainer>
-		</ModalBackdrop>
 	);
 };

@@ -1,16 +1,16 @@
 import styled from 'styled-components';
 import React from 'react';
 
-const PicFrame = styled.div`
+export const PicFrame = styled.div`
 	flex: 1;
 `;
 
-const ProfilePic = styled.img`
+export const ProfilePic = styled.img`
 	border-radius: 50%;
 	width: 100%;
 `;
 
-const InfoContainer = styled.div`
+export const InfoContainer = styled.div`
 	flex: 7;
 	height: 100%;
 	margin-left: 1.5rem;
@@ -20,6 +20,10 @@ const InfoContainer = styled.div`
 	> p {
 		margin: 0;
 	}
+
+	@media screen and (max-width: 500px) {
+		margin-left: 0.5rem;
+	}
 `;
 
 interface FeedPreviewProps {
@@ -28,19 +32,31 @@ interface FeedPreviewProps {
 	onClick: () => void;
 	postPreview: string;
 	isUnread: boolean;
+	darkMode: boolean;
 }
 
-const FeedPostWrapper = styled.div<{ isUnread: boolean }>`
+export const FeedPostWrapper = styled.div<{
+	isUnread: boolean;
+	darkMode: boolean;
+}>`
 	display: flex;
-	border: 1px solid ${props => (props.isUnread ? '#25d87a' : 'white')};
-	background: white;
+	border: 1px solid
+		${props =>
+			props.isUnread ? '#25d87a' : props.darkMode ? '#262628' : 'white'};
+	background: ${props => (props.darkMode ? '#262628' : 'white')};
 	padding: 2rem 2.5rem;
 	height: 100%;
+	color: ${props => (props.darkMode ? 'white' : 'black')};
+	@media screen and (max-width: 500px) {
+		padding: 1rem 1.5rem;
+	}
+	transition: 0.25s border ease-in;
 `;
 
-const ProfileLink = styled.a`
+export const ProfileLink = styled.a`
 	text-decoration: none;
 	color: unset;
+	transition: 0.25s border ease-in;
 	:hover {
 		text-decoration: none;
 	}
@@ -59,7 +75,10 @@ const ProfileLink = styled.a`
 const FeedPreview = (props: FeedPreviewProps) => {
 	return (
 		<ProfileLink href='#' onClick={e => props.onClick()}>
-			<FeedPostWrapper isUnread={props.isUnread}>
+			<FeedPostWrapper
+				isUnread={props.isUnread}
+				darkMode={props.darkMode}
+			>
 				<PicFrame>
 					<ProfilePic src={props.avatarSrc} />
 				</PicFrame>
