@@ -13,6 +13,7 @@ import { PeachContext } from '../PeachContext';
 
 interface ComposerProps {
 	onSubmit: (msg: string) => void;
+	darkMode: boolean;
 }
 
 const ComposerForm = (props: ComposerProps) => {
@@ -20,7 +21,11 @@ const ComposerForm = (props: ComposerProps) => {
 
 	return (
 		<>
-			<TextArea ref={postRef} placeholder="What's going on?" />
+			<TextArea
+				darkMode={props.darkMode}
+				ref={postRef}
+				placeholder="What's going on?"
+			/>
 			<Button
 				onClick={() =>
 					postRef &&
@@ -64,7 +69,7 @@ const NewPost = (props: {}) => {
 					onKeyDown={() => setShowComposer(false)}
 				>
 					<Header>Create a new post</Header>
-					<ComposerForm onSubmit={outputPost} />
+					<ComposerForm darkMode={darkMode} onSubmit={outputPost} />
 				</Modal>
 			) : null}
 			<NewPostButton
