@@ -12,6 +12,9 @@ export const DELETE_COMMENT = (id: string) =>
 export const DELETE_POST = (id: string) =>
 	`${PROXY}https://v1.peachapi.com/post/${id}`;
 export const CREATE_POST = PROXY + 'https://v1.peachapi.com/post';
+export const MARK_FEED_READ = (id: string) =>
+	`${PROXY}https://v1.peachapi.com/stream/id/${id}/read`;
+export const ACTIVITY_FEED = PROXY + 'https://v1.peachapi.com/activity';
 
 enum ACTIONS {
 	login,
@@ -23,6 +26,8 @@ enum ACTIONS {
 	deleteComment,
 	deletePost,
 	createPost,
+	markFeedRead,
+	getActivityFeed,
 }
 
 export default ACTIONS;

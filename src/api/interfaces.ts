@@ -11,7 +11,7 @@ export interface Message {
 }
 
 export interface TextMessage extends Message {
-	text: string;
+	text?: string;
 }
 
 export interface ImageMessage extends Message {
@@ -172,4 +172,33 @@ export interface CreatePostResponse {
 	likedByMe: boolean;
 	isUnread: boolean;
 	success: number;
+}
+
+export interface ActivityItem {
+	type: 'comment' | 'like';
+	body: {
+		authorStream: {
+			id: string;
+			name: string;
+			displayName: string;
+			avatarSrc: string;
+			bio: string;
+			isPublic: boolean;
+			unreadPostCount: number;
+			lastRead: number;
+		};
+		postID: string;
+		postMessage: Post['message'];
+		commentBody?: string;
+	};
+
+	isUnread: boolean;
+	createdTime: number;
+}
+
+export interface ActivityResponse {
+	streamID: string;
+	activityItems: ActivityItem[];
+	unreadActivityItemCount: number;
+	lastRead: number;
 }
