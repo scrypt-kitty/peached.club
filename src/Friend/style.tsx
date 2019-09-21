@@ -25,6 +25,7 @@ export const MiniMenu = styled.div<MiniMenuProps>`
 export const PostWrapper = styled.div<{ darkMode?: boolean }>`
 	background: ${props => (props.darkMode ? '#262628' : 'white')};
 	color: ${props => (props.darkMode ? 'white' : 'black')}
+	word-wrap: break-word;
 	padding: 2rem 3rem 0;
 	:last-of-type {
 		padding: 2rem 3rem;
