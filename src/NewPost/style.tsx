@@ -11,7 +11,7 @@ export const NewPostButton = styled.div`
 	width: 1rem;
 	height: 1rem;
 	text-align: center;
-	box-shadow: 5px 5px 5px #7b7b7b;
+	box-shadow: 5px 5px 5px #00000050;
 
 	> img {
 		width: 1rem;
