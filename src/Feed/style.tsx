@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import React from 'react';
+import { Link } from 'react-router-dom';
 
 export const PicFrame = styled.div`
 	flex: 1;
@@ -26,38 +26,45 @@ export const InfoContainer = styled.div`
 	}
 `;
 
-interface FeedPreviewProps {
-	avatarSrc: string;
-	displayName: string;
-	onClick: () => void;
-	postPreview: string;
+interface FeedPostWrapperProps {
 	isUnread: boolean;
 	darkMode: boolean;
 }
 
-export const FeedPostWrapper = styled.div<{
-	isUnread: boolean;
-	darkMode: boolean;
-}>`
-	display: flex;
+export const FeedPostWrapper = styled.div<FeedPostWrapperProps>`
 	border: 1px solid
 		${props =>
 			props.isUnread ? '#25d87a' : props.darkMode ? '#262628' : 'white'};
 	background: ${props => (props.darkMode ? '#262628' : 'white')};
+	color: ${props => (props.darkMode ? 'white' : 'black')};
+
+	display: flex;
 	padding: 2rem 2.5rem;
 	height: 100%;
-	color: ${props => (props.darkMode ? 'white' : 'black')};
-	@media screen and (max-width: 500px) {
-		padding: 1rem 1.5rem;
-	}
-	transition: 0.25s border ease-in;
+	transition: 0.25s all ease-in;
 	word-wrap: break-word;
+	margin: 1rem;
+	border-radius: 0.5rem;
+
+	:hover {
+		background: ${props => (props.darkMode ? '#cacaca50' : '#cacaca90')};
+		border-color: ${props => (props.darkMode ? '#cacaca50' : '#cacaca90')};
+		cursor: pointer;
+	}
+
+	@media screen and (max-width: 700px) {
+		padding: 1rem 1.25rem;
+		margin: 0.5rem;
+		border-radius: 0.25rem;
+	}
 `;
 
 export const ProfileLink = styled.a`
 	text-decoration: none;
 	color: unset;
 	transition: 0.25s border ease-in;
+	margin: 1rem;
+
 	:hover {
 		text-decoration: none;
 	}
@@ -67,29 +74,40 @@ export const ProfileLink = styled.a`
 	:visited {
 		color: unset;
 	}
-	margin: 1rem;
 	:last-of-type {
 		margin-bottom: 0;
 	}
 `;
 
-const FeedPreview = (props: FeedPreviewProps) => {
-	return (
-		<ProfileLink href='#' onClick={e => props.onClick()}>
-			<FeedPostWrapper
-				isUnread={props.isUnread}
-				darkMode={props.darkMode}
-			>
-				<PicFrame>
-					<ProfilePic src={props.avatarSrc} />
-				</PicFrame>
-				<InfoContainer>
-					<h3>{props.displayName}</h3>
-					<p>{props.postPreview}</p>
-				</InfoContainer>
-			</FeedPostWrapper>
-		</ProfileLink>
-	);
-};
+export const PostPreview = styled.p`
+	color: #a8a8a8;
+`;
 
-export default FeedPreview;
+export const DisplayName = styled.h3`
+	> a {
+		color: unset;
+		text-decoration: none;
+
+		:visited {
+			color: unset;
+			text-decoration: none;
+		}
+		:hover {
+			color: unset;
+			text-decoration: none;
+		}
+	}
+`;
+
+export const LinkStyled = styled(Link)`
+	color: unset;
+	text-decoration: none;
+	:hover {
+		color: unset;
+		text-decoration: none;
+	}
+	:visited {
+		color: unset;
+		text-decoration: none;
+	}
+`;

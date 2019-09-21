@@ -1,63 +1,16 @@
 import React, { useEffect, useContext, useState } from 'react';
 import { Redirect } from 'react-router';
-import { Link } from 'react-router-dom';
 
 import { GlobalContextProps, PeachContext } from '../PeachContext';
 import api from '../api';
 import ACTIONS from '../api/constants';
 import { ActivityResponse, ActivityItem } from '../api/interfaces';
-import { createPostPreview } from '../utils';
-
-import {
-	PostPreview,
-	Title,
-	FeedPostWrapperStyled,
-	DisplayName,
-} from './style';
 
 import Loading from '../Loading';
 import Navigation from '../Navigation';
 import { Page } from '../Theme/Layout';
-
-import {
-	ProfileLink,
-	ProfilePic,
-	PicFrame,
-	InfoContainer,
-} from '../Feed/style';
-
-const ActivityContainer = (
-	props: ActivityItem & { darkMode: boolean; curDate: Date }
-) => {
-	return (
-		<FeedPostWrapperStyled darkMode={props.darkMode} isUnread={false}>
-			<PicFrame>
-				<Link to={`/friend/${props.body.authorStream.id}`}>
-					<ProfilePic
-						src={props.body.authorStream.avatarSrc}
-						alt={props.body.authorStream.name}
-					/>
-				</Link>
-			</PicFrame>
-			<InfoContainer>
-				<DisplayName>
-					<Link to={`/friend/${props.body.authorStream.id}`}>
-						{props.body.authorStream.displayName}
-					</Link>
-				</DisplayName>
-				<PostPreview></PostPreview>
-				<p>
-					{props.type === 'comment' && props.body.commentBody
-						? props.body.commentBody
-						: 'liked your post'}
-				</p>
-				<PostPreview>
-					{createPostPreview(props.body.postMessage[0])}
-				</PostPreview>
-			</InfoContainer>
-		</FeedPostWrapperStyled>
-	);
-};
+import { Title } from '../Theme/Type';
+import Preview from '../Feed/Preview';
 
 const Activity = (props: GlobalContextProps) => {
 	const { peachFeed, jwt } = props;
@@ -65,8 +18,6 @@ const Activity = (props: GlobalContextProps) => {
 		null
 	);
 	const { darkMode } = useContext(PeachContext);
-	const date = new Date();
-	const curHour = date.getHours();
 
 	useEffect(() => {
 		try {
@@ -82,7 +33,7 @@ const Activity = (props: GlobalContextProps) => {
 		} catch (err) {
 			console.log(err);
 		}
-	}, []);
+	}, [jwt]);
 
 	if (!peachFeed || !jwt) return <Redirect to='/feed' />;
 
@@ -93,12 +44,22 @@ const Activity = (props: GlobalContextProps) => {
 				<Title darkMode={darkMode}>Activity</Title>
 				{activityFeed ? (
 					activityFeed.map((item: ActivityItem) => (
-						<ActivityContainer
+						<Preview
 							key={`${item.createdTime}${item.body.authorStream.id}${item.body.postID}`}
-							{...item}
+							avatarSrc={item.body.authorStream.avatarSrc}
+							displayName={item.body.authorStream.displayName}
+							name={item.body.authorStream.name}
+							id={item.body.authorStream.id}
 							darkMode={darkMode}
-							curDate={date}
-						/>
+							message={item.body.postMessage[0]}
+						>
+							<p>
+								{item.type === 'comment' &&
+								item.body.commentBody
+									? item.body.commentBody
+									: 'liked your post'}
+							</p>
+						</Preview>
 					))
 				) : (
 					<Loading />
