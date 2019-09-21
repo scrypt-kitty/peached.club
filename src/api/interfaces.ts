@@ -209,3 +209,11 @@ export interface MutualFriend extends CurUser {
 export interface FriendsOfFriendsResponse {
 	connections: MutualFriend[];
 }
+
+export interface NameChangeResponse {
+	success: number;
+	error?: {
+		Code: number;
+		Message: string;
+	};
+}
