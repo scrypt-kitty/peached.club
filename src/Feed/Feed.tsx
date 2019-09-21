@@ -24,7 +24,6 @@ const Feed = (props: RouteComponentProps & GlobalContextProps) => {
 			api(ACTIONS.getConnections, jwt).then(
 				(response: { data: Connections; success: number }) => {
 					if (response.success === 1) {
-						console.log(response.data);
 						setConnections(response.data.connections);
 						const newPeachFeed: PeachFeed = {};
 						for (const user of response.data.connections) {
