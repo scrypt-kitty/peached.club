@@ -11,6 +11,8 @@ import ACTIONS, {
 	MARK_FEED_READ,
 	ACTIVITY_FEED,
 	FRIENDS_OF_FRIENDS,
+	CHANGE_USER_NAME,
+	CHANGE_DISPLAY_NAME,
 } from './constants';
 
 const api = async (action: ACTIONS, jwt: string, body = {}, id = '') => {
@@ -93,6 +95,16 @@ const api = async (action: ACTIONS, jwt: string, body = {}, id = '') => {
 			req.method = 'GET';
 			req.headers.Authorization = `Bearer ${jwt}`;
 			delete req.body;
+			break;
+		case ACTIONS.changeUserName:
+			uri = CHANGE_USER_NAME;
+			req.method = 'PUT';
+			req.headers.Authorization = `Bearer ${jwt}`;
+			break;
+		case ACTIONS.changeDisplayName:
+			uri = CHANGE_DISPLAY_NAME;
+			req.method = 'PUT';
+			req.headers.Authorization = `Bearer ${jwt}`;
 			break;
 	}
 

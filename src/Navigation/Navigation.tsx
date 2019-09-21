@@ -13,6 +13,8 @@ import ArrowRightDarkMode from './ArrowRightDarkMode.svg';
 import ActivityIconDarkMode from './ActivityDarkMode.svg';
 import NightModeDark from './NightModeDark.svg';
 import NightModeLight from './NightModeLight.svg';
+import SettingsIcon from './SettingsIcon.svg';
+import SettingsIconDarkMode from './SettingsIconDarkMode.svg';
 
 const Navigation = (props: {
 	curFeed?: string;
@@ -59,6 +61,18 @@ const Navigation = (props: {
 							src={darkMode ? NightModeDark : NightModeLight}
 							alt='Toggle dark mode'
 						/>
+					</Link>
+					<Link onClick={() => toggleDarkMode()}>
+						<RouterLink to='/settings'>
+							<img
+								src={
+									darkMode
+										? SettingsIconDarkMode
+										: SettingsIcon
+								}
+								alt='Go to settings'
+							/>
+						</RouterLink>
 					</Link>
 				</AppLinks>
 				{props.curFeed && curFeedIndex !== -1 ? (

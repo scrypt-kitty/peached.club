@@ -7,3 +7,8 @@ export const Title = styled.h1<{ darkMode: boolean }>`
 		margin-top: 2.5rem;
 	}
 `;
+
+export const SubTitle = styled.h2<{ darkMode: boolean }>`
+	color: ${props => (props.darkMode ? 'white' : 'black')};
+	margin: 0 0 0.5rem;
+`;
