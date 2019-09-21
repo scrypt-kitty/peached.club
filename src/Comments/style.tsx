@@ -160,10 +160,6 @@ const ProfileLink = styled.span`
 	> a > h3 {
 		border-radius: 0.25rem;
 	}
-
-	:hover > a > h3 {
-		background: #cacaca;
-	}
 `;
 
 interface CommentProps extends PostCommentProps {
