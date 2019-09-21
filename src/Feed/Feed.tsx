@@ -24,11 +24,16 @@ const Feed = (props: RouteComponentProps & GlobalContextProps) => {
 			api(ACTIONS.getConnections, jwt).then(
 				(response: { data: Connections; success: number }) => {
 					if (response.success === 1) {
+						console.log(response.data);
 						setConnections(response.data.connections);
 						const newPeachFeed: PeachFeed = {};
 						for (const user of response.data.connections) {
 							newPeachFeed[user.id] = user;
-							newPeachFeed[user.id].posts = user.posts.reverse();
+							if (newPeachFeed[user.id].posts) {
+								newPeachFeed[
+									user.id
+								].posts = user.posts.reverse();
+							}
 						}
 						setPeachFeed(newPeachFeed);
 					} else {
@@ -59,7 +64,7 @@ const Feed = (props: RouteComponentProps & GlobalContextProps) => {
 								name={user.name}
 								id={user.id}
 								message={
-									user.posts
+									user.posts && user.posts[0]
 										? user.posts[0].message[0]
 										: { type: 'text', text: '' }
 								}
