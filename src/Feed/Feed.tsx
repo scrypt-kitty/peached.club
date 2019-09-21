@@ -20,11 +20,20 @@ const Feed = (props: RouteComponentProps & GlobalContextProps) => {
 	const [connections, setConnections] = useState<User[] | null>(null);
 	const { darkMode } = useContext(PeachContext);
 	useEffect(() => {
+		window.scroll(0, 0);
 		if (jwt) {
 			api(ACTIONS.getConnections, jwt).then(
 				(response: { data: Connections; success: number }) => {
 					if (response.success === 1) {
-						setConnections(response.data.connections);
+						const connectionsUnread = response.data.connections.filter(
+							user => user.unreadPostCount
+						);
+						const connectionsRead = response.data.connections.filter(
+							user => !user.unreadPostCount
+						);
+						setConnections(
+							connectionsUnread.concat(connectionsRead)
+						);
 						const newPeachFeed: PeachFeed = {};
 						for (const user of response.data.connections) {
 							newPeachFeed[user.id] = user;
@@ -54,7 +63,7 @@ const Feed = (props: RouteComponentProps & GlobalContextProps) => {
 				<Title darkMode={darkMode}>All Feeds</Title>
 				{connections ? (
 					connections.map(user => (
-						<LinkStyled to={`/friend/${user.id}`}>
+						<LinkStyled key={user.id} to={`/friend/${user.id}`}>
 							<Preview
 								key={user.id}
 								darkMode={darkMode}
