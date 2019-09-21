@@ -2,6 +2,10 @@ import styled from 'styled-components';
 
 export const FriendPostContent = styled.div`
 	height: 100%;
+
+	> p:first-of-type {
+		margin-top: 0;
+	}
 `;
 interface MiniMenuProps {
 	onClick: () => void;
@@ -21,9 +25,9 @@ export const MiniMenu = styled.div<MiniMenuProps>`
 export const PostWrapper = styled.div<{ darkMode?: boolean }>`
 	background: ${props => (props.darkMode ? '#262628' : 'white')};
 	color: ${props => (props.darkMode ? 'white' : 'black')}
-	padding: 2rem 3rem 0 3rem;
-	:last-child {
-		padding-bottom: 2rem;
+	padding: 2rem 3rem 0;
+	:last-of-type {
+		padding: 2rem 3rem;
 	}
 
 	:hover {
@@ -32,10 +36,10 @@ export const PostWrapper = styled.div<{ darkMode?: boolean }>`
 		}
 	}
 	@media screen and (max-width: 500px) {
-		padding: 1rem 1.5rem 0 1.5rem;
-	:last-child {
-		padding-bottom: 1rem;
-	}
+		padding: 1rem 1.5rem 0;
+		:last-of-type {
+			padding: 1rem 1.5rem;
+		}
 	}
 `;
 

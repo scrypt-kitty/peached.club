@@ -9,7 +9,6 @@ const ButtonLink = styled.a`
 	}
 	:hover {
 		color: white;
-		cursor: pointer;
 	}
 `;
 
@@ -22,8 +21,9 @@ const ButtonStyle = styled.button<{ color?: string; lg?: boolean }>`
 	color: white;
 	font-size: ${props => (props.lg ? '1.1rem' : '1rem')};
 	:hover {
-		background: #fe4f72;
-		border-color: #fe4f72;
+		background: #e6395b;
+		border-color: #e6395b;
+		cursor: pointer;
 	}
 	transition: 0.25s all ease;
 `;

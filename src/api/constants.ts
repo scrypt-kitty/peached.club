@@ -22,7 +22,7 @@ enum ACTIONS {
 	login,
 	like,
 	unlike,
-	connections,
+	getConnections,
 	connectionStream,
 	comment,
 	deleteComment,

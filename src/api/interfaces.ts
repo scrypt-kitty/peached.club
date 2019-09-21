@@ -148,11 +148,9 @@ export interface User extends CurUser {
 }
 
 export interface Connections {
-	data: {
-		connections: User[];
-		success: number;
-		requesterStream: CurUser;
-	};
+	connections: User[];
+	success: number;
+	requesterStream: CurUser;
 }
 
 /**

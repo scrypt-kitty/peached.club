@@ -33,10 +33,11 @@ const api = async (action: ACTIONS, jwt: string, body = {}, id = '') => {
 			uri = LOGIN;
 			req.method = 'POST';
 			break;
-		case ACTIONS.connections:
+		case ACTIONS.getConnections:
 			uri = CONNECTIONS;
 			req.method = 'GET';
 			req.headers.Authorization = `Bearer ${jwt}`;
+			delete req.body;
 			break;
 		case ACTIONS.like:
 			uri = LIKE;
@@ -98,7 +99,7 @@ const api = async (action: ACTIONS, jwt: string, body = {}, id = '') => {
 	return await fetch(uri, req)
 		.catch(err => {
 			console.log(err);
-			throw new Error();
+			throw new Error(`cant make call for ${action}`);
 		})
 		.then(response => response.json());
 };

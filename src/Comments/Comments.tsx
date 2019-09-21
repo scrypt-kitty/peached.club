@@ -1,11 +1,10 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useContext } from 'react';
 import { Comment as CommentType, User, MutualFriend } from '../api/interfaces';
 import { PeachContext } from '../PeachContext';
 
 import AddComment from './AddComment';
 import { Comment, AllComments } from './style';
 import Modal from '../Theme/Modal';
-import Loading from '../Loading';
 
 interface CommentsProps {
 	comments?: CommentType[];

@@ -308,7 +308,6 @@ const FriendFeed = (
 									response.data.connections
 								) {
 									setOtherFriends(response.data.connections);
-									console.log(response.data.connections);
 								} else {
 									console.log('ugh');
 								}

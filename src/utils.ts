@@ -4,7 +4,6 @@ import {
 	LinkMessage,
 	isText,
 	isImage,
-	isLink,
 } from './api/interfaces';
 
 export const createPostPreview = (
