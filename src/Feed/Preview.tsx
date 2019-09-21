@@ -26,14 +26,10 @@ const Preview: React.FC<PreviewProps> = props => {
 	return (
 		<FeedPostWrapper darkMode={props.darkMode} isUnread={false}>
 			<PicFrame>
-				<Link to={`/friend/${props.id}`}>
-					<ProfilePic src={props.avatarSrc} alt={props.name} />
-				</Link>
+				<ProfilePic src={props.avatarSrc} alt={props.name} />
 			</PicFrame>
 			<InfoContainer>
-				<DisplayName>
-					<Link to={`/friend/${props.id}`}>{props.displayName}</Link>
-				</DisplayName>
+				<DisplayName>{props.displayName}</DisplayName>
 				{props.children}
 				<PostPreview>{createPostPreview(props.message)}</PostPreview>
 			</InfoContainer>

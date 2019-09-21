@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { RouteComponentProps } from 'react-router';
+import { RouteComponentProps, Redirect } from 'react-router';
 
 import Navigation from '../Navigation';
 import Loading from '../Loading';
 import NewPost from '../NewPost';
 
 import { PeachContext, GlobalContextProps } from '../PeachContext';
-import { Connections, PeachFeed } from '../api/interfaces';
+import { Connections, PeachFeed, User } from '../api/interfaces';
 import ACTIONS from '../api/constants';
 import api from '../api';
 
@@ -17,25 +17,29 @@ import { Title } from '../Theme/Type';
 
 const Feed = (props: RouteComponentProps & GlobalContextProps) => {
 	const { jwt, setPeachFeed } = props;
-	const [connections, setConnections] = useState<
-		Connections['connections'] | null
-	>(null);
+	const [connections, setConnections] = useState<User[] | null>(null);
 	const { darkMode } = useContext(PeachContext);
 	useEffect(() => {
-		api(ACTIONS.getConnections, jwt).then(
-			(response: { data: Connections }) => {
-				if (response.data) {
-					setConnections(response.data.connections);
-					const newPeachFeed: PeachFeed = {};
-					for (const user of response.data.connections) {
-						newPeachFeed[user.id] = user;
-						newPeachFeed[user.id].posts = user.posts.reverse();
+		if (jwt) {
+			api(ACTIONS.getConnections, jwt).then(
+				(response: { data: Connections; success: number }) => {
+					if (response.success === 1) {
+						setConnections(response.data.connections);
+						const newPeachFeed: PeachFeed = {};
+						for (const user of response.data.connections) {
+							newPeachFeed[user.id] = user;
+							newPeachFeed[user.id].posts = user.posts.reverse();
+						}
+						setPeachFeed(newPeachFeed);
 					}
-					setPeachFeed(newPeachFeed);
 				}
-			}
-		);
-	}, [jwt, setPeachFeed]);
+			);
+		}
+	}, []);
+
+	if (!jwt) {
+		return <Redirect push to='/login' />;
+	}
 
 	return (
 		<>
@@ -52,7 +56,11 @@ const Feed = (props: RouteComponentProps & GlobalContextProps) => {
 								displayName={user.displayName}
 								name={user.name}
 								id={user.id}
-								message={user.posts[0].message[0]}
+								message={
+									user.posts
+										? user.posts[0].message[0]
+										: { type: 'text', text: '' }
+								}
 							/>
 						</LinkStyled>
 					))

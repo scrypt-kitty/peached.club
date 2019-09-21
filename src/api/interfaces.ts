@@ -149,7 +149,6 @@ export interface User extends CurUser {
 
 export interface Connections {
 	connections: User[];
-	success: number;
 	requesterStream: CurUser;
 }
 
