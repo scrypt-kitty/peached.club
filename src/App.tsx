@@ -4,6 +4,7 @@ import Login from './Login';
 import Feed from './Feed';
 import FriendFeed from './Friend';
 import Activity from './Activity';
+import Settings from './Settings';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { GlobalStyle } from './style';
 import { PeachContext } from './PeachContext';
@@ -125,6 +126,7 @@ const App: React.FC = () => {
 							/>
 						)}
 					/>
+					<Route path='/settings' component={Settings} />
 				</Switch>
 			</PeachContext.Provider>
 		</BrowserRouter>
