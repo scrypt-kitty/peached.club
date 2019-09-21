@@ -31,6 +31,8 @@ const Feed = (props: RouteComponentProps & GlobalContextProps) => {
 							newPeachFeed[user.id].posts = user.posts.reverse();
 						}
 						setPeachFeed(newPeachFeed);
+					} else {
+						console.log('handle error here :)');
 					}
 				}
 			);
