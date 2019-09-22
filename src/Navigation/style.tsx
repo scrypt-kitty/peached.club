@@ -33,9 +33,9 @@ export const Link = styled.span`
 		cursor: pointer;
 	}
 
-	padding-left: 1rem;
+	margin-left: 1rem;
 	:first-child {
-		padding-left: 0;
+		margin-left: 0;
 	}
 `;
 
