@@ -13,6 +13,8 @@ interface CommentsProps {
 	updateComments: (txt: string) => void;
 	requester: User;
 	mutualFriends: MutualFriend[];
+	postAuthorId: string;
+	postAuthorAvatarSrc: string;
 }
 
 const Comments: React.FC<CommentsProps> = ({
@@ -22,10 +24,13 @@ const Comments: React.FC<CommentsProps> = ({
 	requester,
 	deleteComment,
 	mutualFriends,
+	postAuthorAvatarSrc,
+	postAuthorId,
 }) => {
 	const peachContext = useContext(PeachContext);
 
 	const getAvatar = (id: string) => {
+		if (id === postAuthorId) return postAuthorAvatarSrc;
 		const res = mutualFriends.filter(friend => friend.id === id);
 		if (res.length === 0) return 'https://i.imgur.com/iIq3l6X.png';
 		return res[0].avatarSrc;

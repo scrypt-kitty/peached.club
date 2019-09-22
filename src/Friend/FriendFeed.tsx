@@ -83,6 +83,7 @@ interface FriendFeedProps extends Post {
 	author: string;
 	darkMode: boolean;
 	otherFriends: MutualFriend[];
+	postAuthorAvatarSrc: string;
 }
 
 export const FriendFeedContainer = (props: FriendFeedProps) => {
@@ -248,6 +249,8 @@ export const FriendFeedContainer = (props: FriendFeedProps) => {
 			</PostInteraction>
 			{showComments ? (
 				<Comments
+					postAuthorAvatarSrc={props.postAuthorAvatarSrc}
+					postAuthorId={props.author}
 					onDismissComments={onClickComments}
 					comments={comments}
 					updateComments={updateComments}
@@ -412,6 +415,7 @@ const FriendFeed = (
 									author={viewingUser.id}
 									darkMode={peachContext.darkMode}
 									otherFriends={otherFriends}
+									postAuthorAvatarSrc={viewingUser.avatarSrc}
 								/>
 							))
 						) : (
