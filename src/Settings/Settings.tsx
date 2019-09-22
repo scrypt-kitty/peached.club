@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Redirect } from 'react-router';
+import { Link } from 'react-router-dom';
 import Navigation from '../Navigation';
 import { MiniLoader } from '../Loading';
 import { PeachContext } from '../PeachContext';
@@ -129,6 +130,8 @@ const Settings = (props: {}) => {
 					>
 						Submit
 					</Button>
+					<br />
+					<Link to='/logout'>Log out</Link>
 				</SettingsWrapper>
 			</Page>
 		</>

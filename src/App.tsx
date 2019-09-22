@@ -5,6 +5,7 @@ import Feed from './Feed';
 import FriendFeed from './Friend';
 import Activity from './Activity';
 import Settings from './Settings';
+import { Redirect } from 'react-router';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { GlobalStyle } from './style';
 import { PeachContext } from './PeachContext';
@@ -127,6 +128,17 @@ const App: React.FC = () => {
 						)}
 					/>
 					<Route path='/settings' component={Settings} />
+					<Route
+						path='/logout'
+						render={() => {
+							localStorage.removeItem('peachedToken');
+							localStorage.removeItem('user');
+							localStorage.removeItem('peachedDarkMode');
+							updateJwt('');
+							updatePeachFeed(null);
+							return <Redirect to='/login' />;
+						}}
+					/>
 				</Switch>
 			</PeachContext.Provider>
 		</BrowserRouter>
