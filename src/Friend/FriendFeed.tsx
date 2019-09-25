@@ -287,6 +287,7 @@ const FriendFeed = (
 		if (!jwt || !peachFeed) {
 			return;
 		}
+		window.scroll(0, 0);
 		const getUserProfile = async () => {
 			try {
 				api(
