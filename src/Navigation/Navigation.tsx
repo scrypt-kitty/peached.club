@@ -35,9 +35,7 @@ const Navigation = (props: {
 			<Nav>
 				<AppLinks>
 					<Link>
-						<a href='/feed' title='Feed'>
-							Feeds
-						</a>
+						<RouterLink to='/feed'>Feeds</RouterLink>
 					</Link>
 					<Link>
 						<RouterLink to={`/friend/${curUser ? curUser.id : ''}`}>
@@ -62,7 +60,7 @@ const Navigation = (props: {
 							alt='Toggle dark mode'
 						/>
 					</Link>
-					<Link onClick={() => toggleDarkMode()}>
+					<Link>
 						<RouterLink to='/settings'>
 							<img
 								src={
