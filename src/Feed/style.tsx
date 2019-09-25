@@ -5,9 +5,10 @@ export const PicFrame = styled.div`
 	flex: 1;
 `;
 
-export const ProfilePic = styled.img`
+export const ProfilePic = styled.img<{ unread?: boolean }>`
 	border-radius: 50%;
 	width: 100%;
+	border: ${props => (props.unread ? '2px solid #1bb76e' : 'none')};
 `;
 
 export const InfoContainer = styled.div`

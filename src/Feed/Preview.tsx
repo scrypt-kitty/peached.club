@@ -19,13 +19,18 @@ interface PreviewProps {
 	message: TextMessage | ImageMessage | LinkMessage;
 	darkMode: boolean;
 	children?: React.ReactNode;
+	unread?: boolean;
 }
 
 const Preview: React.FC<PreviewProps> = props => {
 	return (
 		<FeedPostWrapper darkMode={props.darkMode} isUnread={false}>
 			<PicFrame>
-				<ProfilePic src={props.avatarSrc} alt={props.name} />
+				<ProfilePic
+					unread={props.unread}
+					src={props.avatarSrc}
+					alt={props.name}
+				/>
 			</PicFrame>
 			<InfoContainer>
 				<DisplayName>{props.displayName}</DisplayName>

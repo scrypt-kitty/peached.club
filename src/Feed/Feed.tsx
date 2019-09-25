@@ -76,6 +76,7 @@ const Feed = (props: RouteComponentProps & GlobalContextProps) => {
 										? user.posts[0].message[0]
 										: { type: 'text', text: '' }
 								}
+								unread={user.unreadPostCount > 0}
 							/>
 						</LinkStyled>
 					))
