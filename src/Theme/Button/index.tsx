@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 const ButtonLink = styled.a`
 	text-decoration: none;
+	align-self: start;
 	color: white;
 	:visited {
 		color: white;
@@ -17,6 +18,7 @@ interface ButtonStyleProps {
 	lg?: boolean;
 	disabled?: boolean;
 }
+// background: ${props => (props.disabled ? '#b0b0b0' : '#e6395b')};
 
 const ButtonStyle = styled.button<ButtonStyleProps>`
 	background: ${props =>
@@ -29,9 +31,9 @@ const ButtonStyle = styled.button<ButtonStyleProps>`
 	color: white;
 	font-size: ${props => (props.lg ? '1.1rem' : '1rem')};
 	:hover {
-		background: ${props => (props.disabled ? '#b0b0b0' : '#e6395b')};
-		border-color: ${props => (props.disabled ? '#b0b0b0' : '#e6395b')};
-		cursor: pointer;
+		background: ${props => (props.disabled ? '#cacaca' : '#e6395b')};
+		border-color: ${props => (props.disabled ? '#cacaca' : '#e6395b')};
+		cursor: ${props => (props.disabled ? 'default' : 'pointer')};
 	}
 	transition: 0.25s all ease;
 `;
