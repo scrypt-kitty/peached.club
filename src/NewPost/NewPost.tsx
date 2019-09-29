@@ -1,19 +1,34 @@
-import React, { useState, useRef, useContext } from 'react';
+import React, { useState, useRef, useContext, useEffect } from 'react';
 
 import Modal from '../Theme/Modal';
 import Button from '../Theme/Button';
 import Toasty from '../Theme/Toasty';
 
-import { NewPostButton, TextArea, Header } from './style';
+import {
+	NewPostButton,
+	TextArea,
+	Header,
+	ImagesHolder,
+	Image,
+	UploadedImage,
+	DeleteImage,
+} from './style';
 import Plus from './Plus.svg';
+import DeleteIcon from '../Comments/DeleteIcon.svg';
 
-import ACTIONS from '../api/constants';
+import ACTIONS, { IMGUR_ID } from '../api/constants';
 import api from '../api';
-import { CreatePostResponse } from '../api/interfaces';
+import {
+	CreatePostResponse,
+	ImgurUploadResponse,
+	ImageMessage,
+	TextMessage,
+	isImage,
+} from '../api/interfaces';
 import { PeachContext } from '../PeachContext';
 
 interface ComposerProps {
-	onSubmit: (msg: string) => void;
+	onSubmit: (messages: (TextMessage | ImageMessage)[]) => void;
 	darkMode: boolean;
 	toggleComposer: () => void;
 }
@@ -24,6 +39,48 @@ const ComposerForm: React.FC<ComposerProps> = ({
 	toggleComposer,
 }) => {
 	const postRef = useRef<HTMLTextAreaElement>(null);
+	const [postText, setPostText] = useState<string>('');
+	const { curUser } = useContext(PeachContext);
+	console.log('hello');
+	const [images, setImages] = useState<(ImageMessage | TextMessage)[]>([]);
+
+	const uploadImage = async (files: FileList | null, id: string) => {
+		if (files === null || files.length < 1) return;
+		const file = files[0];
+		const formData = new FormData();
+		formData.append('image', file);
+		formData.append('type', 'file');
+		const req = {
+			method: 'POST',
+			headers: {
+				Authorization: 'Client-ID ' + IMGUR_ID,
+				Accept: 'application/json',
+			},
+			body: formData,
+		};
+
+		await fetch(
+			'https://cors-anywhere.herokuapp.com/https://api.imgur.com/3/image',
+			req
+		)
+			.then(resp => resp.json())
+			.then((resp: ImgurUploadResponse) => {
+				if (!resp.success) {
+					console.log('oh no');
+					return;
+				}
+				setImages(images =>
+					images.concat([
+						{
+							type: 'image',
+							src: resp.data.link,
+							height: resp.data.height,
+							width: resp.data.width,
+						},
+					])
+				);
+			});
+	};
 
 	return (
 		<Modal darkMode={darkMode} onKeyDown={() => toggleComposer()}>
@@ -32,12 +89,60 @@ const ComposerForm: React.FC<ComposerProps> = ({
 				darkMode={darkMode}
 				ref={postRef}
 				placeholder="What's going on?"
+				onChange={e => setPostText(e.target.value)}
 			/>
+
+			<input
+				type='file'
+				accept='image*'
+				onChange={e =>
+					curUser ? uploadImage(e.target.files, curUser.id) : null
+				}
+			/>
+			{images.length > 0 ? (
+				<ImagesHolder>
+					{images.map(
+						img =>
+							isImage(img) && (
+								<Image key={img.src}>
+									<DeleteImage
+										src={DeleteIcon}
+										alt='Delete picture'
+										onClick={() =>
+											setImages(images =>
+												images.filter(
+													i =>
+														isImage(i) &&
+														i.src !== img.src
+												)
+											)
+										}
+									/>
+									<UploadedImage
+										src={img.src}
+										alt={img.src}
+									/>
+								</Image>
+							)
+					)}
+				</ImagesHolder>
+			) : null}
+
 			<Button
+				disabled={images.length < 1 && postText.length < 1}
 				onClick={() =>
-					postRef &&
-					postRef.current &&
-					onSubmit(postRef.current.value)
+					onSubmit(
+						postText.length > 0
+							? ([
+									{
+										type: 'text',
+										text: postText,
+									},
+							  ] as ((ImageMessage | TextMessage)[])).concat(
+									images
+							  )
+							: images
+					)
 				}
 			>
 				Post
@@ -83,13 +188,36 @@ const NewPost = (props: {}) => {
 		}
 	};
 
+	const submitPost = (messages: (TextMessage | ImageMessage)[]) => {
+		if (messages.length < 1) return;
+
+		setSubmitted(true);
+		setShowToasty(true);
+		setPosting(true);
+		api(ACTIONS.createPost, jwt, {
+			message: messages,
+		}).then((response: { data: CreatePostResponse; success: number }) => {
+			setPosting(false);
+			if (response.success === 1) {
+				setPostSuccess(true);
+			} else {
+				setPostSuccess(false);
+			}
+			setTimeout(() => {
+				setSubmitted(false);
+				setShowToasty(false);
+				setPosting(false);
+			}, 2000);
+		});
+	};
+
 	return (
 		<>
 			{showComposer ? (
 				<>
 					<ComposerForm
 						darkMode={darkMode}
-						onSubmit={outputPost}
+						onSubmit={submitPost}
 						toggleComposer={() => setShowComposer(false)}
 					/>
 					{submitted && showToasty ? (
