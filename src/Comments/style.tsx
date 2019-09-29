@@ -26,7 +26,11 @@ const DeletePromptContainer = styled(ModalContainer)`
 	height: auto;
 	text-align: center;
 	@media screen and (max-width: 800px) {
-		width: 30%;
+		width: 50%;
+	}
+
+	@media screen and (max-width: 600px) {
+		width: 80%;
 	}
 `;
 
@@ -95,6 +99,10 @@ const CommentText = styled.div`
 		> a > h3 {
 			margin-top: 0;
 		}
+	}
+
+	> p {
+		word-wrap: break-word;
 	}
 `;
 
