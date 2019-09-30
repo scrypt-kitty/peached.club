@@ -112,6 +112,7 @@ export const AddCommentContainer = styled.div<{ darkMode: boolean }>`
 	padding-top: 1rem;
 	width: 100%;
 	background: ${props => (props.darkMode ? '#262628' : 'white')};
+	min-height: 2rem;
 `;
 
 export const Input = styled.textarea<{ darkMode: boolean }>`
@@ -125,6 +126,7 @@ export const Input = styled.textarea<{ darkMode: boolean }>`
 	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
 		Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 	font-size: 1rem;
+	min-height: 2.5rem;
 `;
 
 export const ButtonStyled = styled(Button)`
