@@ -9,27 +9,29 @@ export const Moat = styled.div`
 	height: 100%;
 `;
 
-export const Heading = styled.h1`
+export const Heading = styled.h1<{ darkMode: boolean }>`
 	margin: 0 0 1rem;
 	text-align: center;
+	${props => (props.darkMode ? 'color: white;' : '')}
 `;
 
-export const Castle = styled.div`
-	background: #fff0e6;
+export const Castle = styled.div<{ darkMode: boolean }>`
+	background: ${props => (props.darkMode ? 'black' : '#fff0e6')};
 
 	@media screen and (max-width: 800px) {
 		width: 70%;
 	}
 `;
 
-export const AuthInput = styled.input`
+export const AuthInput = styled.input<{ darkMode: boolean }>`
 	padding: 0.5rem 0.25rem;
 	display: block;
 	margin-bottom: 0.5rem;
 	border-radius: 5px;
-	border: 1px solid #cacaca;
+	border: ${props => (props.darkMode ? 'none' : '1px solid #cacaca')};
 	font-size: 1rem;
 	width: 100%;
+	${props => (props.darkMode ? 'background: #262628; color: white;' : '')}
 `;
 
 export const DangerTxt = styled.p`

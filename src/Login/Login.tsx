@@ -24,6 +24,7 @@ const Login: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
 	const [pw, setPw] = useState<string>('');
 	const [err, setErr] = useState<loginErrors>(loginErrors.OK);
 	const peachContext = useContext(PeachContext);
+	const darkMode = peachContext.darkMode;
 
 	useEffect(() => {
 		const peachedToken = localStorage.getItem('peachedToken');
@@ -91,15 +92,17 @@ const Login: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
 
 	return (
 		<Moat>
-			<Castle>
-				<Heading>Login</Heading>
+			<Castle darkMode={darkMode}>
+				<Heading darkMode={darkMode}>Login</Heading>
 				<AuthInput
+					darkMode={darkMode}
 					onChange={e => setEmail(e.target.value)}
 					key='email'
 					type='text'
 					placeholder='email'
 				/>
 				<AuthInput
+					darkMode={darkMode}
 					onChange={e => setPw(e.target.value)}
 					key='password'
 					type='password'
