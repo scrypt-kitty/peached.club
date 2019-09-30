@@ -12,9 +12,19 @@ import {
 	Image,
 	UploadedImage,
 	DeleteImage,
+	ImageUploadButton,
+	MagicPostActionsContainer,
 } from './style';
 import Plus from './Plus.svg';
+import ImageIcon from './ImageIcon.svg';
+import ImageIconDarkMode from './ImageIconDarkMode.svg';
+import ClockIconDarkMode from './ClockIconDarkMode.svg';
+import ClockIcon from './ClockIcon.svg';
+import CalendarIcon from './CalendarIcon.svg';
+import CalendarIconDarkMode from './CalendarIconDarkMode.svg';
 import DeleteIcon from '../Comments/DeleteIcon.svg';
+
+import { getCurrentTime, getCurrentDate } from './MagicPostActions';
 
 import ACTIONS, { IMGUR_ID } from '../api/constants';
 import api from '../api';
@@ -41,7 +51,6 @@ const ComposerForm: React.FC<ComposerProps> = ({
 	const postRef = useRef<HTMLTextAreaElement>(null);
 	const [postText, setPostText] = useState<string>('');
 	const { curUser } = useContext(PeachContext);
-	console.log('hello');
 	const [images, setImages] = useState<(ImageMessage | TextMessage)[]>([]);
 
 	const uploadImage = async (files: FileList | null, id: string) => {
@@ -90,15 +99,45 @@ const ComposerForm: React.FC<ComposerProps> = ({
 				ref={postRef}
 				placeholder="What's going on?"
 				onChange={e => setPostText(e.target.value)}
+				value={postText}
 			/>
 
-			<input
-				type='file'
-				accept='image*'
-				onChange={e =>
-					curUser ? uploadImage(e.target.files, curUser.id) : null
-				}
-			/>
+			<MagicPostActionsContainer>
+				<ImageUploadButton>
+					<img
+						src={darkMode ? ImageIconDarkMode : ImageIcon}
+						alt='Upload an image'
+					/>
+					<input
+						type='file'
+						accept='image*'
+						onChange={e =>
+							curUser
+								? uploadImage(e.target.files, curUser.id)
+								: null
+						}
+					/>
+				</ImageUploadButton>
+				<ImageUploadButton>
+					<img
+						onClick={() =>
+							setPostText(postText => postText + getCurrentTime())
+						}
+						src={darkMode ? ClockIconDarkMode : ClockIcon}
+						alt='Add current time'
+					/>
+				</ImageUploadButton>
+				<ImageUploadButton>
+					<img
+						onClick={() =>
+							setPostText(postText => postText + getCurrentDate())
+						}
+						src={darkMode ? CalendarIconDarkMode : CalendarIcon}
+						alt='Add current date'
+					/>
+				</ImageUploadButton>
+			</MagicPostActionsContainer>
+
 			{images.length > 0 ? (
 				<ImagesHolder>
 					{images.map(

@@ -50,9 +50,11 @@ export const ImagesHolder = styled.div`
 	display: flex;
 	width: 100%;
 	justify-content: start;
-	height: 15%;
-	margin: 1rem 0;
+	height: 5rem;
+	width: auto;
+	margin: 0 0 1rem;
 	overflow: hidden;
+	flex-wrap: wrap;
 `;
 
 export const DeleteImage = styled.img`
@@ -87,8 +89,9 @@ export const UploadedImage = styled.img`
 `;
 
 export const Image = styled.div`
-	flex-basis: 25%;
+	flex-basis: 20%;
 	margin-right: 1rem;
+	margin-top: 0.25rem;
 	overflow: hidden;
 	border-radius: 0.25rem;
 	:hover > ${DeleteImage} {
@@ -97,4 +100,29 @@ export const Image = styled.div`
 	}
 
 	position: relative;
+`;
+
+export const ImageUploadButton = styled.div`
+	position: relative;
+	overflow: hidden;
+	align-self: start;
+	cursor: pointer;
+	margin-bottom: 1rem;
+	margin-right: 1rem;
+	display: inline;
+	> input {
+		position: absolute;
+		top: 0;
+		left: 0;
+		opacity: 0;
+		display: block;
+		font-size: 1.5rem;
+		min-width: 100%;
+		min-height: 100%;
+	}
+`;
+
+export const MagicPostActionsContainer = styled.div`
+	overflow: hidden;
+	margin-bottom: 1rem;
 `;
