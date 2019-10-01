@@ -13,6 +13,7 @@ import ACTIONS, {
 	FRIENDS_OF_FRIENDS,
 	CHANGE_USER_NAME,
 	CHANGE_DISPLAY_NAME,
+	ADD_FRIEND,
 } from './constants';
 
 const api = async (action: ACTIONS, jwt: string, body = {}, id = '') => {
@@ -104,6 +105,11 @@ const api = async (action: ACTIONS, jwt: string, body = {}, id = '') => {
 		case ACTIONS.changeDisplayName:
 			uri = CHANGE_DISPLAY_NAME;
 			req.method = 'PUT';
+			req.headers.Authorization = `Bearer ${jwt}`;
+			break;
+		case ACTIONS.addFriend:
+			uri = ADD_FRIEND(id);
+			req.method = 'POST';
 			req.headers.Authorization = `Bearer ${jwt}`;
 			break;
 	}

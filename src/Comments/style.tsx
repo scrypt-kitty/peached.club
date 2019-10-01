@@ -13,6 +13,8 @@ import Button from '../Theme/Button';
 import { ModalContainer, ModalBackdrop } from '../Theme/Modal';
 import { DisplayName3 } from '../Theme/Profile';
 
+import PrivateProfile from '../PrivateProfile';
+
 import DeleteIcon from './DeleteIcon.svg';
 
 export const DisableBodyScroll = createGlobalStyle`
@@ -54,7 +56,7 @@ interface DeletePromptProps {
 
 export const DeletePrompt = (props: DeletePromptProps) => (
 	<ModalBackdrop entering>
-		<DeletePromptContainer darkMode={props.darkMode}>
+		<DeletePromptContainer isMini={false} darkMode={props.darkMode}>
 			{props.children}
 			<DeleteOptions>
 				<ButtonStyled onClick={() => props.onDelete()}>
@@ -172,35 +174,61 @@ const ProfileLink = styled.span`
 	}
 `;
 
+const BasicContainer = styled.div`
+	margin: 0;
+	padding: 0;
+`;
+
 interface CommentProps extends PostCommentProps {
 	avatarSrc: string;
 	isRequester: boolean;
 	deleteComment: (id: string) => void;
 	darkMode: boolean;
+	isFriend: boolean;
 }
 
 export const Comment: React.FC<CommentProps> = (props: CommentProps) => {
 	const [deletePromptShowing, setDeletePromptShowing] = useState<boolean>(
 		false
 	);
+	const [profilePreviewShowing, setProfilePreviewShowing] = useState<boolean>(
+		false
+	);
+	const Avatar = (
+		<AvatarStyled>
+			<img src={props.avatarSrc} alt={props.author.displayName} />
+		</AvatarStyled>
+	);
+	const Name = (
+		<>
+			<DisplayName3>{props.author.displayName}</DisplayName3>
+			<Handle>@{props.author.name}</Handle>
+		</>
+	);
 	return (
 		<CommentContainer>
 			<ProfileLink>
-				<Link to={`/friend/${props.author.id}`}>
-					<AvatarStyled>
-						<img
-							src={props.avatarSrc}
-							alt={props.author.displayName}
-						/>
-					</AvatarStyled>
-				</Link>
+				{props.author.isPublic || props.isFriend ? (
+					<Link to={`/friend/${props.author.id}`}>{Avatar}</Link>
+				) : (
+					<BasicContainer
+						onClick={() => setProfilePreviewShowing(true)}
+					>
+						{Avatar}
+					</BasicContainer>
+				)}
 			</ProfileLink>
 			<CommentText>
 				<ProfileLink>
-					<Link to={`/friend/${props.author.id}`}>
-						<DisplayName3>{props.author.displayName}</DisplayName3>
-						<Handle>@{props.author.name}</Handle>
-					</Link>
+					{props.author.isPublic || props.isFriend ? (
+						<Link to={`/friend/${props.author.id}`}>{Name}</Link>
+					) : (
+						<BasicContainer
+							onClick={() => setProfilePreviewShowing(true)}
+						>
+							{Name}
+						</BasicContainer>
+					)}
 				</ProfileLink>
 				<p>{props.body}</p>
 			</CommentText>
@@ -219,6 +247,16 @@ export const Comment: React.FC<CommentProps> = (props: CommentProps) => {
 						</DeletePrompt>
 					) : null}
 				</>
+			) : null}
+
+			{profilePreviewShowing ? (
+				<PrivateProfile
+					onDismissPrivateProfile={() =>
+						setProfilePreviewShowing(false)
+					}
+					avatarSrc={props.avatarSrc}
+					user={props.author}
+				/>
 			) : null}
 		</CommentContainer>
 	);

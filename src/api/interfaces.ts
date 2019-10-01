@@ -218,6 +218,15 @@ export interface NameChangeResponse {
 	};
 }
 
+export interface AddFriendResponse {
+	data: {
+		status: string;
+		id: string;
+		stream: User;
+	};
+	success: number;
+}
+
 /*
  * IMGUR API
  */

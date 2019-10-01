@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const ButtonLink = styled.a`
+const ButtonLink = styled.a<{ centered?: boolean }>`
 	text-decoration: none;
-	align-self: start;
+	${props => (props.centered ? '' : 'align-self: start;')}
 	color: white;
 	:visited {
 		color: white;
@@ -42,10 +42,15 @@ interface ButtonProps extends ButtonStyleProps {
 	children: React.ReactNode;
 	link?: string;
 	onClick: () => void;
+	centered?: boolean;
 }
 
 const Button: React.FC<ButtonProps> = (props: ButtonProps) => (
-	<ButtonLink href={props.link || '#'} onClick={e => props.onClick()}>
+	<ButtonLink
+		href={props.link || '#'}
+		onClick={e => props.onClick()}
+		centered={props.centered}
+	>
 		<ButtonStyle
 			type='submit'
 			color={props.color}

@@ -27,21 +27,24 @@ const Comments: React.FC<CommentsProps> = ({
 	postAuthorAvatarSrc,
 	postAuthorId,
 }) => {
-	const peachContext = useContext(PeachContext);
+	const { darkMode, peachFeed } = useContext(PeachContext);
 
 	const getAvatar = (id: string) => {
 		if (id === postAuthorId) return postAuthorAvatarSrc;
 		const res = mutualFriends.filter(friend => friend.id === id);
-		if (res.length === 0) return 'https://i.imgur.com/iIq3l6X.png';
+		if (res.length === 0) return 'https://i.imgur.com/J9tsyuW.png';
 		return res[0].avatarSrc;
 	};
 
 	return (
-		<Modal darkMode={peachContext.darkMode} onKeyDown={onDismissComments}>
+		<Modal darkMode={darkMode} onKeyDown={onDismissComments}>
 			<AllComments>
 				{comments.map(c => (
 					<Comment
-						darkMode={peachContext.darkMode}
+						isFriend={
+							peachFeed && peachFeed[c.author.name] ? true : false
+						}
+						darkMode={darkMode}
 						isRequester={
 							requester !== null && c.author.id === requester.id
 						}
@@ -52,10 +55,7 @@ const Comments: React.FC<CommentsProps> = ({
 					/>
 				))}
 			</AllComments>
-			<AddComment
-				darkMode={peachContext.darkMode}
-				onSubmit={updateComments}
-			/>
+			<AddComment darkMode={darkMode} onSubmit={updateComments} />
 		</Modal>
 	);
 };
