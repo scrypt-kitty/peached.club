@@ -37,17 +37,20 @@ const DisableBodyScroll = createGlobalStyle`
 
 `;
 
-export const ModalContainer = styled.div<{ darkMode: boolean }>`
+export const ModalContainer = styled.div<{
+	darkMode: boolean;
+	isMini: boolean;
+}>`
 	background: ${props => (props.darkMode ? '#262628' : 'white')};
 	margin: 0;
 	padding: 1rem 2rem;
-	width: 50%;
-	height: 60%;
+	width: ${props => (props.isMini ? '30%' : '50%')};
+	height: ${props => (props.isMini ? '40%' : '60%')};
 	max-height: 80%;
 	overflow: scroll;
 	border-radius: 0.5rem;
 	@media screen and (max-width: 800px) {
-		width: 80%;
+		width: ${props => (props.isMini ? '50%' : '80%')};
 	}
 
 	display: flex;
@@ -59,9 +62,15 @@ interface ModalProps {
 	children: React.ReactNode;
 	onKeyDown: () => void;
 	darkMode: boolean;
+	isMini?: boolean;
 }
 
-const Modal: React.FC<ModalProps> = ({ children, onKeyDown, darkMode }) => {
+const Modal: React.FC<ModalProps> = ({
+	children,
+	onKeyDown,
+	darkMode,
+	isMini = false,
+}) => {
 	const [entering, setEntering] = useState<boolean>(true);
 	const keepModalOpen = (e: React.MouseEvent<HTMLDivElement>) => {
 		// This stops the event from bubbling up.
@@ -90,6 +99,7 @@ const Modal: React.FC<ModalProps> = ({ children, onKeyDown, darkMode }) => {
 				entering={entering}
 			>
 				<ModalContainer
+					isMini={isMini}
 					darkMode={darkMode}
 					onClick={e => e.stopPropagation()}
 				>
