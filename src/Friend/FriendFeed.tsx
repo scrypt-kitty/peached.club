@@ -60,6 +60,12 @@ function isImage(object: any): object is ImageMessage {
 }
 /*eslint-enable*/
 
+enum LIKE_STATE {
+	loading,
+	liked,
+	unliked,
+}
+
 const addNewlines = (txt: string) =>
 	txt.indexOf('\n') < 0
 		? txt
@@ -133,28 +139,38 @@ export const FriendFeedContainer = (props: FriendFeedProps) => {
 	const peachContext = useContext(PeachContext);
 
 	const onClickLike = () => {
-		fetch(liked ? UNLIKE(props.id) : LIKE, {
-			method: liked ? 'DELETE' : 'POST',
-			body: JSON.stringify(liked ? {} : { postId: props.id }),
-			headers: {
-				'Content-Type': 'application/json',
-				Authorization: `Bearer ${peachContext.jwt}`,
-			},
-		})
-			.then(response => response.json())
-			.catch(err => console.log(err))
-			.then((response: LikePostResponse) => {
-				if (response.error) {
-					console.log('whoops');
+		toggleLiked(liked => !liked);
+		if (liked) {
+			setLikeCount(likeCount => likeCount - 1);
+		} else {
+			setLikeCount(likeCount => likeCount + 1);
+		}
+
+		// this is redundant and should be fixed
+		if (liked) {
+			api(ACTIONS.unlike, peachContext.jwt).then(
+				(response: LikePostResponse) => {
+					if (response.success !== 1) {
+						console.log('oh no');
+						toggleLiked(liked => !liked);
+						return;
+					}
+				}
+			);
+		} else {
+			api(
+				ACTIONS.like,
+				peachContext.jwt,
+				{ postId: props.id },
+				props.id
+			).then((response: LikePostResponse) => {
+				if (response.success !== 1) {
+					console.log('oh no');
+					toggleLiked(liked => !liked);
 					return;
 				}
-				toggleLiked(liked => !liked);
-				if (liked) {
-					setLikeCount(likeCount => likeCount - 1);
-				} else {
-					setLikeCount(likeCount => likeCount + 1);
-				}
 			});
+		}
 	};
 
 	const onClickComments = () => {
