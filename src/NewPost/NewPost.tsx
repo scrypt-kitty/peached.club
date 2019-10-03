@@ -1,4 +1,4 @@
-import React, { useState, useRef, useContext, useEffect } from 'react';
+import React, { useState, useRef, useContext } from 'react';
 
 import Modal from '../Theme/Modal';
 import Button from '../Theme/Button';
@@ -106,7 +106,7 @@ const ComposerForm: React.FC<ComposerProps> = ({
 				<ImageUploadButton>
 					<img
 						src={darkMode ? ImageIconDarkMode : ImageIcon}
-						alt='Upload an image'
+						alt='Upload'
 					/>
 					<input
 						type='file'
@@ -197,35 +197,6 @@ const NewPost = (props: {}) => {
 	const [postSuccess, setPostSuccess] = useState<boolean>(false);
 	const [posting, setPosting] = useState<boolean>(false);
 	const { jwt, darkMode } = useContext(PeachContext);
-	const outputPost = (content: string) => {
-		if (content && content.length > 0) {
-			setSubmitted(true);
-			setShowToasty(true);
-			setPosting(true);
-			api(ACTIONS.createPost, jwt, {
-				message: [
-					{
-						text: content,
-						type: 'text',
-					},
-				],
-			}).then(
-				(response: { data: CreatePostResponse; success: number }) => {
-					setPosting(false);
-					if (response.success === 1) {
-						setPostSuccess(true);
-					} else {
-						setPostSuccess(false);
-					}
-					setTimeout(() => {
-						setSubmitted(false);
-						setShowToasty(false);
-						setPosting(false);
-					}, 2000);
-				}
-			);
-		}
-	};
 
 	const submitPost = (messages: (TextMessage | ImageMessage)[]) => {
 		if (messages.length < 1) return;

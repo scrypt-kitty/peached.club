@@ -1,11 +1,11 @@
 import React from 'react';
-import { PeachFeed, LoginStream } from './api/interfaces';
+import { LoginStream, User } from './api/interfaces';
 
 interface PeachContextTypes {
 	jwt: string;
 	setJwt: (newJwt: string) => void;
-	peachFeed: PeachFeed | null;
-	setPeachFeed: (peachFeed: PeachFeed) => void;
+	peachFeed: User[];
+	setPeachFeed: (newPeachFeed: User[]) => void;
 	curUser: LoginStream | null;
 	setCurUser: (newUser: LoginStream) => void;
 	curFeedIndex: number;
@@ -17,8 +17,8 @@ interface PeachContextTypes {
 const defaults = {
 	jwt: '',
 	setJwt: (newJwt: string) => {},
-	peachFeed: null,
-	setPeachFeed: (peachFeed: PeachFeed) => {},
+	peachFeed: [],
+	setPeachFeed: (newPeachFeed: User[]) => {},
 	curUser: null,
 	setCurUser: (newUser: LoginStream) => {},
 	curFeedIndex: 0,
@@ -29,10 +29,10 @@ const defaults = {
 
 export interface GlobalContextProps {
 	jwt: string;
-	peachFeed: PeachFeed | null;
+	peachFeed: User[];
 	curUser: LoginStream | null;
 	setCurFeedIndex: (newIndex: number) => void;
-	setPeachFeed: (peachFeed: PeachFeed) => void;
+	setPeachFeed: (newPeachFeed: User[]) => void;
 }
 
 export const PeachContext = React.createContext<PeachContextTypes>(defaults);

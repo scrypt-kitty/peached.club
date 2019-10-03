@@ -39,7 +39,7 @@ const Login: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
 			peachContext.setCurUser(JSON.parse(user));
 			history.push('/feed');
 		}
-	}, [peachContext]);
+	}, [peachContext, history]);
 
 	const buttonOnClick = () => {
 		if (email.indexOf('@') < 1 || email.length < 1 || pw.length < 1) {

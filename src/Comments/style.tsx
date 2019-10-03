@@ -138,8 +138,10 @@ export const ButtonStyled = styled(Button)`
 const AvatarStyled = styled(Avatar)`
 	flex: 1;
 	> img {
+		object-fit: cover;
 		border-radius: 50%;
-		width: 100px;
+		width: 5rem;
+		height: 5rem;
 	}
 
 	@media screen and (max-width: 800px) {

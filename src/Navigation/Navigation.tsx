@@ -3,7 +3,6 @@ import React, { useContext } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 
 import { PeachContext } from '../PeachContext';
-import { PeachFeed } from '../api/interfaces';
 import { NavWrap, Link, FeedControls, AppLinks, Nav } from './style';
 import ArrowLeft from './ArrowLeft.svg';
 import ArrowRight from './ArrowRight.svg';
@@ -16,19 +15,36 @@ import NightModeLight from './NightModeLight.svg';
 import SettingsIcon from './SettingsIcon.svg';
 import SettingsIconDarkMode from './SettingsIconDarkMode.svg';
 
-const Navigation = (props: {
+interface NavigationProps {
 	curFeed?: string;
-	peachFeed?: PeachFeed | null;
-}) => {
-	const { darkMode, curUser, toggleDarkMode } = useContext(PeachContext);
-	const peachFeedIds = props.peachFeed ? Object.keys(props.peachFeed) : [];
-	const curFeedIndex = props.curFeed
-		? peachFeedIds.indexOf(props.curFeed)
-		: -1;
+}
 
-	const showRightArrow =
-		curFeedIndex < peachFeedIds.length - 1 && peachFeedIds.length > 0;
-	const showLeftArrow = curFeedIndex > 0 && peachFeedIds.length > 0;
+const Navigation: React.FC<NavigationProps> = ({ curFeed }) => {
+	const { darkMode, curUser, toggleDarkMode, peachFeed } = useContext(
+		PeachContext
+	);
+	let feedListIDs: string[] = [];
+
+	let showRightArrow = false;
+	let showLeftArrow = false;
+	let nextUser = '';
+	let prevUser = '';
+
+	if (curFeed) {
+		feedListIDs = peachFeed
+			.filter(user => user.unreadPostCount > 0)
+			.map(user => user.id);
+		const curFeedIndex = feedListIDs.indexOf(curFeed);
+		if (curFeedIndex > 0) {
+			showLeftArrow = true;
+			prevUser = feedListIDs[curFeedIndex - 1];
+		}
+
+		if (curFeedIndex < feedListIDs.length - 1) {
+			showRightArrow = true;
+			nextUser = feedListIDs[curFeedIndex + 1];
+		}
+	}
 
 	return (
 		<NavWrap darkMode={darkMode}>
@@ -73,15 +89,11 @@ const Navigation = (props: {
 						</RouterLink>
 					</Link>
 				</AppLinks>
-				{props.curFeed && curFeedIndex !== -1 ? (
+				{curFeed ? (
 					<FeedControls>
 						{showLeftArrow ? (
 							<Link>
-								<RouterLink
-									to={`/friend/${
-										peachFeedIds[curFeedIndex - 1]
-									}`}
-								>
+								<RouterLink to={`/friend/${prevUser}`}>
 									<img
 										src={
 											darkMode
@@ -95,11 +107,7 @@ const Navigation = (props: {
 						) : null}
 						{showRightArrow ? (
 							<Link>
-								<RouterLink
-									to={`/friend/${
-										peachFeedIds[curFeedIndex + 1]
-									}`}
-								>
+								<RouterLink to={`/friend/${nextUser}`}>
 									<img
 										src={
 											darkMode

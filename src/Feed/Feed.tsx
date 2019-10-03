@@ -6,7 +6,7 @@ import Loading from '../Loading';
 import NewPost from '../NewPost';
 
 import { PeachContext, GlobalContextProps } from '../PeachContext';
-import { Connections, PeachFeed, User } from '../api/interfaces';
+import { Connections, User } from '../api/interfaces';
 import ACTIONS from '../api/constants';
 import api from '../api';
 
@@ -34,16 +34,22 @@ const Feed = (props: RouteComponentProps & GlobalContextProps) => {
 						setConnections(
 							connectionsUnread.concat(connectionsRead)
 						);
-						const newPeachFeed: PeachFeed = {};
-						for (const user of response.data.connections) {
-							newPeachFeed[user.id] = user;
-							if (newPeachFeed[user.id].posts) {
-								newPeachFeed[
-									user.id
-								].posts = user.posts.reverse();
-							}
-						}
-						setPeachFeed(newPeachFeed);
+						// const newPeachFeed: PeachFeed = {};
+						// for (const user of response.data.connections) {
+						// newPeachFeed[user.id] = user;
+						// if (newPeachFeed[user.id].posts) {
+						// newPeachFeed[
+						// user.id
+						// ].posts = user.posts.reverse();
+						// }
+						// }
+
+						setPeachFeed(
+							response.data.connections.map(user => {
+								user.posts = user.posts.reverse();
+								return user;
+							})
+						);
 					} else {
 						console.log('handle error here :)');
 					}

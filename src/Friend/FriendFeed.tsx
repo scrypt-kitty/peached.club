@@ -22,9 +22,9 @@ import {
 	MutualFriend,
 	FriendsOfFriendsResponse,
 } from '../api/interfaces';
-import ACTIONS, { LIKE, UNLIKE } from '../api/constants';
+import ACTIONS from '../api/constants';
 import {
-	MiniMenu,
+	DeletePost,
 	PostWrapper,
 	PostInteraction,
 	FriendPostContent,
@@ -59,12 +59,6 @@ function isImage(object: any): object is ImageMessage {
 	return 'src' in object;
 }
 /*eslint-enable*/
-
-enum LIKE_STATE {
-	loading,
-	liked,
-	unliked,
-}
 
 const addNewlines = (txt: string) =>
 	txt.indexOf('\n') < 0
@@ -151,7 +145,6 @@ export const FriendFeedContainer = (props: FriendFeedProps) => {
 			api(ACTIONS.unlike, peachContext.jwt).then(
 				(response: LikePostResponse) => {
 					if (response.success !== 1) {
-						console.log('oh no');
 						toggleLiked(liked => !liked);
 						return;
 					}
@@ -165,7 +158,6 @@ export const FriendFeedContainer = (props: FriendFeedProps) => {
 				props.id
 			).then((response: LikePostResponse) => {
 				if (response.success !== 1) {
-					console.log('oh no');
 					toggleLiked(liked => !liked);
 					return;
 				}
@@ -218,12 +210,13 @@ export const FriendFeedContainer = (props: FriendFeedProps) => {
 			<>
 				{props.requester.id === props.author ? (
 					<>
-						<MiniMenu
-							onClick={() => setDeletePromptShowing(true)}
-							disableTopMargin
-						>
-							<img src={DeleteIcon} alt='Delete' />
-						</MiniMenu>
+						<DeletePost>
+							<img
+								onClick={() => setDeletePromptShowing(true)}
+								src={DeleteIcon}
+								alt='Delete'
+							/>
+						</DeletePost>
 						{deletePromptShowing ? (
 							<DeletePrompt
 								darkMode={peachContext.darkMode}
@@ -294,13 +287,14 @@ const FriendFeed = (
 	const { jwt, curUser, peachFeed } = props;
 
 	const [viewingUser, setCurUserProfile] = useState<User | null>(
-		peachFeed ? peachFeed[props.match.params['id']] || null : null
+		peachFeed.filter(user => user.id === props.match.params['id'])[0] ||
+			null
 	);
 	const [curFeedId, setCurFeedId] = useState<string>('');
 	const [otherFriends, setOtherFriends] = useState<MutualFriend[]>([]);
 
 	useEffect(() => {
-		if (!jwt || !peachFeed) {
+		if (!jwt || peachFeed.length === 0) {
 			return;
 		}
 		window.scroll(0, 0);
@@ -377,10 +371,8 @@ const FriendFeed = (
 				};
 				markRead();
 			}
-		} catch (_error) {
-			alert('cant mark as read!');
-		}
-	}, [curUser, jwt]);
+		} catch (_error) {}
+	}, [curUser, jwt, peachFeed]);
 
 	const deletePost = (id: string) => {
 		api(ACTIONS.deletePost, jwt, {}, id).then(
@@ -392,13 +384,13 @@ const FriendFeed = (
 		);
 	};
 
-	if (!jwt || !peachFeed) {
+	if (!jwt || peachFeed.length === 0) {
 		return <Redirect push to='/feed' />;
 	}
 
 	return (
 		<>
-			<Navigation curFeed={curFeedId} peachFeed={peachFeed} />
+			<Navigation curFeed={curFeedId} />
 			<Page>
 				{viewingUser && requester ? (
 					<>

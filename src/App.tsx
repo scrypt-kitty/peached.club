@@ -9,7 +9,7 @@ import { Redirect } from 'react-router';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { GlobalStyle } from './style';
 import { PeachContext } from './PeachContext';
-import { PeachFeed, LoginStream } from './api/interfaces';
+import { LoginStream, User } from './api/interfaces';
 
 function getUserFromStorage() {
 	const user = localStorage.getItem('user');
@@ -25,7 +25,7 @@ const App: React.FC = () => {
 		localStorage.getItem('peachedToken') || ''
 	);
 
-	const [peachFeed, setPeachFeed] = useState<PeachFeed | null>(null);
+	const [peachFeed, setPeachFeed] = useState<User[]>([]);
 	const [curUser, setCurUser] = useState<LoginStream | null>(
 		getUserFromStorage()
 	);
@@ -38,7 +38,7 @@ const App: React.FC = () => {
 		setNewJwt(newJwt);
 	};
 
-	const updatePeachFeed = (newPeachFeed: PeachFeed | null) => {
+	const updatePeachFeed = (newPeachFeed: User[]) => {
 		setPeachFeed(newPeachFeed);
 	};
 
@@ -135,7 +135,7 @@ const App: React.FC = () => {
 							localStorage.removeItem('user');
 							localStorage.removeItem('peachedDarkMode');
 							updateJwt('');
-							updatePeachFeed(null);
+							updatePeachFeed([]);
 							return <Redirect to='/login' />;
 						}}
 					/>

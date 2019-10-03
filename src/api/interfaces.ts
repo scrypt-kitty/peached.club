@@ -57,7 +57,7 @@ export interface CommentResponse {
 	author: {
 		bio: string;
 		isPublic: boolean;
-		posts: any;
+		posts: Post[] | null;
 		unreadPostCount: number;
 		lastRead: number;
 	};
@@ -73,7 +73,7 @@ export interface Comment {
 		displayName: string;
 		bio: string;
 		isPublic: boolean;
-		posts: any;
+		posts: Post[] | null;
 		unreadPostCount: number;
 		lastRead: number;
 	};
@@ -147,9 +147,26 @@ export interface User extends CurUser {
 	isFavorite: boolean;
 }
 
+export interface PendingFriendRequest {
+	id: string;
+	stream: {
+		id: string;
+		name: string;
+		displayName: string;
+		bio: string;
+		isPublic: boolean;
+		unreadPostCount: number;
+		lastRead: number;
+	};
+
+	createdTime: number;
+}
+
 export interface Connections {
 	connections: User[];
 	requesterStream: CurUser;
+	inboundFriendRequests: PendingFriendRequest;
+	outboundFriendRequests: PendingFriendRequest;
 }
 
 /**

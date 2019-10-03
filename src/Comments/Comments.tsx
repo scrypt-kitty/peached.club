@@ -42,7 +42,8 @@ const Comments: React.FC<CommentsProps> = ({
 				{comments.map(c => (
 					<Comment
 						isFriend={
-							peachFeed && peachFeed[c.author.name] ? true : false
+							peachFeed.filter(user => user.id === c.author.id)
+								.length > 0
 						}
 						darkMode={darkMode}
 						isRequester={

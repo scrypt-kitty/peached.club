@@ -8,18 +8,21 @@ export const FriendPostContent = styled.div`
 	}
 `;
 interface MiniMenuProps {
-	onClick: () => void;
-	disableTopMargin?: boolean;
+	onClick?: () => void;
 }
 
 export const MiniMenu = styled.div<MiniMenuProps>`
-	display: flex;
-	justify-content: end;
-	margin-top: ${props => (props.disableTopMargin ? '0' : '1.25rem')};
+	height: 100%;
 	visibility: hidden;
-	:hover {
+	> img:hover {
 		cursor: pointer;
 	}
+`;
+
+export const DeletePost = styled(MiniMenu)`
+	width: 100%;
+	display: flex;
+	justify-content: end;
 `;
 
 export const PostWrapper = styled.div<{ darkMode?: boolean }>`
