@@ -12,6 +12,8 @@ const Dropdown = styled.div`
 	max-width: 30%;
 	overflow-x: hidden;
 	overflow-y: scroll;
+	box-shadow: 0.25rem 0.25rem 0.25rem rgba(0, 0, 0, 0.2);
+	border-radius: 0.25rem;
 
 	@media screen and (max-width: 1000px) {
 		max-width: 45%;
@@ -34,8 +36,6 @@ const DropdownUserItemContainer = styled.div<{ darkMode: boolean }>`
 	> img {
 		flex: 1;
 		border-radius: 50%;
-		height: 100%;
-		width: 100%;
 		margin-right: 1rem;
 	}
 	> div {

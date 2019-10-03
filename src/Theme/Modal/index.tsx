@@ -40,6 +40,7 @@ const DisableBodyScroll = createGlobalStyle`
 export const ModalContainer = styled.div<{
 	darkMode: boolean;
 	isMini: boolean;
+	alignTop: boolean;
 }>`
 	background: ${props => (props.darkMode ? '#262628' : 'white')};
 	margin: 0;
@@ -51,6 +52,7 @@ export const ModalContainer = styled.div<{
 	border-radius: 0.5rem;
 	@media screen and (max-width: 800px) {
 		width: ${props => (props.isMini ? '50%' : '80%')};
+		${props => (props.alignTop ? 'align-self: start;' : '')}
 	}
 
 	display: flex;
@@ -58,11 +60,14 @@ export const ModalContainer = styled.div<{
 	justify-content: space-between;
 `;
 
+// ${props => (props.alignTop ? 'height: 40%;' : '')}
+
 interface ModalProps {
 	children: React.ReactNode;
 	onKeyDown: () => void;
 	darkMode: boolean;
 	isMini?: boolean;
+	alignTop?: boolean;
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -70,6 +75,7 @@ const Modal: React.FC<ModalProps> = ({
 	onKeyDown,
 	darkMode,
 	isMini = false,
+	alignTop = false,
 }) => {
 	const [entering, setEntering] = useState<boolean>(true);
 	const keepModalOpen = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -99,6 +105,7 @@ const Modal: React.FC<ModalProps> = ({
 				entering={entering}
 			>
 				<ModalContainer
+					alignTop={alignTop}
 					isMini={isMini}
 					darkMode={darkMode}
 					onClick={e => e.stopPropagation()}

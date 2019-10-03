@@ -1,10 +1,11 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Comment as CommentType, User, MutualFriend } from '../api/interfaces';
 import { PeachContext } from '../PeachContext';
 
 import AddComment from './AddComment';
 import { Comment, AllComments } from './style';
 import Modal from '../Theme/Modal';
+import Button from '../Theme/Button';
 
 interface CommentsProps {
 	comments?: CommentType[];
@@ -28,6 +29,7 @@ const Comments: React.FC<CommentsProps> = ({
 	postAuthorId,
 }) => {
 	const { darkMode, peachFeed } = useContext(PeachContext);
+	const [isWritingComment, setWritingComment] = useState<boolean>(false);
 
 	const getAvatar = (id: string) => {
 		if (id === postAuthorId) return postAuthorAvatarSrc;
@@ -37,8 +39,12 @@ const Comments: React.FC<CommentsProps> = ({
 	};
 
 	return (
-		<Modal darkMode={darkMode} onKeyDown={onDismissComments}>
-			<AllComments>
+		<Modal
+			darkMode={darkMode}
+			onKeyDown={onDismissComments}
+			alignTop={isWritingComment}
+		>
+			<AllComments scroll={!isWritingComment}>
 				{comments.map(c => (
 					<Comment
 						isFriend={
@@ -56,7 +62,20 @@ const Comments: React.FC<CommentsProps> = ({
 					/>
 				))}
 			</AllComments>
-			<AddComment darkMode={darkMode} onSubmit={updateComments} />
+			<Button
+				onClick={() =>
+					setWritingComment(isWritingComment => !isWritingComment)
+				}
+			>
+				Write comment
+			</Button>
+			{isWritingComment ? (
+				<AddComment
+					darkMode={darkMode}
+					onSubmit={updateComments}
+					setCommentFinished={() => setWritingComment(false)}
+				/>
+			) : null}
 		</Modal>
 	);
 };

@@ -8,9 +8,14 @@ import { User } from '../api/interfaces';
 interface AddCommentProps {
 	onSubmit: (txt: string) => void;
 	darkMode: boolean;
+	setCommentFinished: () => void;
 }
 
-const AddComment: React.FC<AddCommentProps> = ({ onSubmit, darkMode }) => {
+const AddComment: React.FC<AddCommentProps> = ({
+	onSubmit,
+	darkMode,
+	setCommentFinished,
+}) => {
 	const [newComment, setNewComment] = useState<string>('');
 	const [isDropdownShowing, setDropdownShowing] = useState<boolean>(false);
 	const [nameSuggestions, setNameSuggestions] = useState<User[]>([]);
@@ -84,6 +89,7 @@ const AddComment: React.FC<AddCommentProps> = ({ onSubmit, darkMode }) => {
 					if (newComment.length > 0) {
 						onSubmit(newComment);
 						setNewComment('');
+						setCommentFinished();
 					}
 				}}
 			>

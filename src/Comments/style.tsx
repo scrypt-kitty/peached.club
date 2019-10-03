@@ -43,8 +43,8 @@ const DeleteOptions = styled.div`
 	margin-top: 1rem;
 `;
 
-export const AllComments = styled.div`
-	overflow: scroll;
+export const AllComments = styled.div<{ scroll: boolean }>`
+	overflow: ${props => (props.scroll ? 'scroll' : 'initial')};
 `;
 
 interface DeletePromptProps {
@@ -56,7 +56,11 @@ interface DeletePromptProps {
 
 export const DeletePrompt = (props: DeletePromptProps) => (
 	<ModalBackdrop entering>
-		<DeletePromptContainer isMini={false} darkMode={props.darkMode}>
+		<DeletePromptContainer
+			alignTop={false}
+			isMini={false}
+			darkMode={props.darkMode}
+		>
 			{props.children}
 			<DeleteOptions>
 				<ButtonStyled onClick={() => props.onDelete()}>
@@ -129,6 +133,7 @@ export const Input = styled.textarea<{ darkMode: boolean }>`
 		Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 	font-size: 1rem;
 	min-height: 2.5rem;
+	height: 10rem;
 `;
 
 export const ButtonStyled = styled(Button)`
