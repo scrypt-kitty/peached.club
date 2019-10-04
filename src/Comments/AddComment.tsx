@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Input, AddCommentContainer, ButtonStyled } from './style';
+import { Input, AddCommentContainer, ButtonWrapper } from './style';
 import Dropdown, { DropdownUserItem } from '../Theme/Dropdown';
+import Button from '../Theme/Button';
 
 import { PeachContext } from '../PeachContext';
 import { User } from '../api/interfaces';
@@ -8,14 +9,9 @@ import { User } from '../api/interfaces';
 interface AddCommentProps {
 	onSubmit: (txt: string) => void;
 	darkMode: boolean;
-	setCommentFinished: () => void;
 }
 
-const AddComment: React.FC<AddCommentProps> = ({
-	onSubmit,
-	darkMode,
-	setCommentFinished,
-}) => {
+const AddComment: React.FC<AddCommentProps> = ({ onSubmit, darkMode }) => {
 	const [newComment, setNewComment] = useState<string>('');
 	const [isDropdownShowing, setDropdownShowing] = useState<boolean>(false);
 	const [nameSuggestions, setNameSuggestions] = useState<User[]>([]);
@@ -49,6 +45,7 @@ const AddComment: React.FC<AddCommentProps> = ({
 						user.name.indexOf(handle) > -1
 				)
 				.slice(0, 6)
+				.reverse()
 		);
 	}, [isDropdownShowing, newComment, peachFeed]);
 
@@ -64,12 +61,6 @@ const AddComment: React.FC<AddCommentProps> = ({
 
 	return (
 		<AddCommentContainer darkMode={darkMode}>
-			<Input
-				darkMode={darkMode}
-				value={newComment}
-				onChange={e => setNewComment(e.target.value)}
-				placeholder='Write a comment...'
-			/>
 			{isDropdownShowing ? (
 				<Dropdown>
 					{nameSuggestions.map(u => (
@@ -84,17 +75,25 @@ const AddComment: React.FC<AddCommentProps> = ({
 					))}
 				</Dropdown>
 			) : null}
-			<ButtonStyled
-				onClick={() => {
-					if (newComment.length > 0) {
-						onSubmit(newComment);
-						setNewComment('');
-						setCommentFinished();
-					}
-				}}
-			>
-				Submit
-			</ButtonStyled>
+			<ButtonWrapper>
+				<Button
+					onClick={() => {
+						if (newComment.length > 0) {
+							onSubmit(newComment);
+							setNewComment('');
+						}
+					}}
+				>
+					Post
+				</Button>
+			</ButtonWrapper>
+			<Input
+				autoFocus
+				darkMode={darkMode}
+				value={newComment}
+				onChange={e => setNewComment(e.target.value)}
+				placeholder='Write a comment...'
+			/>
 		</AddCommentContainer>
 	);
 };

@@ -17,6 +17,7 @@ interface ButtonStyleProps {
 	color?: string;
 	lg?: boolean;
 	disabled?: boolean;
+	isSmall?: boolean;
 }
 // background: ${props => (props.disabled ? '#b0b0b0' : '#e6395b')};
 
@@ -26,6 +27,7 @@ const ButtonStyle = styled.button<ButtonStyleProps>`
 	border: 1px solid
 		${props => (props.disabled ? '#cacaca' : props.color || '#fe4f72')};
 	padding: 0.5rem 1rem;
+	padding: ${props => (props.isSmall ? '0.25rem 0.5rem' : '0.5rem 1rem')};
 	border-radius: 0.25rem;
 	text-align: center;
 	color: white;
@@ -56,6 +58,7 @@ const Button: React.FC<ButtonProps> = (props: ButtonProps) => (
 			color={props.color}
 			lg={props.lg}
 			disabled={props.disabled}
+			isSmall={props.isSmall}
 		>
 			{props.children}
 		</ButtonStyle>

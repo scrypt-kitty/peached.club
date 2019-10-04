@@ -43,8 +43,8 @@ const DeleteOptions = styled.div`
 	margin-top: 1rem;
 `;
 
-export const AllComments = styled.div<{ scroll: boolean }>`
-	overflow: ${props => (props.scroll ? 'scroll' : 'initial')};
+export const AllComments = styled.div`
+	overflow: scroll;
 `;
 
 interface DeletePromptProps {
@@ -63,12 +63,8 @@ export const DeletePrompt = (props: DeletePromptProps) => (
 		>
 			{props.children}
 			<DeleteOptions>
-				<ButtonStyled onClick={() => props.onDelete()}>
-					Delete
-				</ButtonStyled>
-				<ButtonStyled onClick={() => props.onCancel()}>
-					Cancel
-				</ButtonStyled>
+				<Button onClick={() => props.onDelete()}>Delete</Button>
+				<Button onClick={() => props.onCancel()}>Cancel</Button>
 			</DeleteOptions>
 		</DeletePromptContainer>
 	</ModalBackdrop>
@@ -113,12 +109,10 @@ const CommentText = styled.div`
 `;
 
 export const AddCommentContainer = styled.div<{ darkMode: boolean }>`
-	display: flex;
 	padding-bottom: 0;
-	padding-top: 1rem;
 	width: 100%;
 	background: ${props => (props.darkMode ? '#262628' : 'white')};
-	min-height: 2rem;
+	flex: 0 1 auto;
 `;
 
 export const Input = styled.textarea<{ darkMode: boolean }>`
@@ -133,11 +127,31 @@ export const Input = styled.textarea<{ darkMode: boolean }>`
 		Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 	font-size: 1rem;
 	min-height: 2.5rem;
-	height: 10rem;
+	height: 2rem;
+
+	width: calc(100% - 4.25rem);
+	padding: 0.25rem 4rem 0.25rem 0.25rem
+	@media screen and (max-height: 400px)
+	@media screen and (max-width: 700px) {
+		height: 10rem;
+
+	}}
 `;
 
-export const ButtonStyled = styled(Button)`
+/*
+ * aligned with ../Theme/Modal
+ */
+export const ButtonWrapper = styled.div`
+	margin: 0;
 	flex: 1;
+	position: absolute;
+	z-index: 9999;
+	transform: translate(calc(50% - 4.5rem), 0.5rem);
+
+	@media screen and (max-width: 800px) {
+		transform: translate(calc(80% - 4.5rem), 0.5rem);
+	}
+	width: inherit;
 `;
 
 const AvatarStyled = styled(Avatar)`

@@ -4,8 +4,8 @@ import styled, { createGlobalStyle } from 'styled-components';
 export const ModalBackdrop = styled.div<{ entering: boolean }>`
 	top: 0;
 	left: 0;
-	position: fixed;
 	width: 100vw;
+	position: fixed;
 	display: flex;
 	align-items: center;
 	align-content: center;
@@ -18,6 +18,7 @@ export const ModalBackdrop = styled.div<{ entering: boolean }>`
 
 	animation: 0.5s ${props => (props.entering ? '' : 'reverse')} EnterBackdrop;
 	background: rgba(0, 0, 0, 0.3);
+	z-index: 999;
 `;
 
 const DisableBodyScroll = createGlobalStyle`
@@ -52,15 +53,17 @@ export const ModalContainer = styled.div<{
 	border-radius: 0.5rem;
 	@media screen and (max-width: 800px) {
 		width: ${props => (props.isMini ? '50%' : '80%')};
-		${props => (props.alignTop ? 'align-self: start;' : '')}
+	}
+
+	@media screen and (max-height: 400px) {
+		height: 100%;
+		max-height: calc(100% - 2rem);
 	}
 
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
 `;
-
-// ${props => (props.alignTop ? 'height: 40%;' : '')}
 
 interface ModalProps {
 	children: React.ReactNode;

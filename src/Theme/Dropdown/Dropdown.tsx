@@ -1,54 +1,60 @@
 import React from 'react';
 import styled from 'styled-components';
 
+// const Dropdown = styled.div`
+// position: absolute;
+// display: flex;
+// flex-direction: column;
+// flex-shrink: 0;
+// margin: 0;
+// padding: 0;
+// top: 80%;
+// overflow-x: hidden;
+// overflow-y: scroll;
+// border-radius: 0.25rem;
+// width: 100%;
+
+// @media screen and (max-width: 700px) {
+// flex-direction: column-reverse;
+// top: 0;
+// }
+// `;
+
 const Dropdown = styled.div`
-	position: absolute;
+	margin: 0;
+	width: 100%;
+	height: 5rem;
+	overflow-y: scroll;
 	display: flex;
 	flex-direction: column;
-	flex-shrink: 0;
-	margin: 0;
-	padding: 0;
-	top: 80%;
-	max-width: 30%;
-	overflow-x: hidden;
-	overflow-y: scroll;
-	box-shadow: 0.25rem 0.25rem 0.25rem rgba(0, 0, 0, 0.2);
 	border-radius: 0.25rem;
-
-	@media screen and (max-width: 1000px) {
-		max-width: 45%;
-	}
-
-	@media screen and (max-width: 700px) {
-		max-width: 75%;
-		flex-direction: column-reverse;
-		top: 0;
-	}
 `;
 
 const DropdownUserItemContainer = styled.div<{ darkMode: boolean }>`
-	background: ${props => (props.darkMode ? 'black' : 'white')};
 	margin: 0;
-	padding: 1rem;
+	padding: 0.5rem;
 	display: flex;
 	color: ${props => (props.darkMode ? 'white' : 'black')};
+	font-size: smaller;
+	border-top: 1px solid #cacaca;
+	height: 2.5rem;
 
 	> img {
-		flex: 1;
 		border-radius: 50%;
 		margin-right: 1rem;
+		height: 38px;
+		width: 38px;
+		object-fit: cover;
 	}
 	> div {
 		margin: 0;
 		padding: 0;
 		flex: 5;
+		> p {
+			margin: 0;
+		}
 		> p:first-of-type {
 			font-weight: bold;
-			margin: 0 0 0.25rem;
-		}
-
-		> p:last-of-type {
-			margin: 0;
 		}
 	}
 
