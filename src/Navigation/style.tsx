@@ -6,6 +6,7 @@ export const NavWrap = styled.div<{ darkMode: boolean }>`
 	top: 0;
 	left: 0;
 	background: ${props => (props.darkMode ? 'black' : '#fff0e6')};
+	z-index: 100;
 `;
 
 export const Nav = styled.nav`
