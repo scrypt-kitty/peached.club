@@ -88,7 +88,6 @@ const AddComment: React.FC<AddCommentProps> = ({ onSubmit, darkMode }) => {
 				</Button>
 			</ButtonWrapper>
 			<Input
-				autoFocus
 				darkMode={darkMode}
 				value={newComment}
 				onChange={e => setNewComment(e.target.value)}

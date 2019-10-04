@@ -23,7 +23,7 @@ import styled from 'styled-components';
 const Dropdown = styled.div`
 	margin: 0;
 	width: 100%;
-	height: 5rem;
+	max-height: 5rem;
 	overflow-y: scroll;
 	display: flex;
 	flex-direction: column;

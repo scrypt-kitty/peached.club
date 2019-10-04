@@ -85,9 +85,7 @@ const CommentContainer = styled.div`
 	}
 	@media screen and (max-width: 500px) {
 		padding: 0;
-		:first-child {
-			padding-top: 0.5rem;
-		}
+		padding-left: 0.5rem;
 	}
 `;
 
@@ -130,12 +128,12 @@ export const Input = styled.textarea<{ darkMode: boolean }>`
 	height: 2rem;
 
 	width: calc(100% - 4.25rem);
-	padding: 0.25rem 4rem 0.25rem 0.25rem
-	@media screen and (max-height: 400px)
-	@media screen and (max-width: 700px) {
-		height: 10rem;
-
-	}}
+	padding: 0.25rem 4rem 0.25rem 0.25rem;
+	@media screen and (max-height: 400px) {
+		@media screen and (max-width: 700px) {
+			height: 7.5rem;
+		}
+	}
 `;
 
 /*
@@ -229,7 +227,9 @@ export const Comment: React.FC<CommentProps> = (props: CommentProps) => {
 	return (
 		<CommentContainer>
 			<ProfileLink>
-				{props.author.isPublic || props.isFriend ? (
+				{props.author.isPublic ||
+				props.isFriend ||
+				props.isRequester ? (
 					<Link to={`/friend/${props.author.id}`}>{Avatar}</Link>
 				) : (
 					<BasicContainer
@@ -241,7 +241,9 @@ export const Comment: React.FC<CommentProps> = (props: CommentProps) => {
 			</ProfileLink>
 			<CommentText>
 				<ProfileLink>
-					{props.author.isPublic || props.isFriend ? (
+					{props.author.isPublic ||
+					props.isFriend ||
+					props.isRequester ? (
 						<Link to={`/friend/${props.author.id}`}>{Name}</Link>
 					) : (
 						<BasicContainer

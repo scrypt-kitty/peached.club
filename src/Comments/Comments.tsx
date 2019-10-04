@@ -32,7 +32,8 @@ const Comments: React.FC<CommentsProps> = ({
 	const getAvatar = (id: string) => {
 		if (id === postAuthorId) return postAuthorAvatarSrc;
 		const res = mutualFriends.filter(friend => friend.id === id);
-		if (res.length === 0) return 'https://i.imgur.com/J9tsyuW.png';
+		if (res.length === 0) return '/defaultavatar.jpg';
+		if (!res[0].avatarSrc) return '/defaultavatar.jpg';
 		return res[0].avatarSrc;
 	};
 
