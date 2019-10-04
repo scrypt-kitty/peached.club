@@ -14,6 +14,8 @@ interface MiniMenuProps {
 export const MiniMenu = styled.div<MiniMenuProps>`
 	height: 100%;
 	visibility: hidden;
+	position: relative;
+	transform: translateY(1rem);
 	> img:hover {
 		cursor: pointer;
 	}
@@ -30,7 +32,7 @@ export const PostWrapper = styled.div<{ darkMode?: boolean }>`
 	color: ${props => (props.darkMode ? 'white' : 'black')}
 	word-wrap: break-word;
 	padding: 2rem 3rem 0;
-	:last-of-type {
+	:last-child {
 		padding: 2rem 3rem;
 	}
 
@@ -42,7 +44,7 @@ export const PostWrapper = styled.div<{ darkMode?: boolean }>`
 	@media screen and (max-width: 500px) {
 		padding: 1rem 1.5rem 0;
 		:last-of-type {
-			padding: 1rem 1.5rem;
+			padding: 1rem 1.5rem 1rem;
 		}
 	}
 `;
