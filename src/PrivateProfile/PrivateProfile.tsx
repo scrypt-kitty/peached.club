@@ -38,8 +38,8 @@ const PrivateProfileContainer = styled.div<{ darkMode: boolean }>`
 const AvatarPreview = styled.img`
 	border-radius: 50%;
 	object-fit: cover;
-	height: 7rem;
-	width: 7rem;
+	width: 75px;
+	height: 75px;
 `;
 
 const PrivateProfile: React.FC<PrivateProfileProps> = ({
@@ -66,13 +66,19 @@ const PrivateProfile: React.FC<PrivateProfileProps> = ({
 		);
 	};
 	return (
-		<Modal onKeyDown={onDismissPrivateProfile} darkMode={darkMode} isMini>
+		<Modal
+			onKeyDown={onDismissPrivateProfile}
+			darkMode={darkMode}
+			isMini
+			noSpaceBetween
+		>
 			<PrivateProfileContainer darkMode={darkMode}>
 				<AvatarPreview src={avatarSrc} alt='a profile pic' />
 				<Title darkMode={darkMode}>{user.displayName}</Title>
 				<Handle>@{user.name}</Handle>
 				<p>{user.bio}</p>
 				<Button
+					isSmall
 					centered
 					onClick={hasMadeRequest ? () => {} : sendFriendRequest}
 				>
