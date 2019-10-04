@@ -47,7 +47,7 @@ import CommentIcon from './CommentIcon.svg';
 import CommentIconDarkMode from './CommentIconDarkMode.svg';
 import LinkIcon from './LinkIcon.svg';
 import LinkIconDarkMode from './LinkIconDarkMode.svg';
-import { PeachContext, GlobalContextProps } from '../PeachContext';
+import { PeachContext } from '../PeachContext';
 
 import Navigation from '../Navigation';
 
@@ -278,13 +278,11 @@ const EmptyState = () => (
 	</EmptyStateWrapper>
 );
 
-const FriendFeed = (
-	props: RouteComponentProps<{ id: string }> & GlobalContextProps
-) => {
-	const peachContext = useContext(PeachContext);
+const FriendFeed = (props: RouteComponentProps<{ id: string }>) => {
+	const { jwt, curUser, peachFeed, darkMode } = useContext(PeachContext);
 	const [posts, setPosts] = useState<Post[]>([]);
 	const [requester, setRequester] = useState<User | null>(null);
-	const { jwt, curUser, peachFeed } = props;
+	// const { jwt, curUser, peachFeed } = props;
 
 	const [viewingUser, setCurUserProfile] = useState<User | null>(
 		peachFeed.filter(user => user.id === props.match.params['id'])[0] ||
@@ -394,9 +392,7 @@ const FriendFeed = (
 			<Page>
 				{viewingUser && requester ? (
 					<>
-						<ProfileHeaderContainer
-							darkMode={peachContext.darkMode}
-						>
+						<ProfileHeaderContainer darkMode={darkMode}>
 							<Avatar>
 								<img
 									src={
@@ -415,18 +411,22 @@ const FriendFeed = (
 							</ProfileHeaderText>
 						</ProfileHeaderContainer>
 						{posts.length > 0 ? (
-							posts.map(post => (
-								<FriendFeedContainer
-									{...post}
-									key={post.id}
-									requester={requester}
-									deletePost={deletePost}
-									author={viewingUser.id}
-									darkMode={peachContext.darkMode}
-									otherFriends={otherFriends}
-									postAuthorAvatarSrc={viewingUser.avatarSrc}
-								/>
-							))
+							<div style={{ margin: '0' }}>
+								{posts.map(post => (
+									<FriendFeedContainer
+										{...post}
+										key={post.id}
+										requester={requester}
+										deletePost={deletePost}
+										author={viewingUser.id}
+										darkMode={darkMode}
+										otherFriends={otherFriends}
+										postAuthorAvatarSrc={
+											viewingUser.avatarSrc
+										}
+									/>
+								))}
+							</div>
 						) : (
 							<EmptyState />
 						)}

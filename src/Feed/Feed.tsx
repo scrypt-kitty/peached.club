@@ -5,7 +5,7 @@ import Navigation from '../Navigation';
 import Loading from '../Loading';
 import NewPost from '../NewPost';
 
-import { PeachContext, GlobalContextProps } from '../PeachContext';
+import { PeachContext } from '../PeachContext';
 import { Connections, User } from '../api/interfaces';
 import ACTIONS from '../api/constants';
 import api from '../api';
@@ -15,10 +15,9 @@ import Preview from './Preview';
 import { Page } from '../Theme/Layout';
 import { Title } from '../Theme/Type';
 
-const Feed = (props: RouteComponentProps & GlobalContextProps) => {
-	const { jwt, setPeachFeed } = props;
+const Feed = (props: RouteComponentProps) => {
 	const [connections, setConnections] = useState<User[] | null>(null);
-	const { darkMode } = useContext(PeachContext);
+	const { darkMode, jwt, setPeachFeed } = useContext(PeachContext);
 	useEffect(() => {
 		window.scroll(0, 0);
 		if (jwt) {
@@ -34,16 +33,6 @@ const Feed = (props: RouteComponentProps & GlobalContextProps) => {
 						setConnections(
 							connectionsUnread.concat(connectionsRead)
 						);
-						// const newPeachFeed: PeachFeed = {};
-						// for (const user of response.data.connections) {
-						// newPeachFeed[user.id] = user;
-						// if (newPeachFeed[user.id].posts) {
-						// newPeachFeed[
-						// user.id
-						// ].posts = user.posts.reverse();
-						// }
-						// }
-
 						setPeachFeed(
 							response.data.connections.map(user => {
 								user.posts = user.posts.reverse();

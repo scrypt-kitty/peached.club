@@ -89,32 +89,8 @@ const App: React.FC = () => {
 				<Switch>
 					<Route exact path='/' component={Loading} />
 					<Route path='/login' component={Login} />
-					<Route
-						path='/feed'
-						render={routeProps => (
-							<Feed
-								{...routeProps}
-								peachFeed={peachFeed}
-								jwt={newJwt}
-								setCurFeedIndex={updateCurFeedIndex}
-								curUser={curUser}
-								setPeachFeed={updatePeachFeed}
-							/>
-						)}
-					/>
-					<Route
-						path='/friend/:id'
-						render={routeProps => (
-							<FriendFeed
-								{...routeProps}
-								peachFeed={peachFeed}
-								jwt={newJwt}
-								setCurFeedIndex={updateCurFeedIndex}
-								curUser={curUser}
-								setPeachFeed={updatePeachFeed}
-							/>
-						)}
-					/>
+					<Route path='/feed' component={Feed} />
+					<Route path='/friend/:id' component={FriendFeed} />
 					<Route
 						path='/activity'
 						render={routeProps => (
