@@ -1,5 +1,9 @@
 import React, { useContext } from 'react';
-import { Comment as CommentType, User, MutualFriend } from '../api/interfaces';
+import {
+	Comment as CommentType,
+	MutualFriend,
+	CurUser,
+} from '../api/interfaces';
 import { PeachContext } from '../PeachContext';
 
 import AddComment from './AddComment';
@@ -11,7 +15,7 @@ interface CommentsProps {
 	onDismissComments: () => void;
 	deleteComment: (id: string) => void;
 	updateComments: (txt: string) => void;
-	requester: User;
+	requester: CurUser;
 	mutualFriends: MutualFriend[];
 	postAuthorId: string;
 	postAuthorAvatarSrc: string;

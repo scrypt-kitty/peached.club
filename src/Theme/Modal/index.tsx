@@ -59,7 +59,7 @@ export const ModalContainer = styled.div<{
 		width: ${props => (props.isMini ? '50%' : '80%')};
 	}
 
-	@media screen and (max-height: 600px) {
+	@media screen and (max-height: 700px) {
 		height: ${props => (props.isMini ? '60%' : '100%')};
 		max-height: calc(100% - 2rem);
 	}

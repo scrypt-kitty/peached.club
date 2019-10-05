@@ -129,7 +129,7 @@ export const Input = styled.textarea<{ darkMode: boolean }>`
 
 	width: calc(100% - 4.25rem);
 	padding: 0.25rem 4rem 0.25rem 0.25rem;
-	@media screen and (max-height: 400px) {
+	@media screen and (max-height: 700px) {
 		@media screen and (max-width: 700px) {
 			height: 7.5rem;
 		}
@@ -154,6 +154,8 @@ export const ButtonWrapper = styled.div`
 
 const AvatarStyled = styled(Avatar)`
 	flex: 1;
+	cursor: pointer;
+
 	> img {
 		object-fit: cover;
 		border-radius: 50%;
@@ -180,6 +182,7 @@ const ProfileLink = styled.span`
 	> a {
 		text-decoration: none;
 		color: unset;
+		cursor: pointer;
 		:visited {
 			text-decoration: none;
 		}
@@ -196,6 +199,7 @@ const ProfileLink = styled.span`
 const BasicContainer = styled.div`
 	margin: 0;
 	padding: 0;
+	cursor: pointer;
 `;
 
 interface CommentProps extends PostCommentProps {
