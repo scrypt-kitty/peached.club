@@ -77,6 +77,7 @@ const AddComment: React.FC<AddCommentProps> = ({ onSubmit, darkMode }) => {
 			) : null}
 			<ButtonWrapper>
 				<Button
+					disabled={newComment.length < 1}
 					onClick={() => {
 						if (newComment.length > 0) {
 							onSubmit(newComment);
