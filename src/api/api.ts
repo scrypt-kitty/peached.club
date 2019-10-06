@@ -16,7 +16,7 @@ import ACTIONS, {
 	ADD_FRIEND,
 } from './constants';
 
-const api = async (action: ACTIONS, jwt: string, body = {}, id = '') => {
+const api = (action: ACTIONS, jwt: string, body = {}, id = '') => {
 	const req = {
 		method: '',
 		body: JSON.stringify(body),
@@ -114,7 +114,7 @@ const api = async (action: ACTIONS, jwt: string, body = {}, id = '') => {
 			break;
 	}
 
-	return await fetch(uri, req)
+	return fetch(uri, req)
 		.catch(err => {
 			console.log(err);
 			throw new Error(`cant make call for ${action}`);

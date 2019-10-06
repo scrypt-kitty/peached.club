@@ -9,7 +9,7 @@ import { Redirect } from 'react-router';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { GlobalStyle } from './style';
 import { PeachContext } from './PeachContext';
-import { LoginStream, User } from './api/interfaces';
+import { LoginStream, User, CurUser, DummyCurUser } from './api/interfaces';
 
 function getUserFromStorage() {
 	const user = localStorage.getItem('user');
@@ -33,6 +33,7 @@ const App: React.FC = () => {
 	const [darkMode, setDarkMode] = useState<boolean>(
 		localStorage.getItem('peachedDarkMode') === 'true'
 	);
+	const [curUserData, setCurUserData] = useState<CurUser>(DummyCurUser);
 
 	const updateJwt = (newJwt: string) => {
 		setNewJwt(newJwt);
@@ -83,6 +84,8 @@ const App: React.FC = () => {
 					setCurFeedIndex: updateCurFeedIndex,
 					darkMode: darkMode,
 					toggleDarkMode: toggleDarkMode,
+					curUserData: curUserData,
+					setCurUserData: setCurUserData,
 				}}
 			>
 				<GlobalStyle darkMode={darkMode} />

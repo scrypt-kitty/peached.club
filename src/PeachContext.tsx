@@ -1,5 +1,5 @@
 import React from 'react';
-import { LoginStream, User } from './api/interfaces';
+import { LoginStream, User, CurUser, DummyCurUser } from './api/interfaces';
 
 interface PeachContextTypes {
 	jwt: string;
@@ -12,6 +12,8 @@ interface PeachContextTypes {
 	setCurFeedIndex: (newIndex: number) => void;
 	darkMode: boolean;
 	toggleDarkMode: () => void;
+	curUserData: CurUser;
+	setCurUserData: (newCurUser: CurUser) => void;
 }
 
 const defaults = {
@@ -25,6 +27,8 @@ const defaults = {
 	setCurFeedIndex: (newIndex: number) => {},
 	darkMode: true,
 	toggleDarkMode: () => {},
+	curUserData: DummyCurUser,
+	setCurUserData: (newCurUser: CurUser) => {},
 };
 
 export interface GlobalContextProps {

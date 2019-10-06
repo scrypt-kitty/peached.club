@@ -137,6 +137,16 @@ export interface CurUser {
 	friendsSharing: boolean;
 }
 
+export const DummyCurUser: CurUser = {
+	id: '',
+	name: '',
+	displayName: '',
+	avatarSrc: '',
+	bio: '',
+	isPublic: false,
+	friendsSharing: false,
+};
+
 export interface User extends CurUser {
 	youFollow: boolean;
 	followsYou: boolean;

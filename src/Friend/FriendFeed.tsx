@@ -78,7 +78,6 @@ const LikeButton = (props: { liked: boolean; darkMode: boolean }) => (
 );
 
 interface FriendFeedProps extends Post {
-	requester: User;
 	deletePost: (id: string) => void;
 	author: string;
 	darkMode: boolean;
@@ -94,6 +93,7 @@ export const FriendFeedContainer = (props: FriendFeedProps) => {
 		false
 	);
 	const [likeCount, setLikeCount] = useState<number>(props.likeCount);
+	const { curUserData } = useContext(PeachContext);
 
 	let msgKey = 0;
 	const msgs = props.message.map(obj => {
@@ -170,6 +170,7 @@ export const FriendFeedContainer = (props: FriendFeedProps) => {
 	};
 
 	const updateComments = (txt: string) => {
+		const windowPositionY = window.scrollY;
 		api(ACTIONS.comment, peachContext.jwt, {
 			body: txt,
 			postId: props.id,
@@ -181,8 +182,8 @@ export const FriendFeedContainer = (props: FriendFeedProps) => {
 					body: txt,
 					author: {
 						id: resp.authorStreamID,
-						name: props.requester.name,
-						displayName: props.requester.displayName,
+						name: curUserData.name,
+						displayName: curUserData.displayName,
 						bio: '',
 						isPublic: false,
 						posts: [],
@@ -191,6 +192,7 @@ export const FriendFeedContainer = (props: FriendFeedProps) => {
 					},
 				};
 				setComments(comments => comments.concat([newComment]));
+				window.scrollTo(0, windowPositionY);
 			}
 		});
 	};
@@ -208,7 +210,7 @@ export const FriendFeedContainer = (props: FriendFeedProps) => {
 	return (
 		<PostWrapper darkMode={peachContext.darkMode}>
 			<>
-				{props.requester.id === props.author ? (
+				{curUserData.id === props.author ? (
 					<>
 						<DeletePost>
 							<img
@@ -263,7 +265,7 @@ export const FriendFeedContainer = (props: FriendFeedProps) => {
 					onDismissComments={onClickComments}
 					comments={comments}
 					updateComments={updateComments}
-					requester={props.requester}
+					requester={curUserData}
 					deleteComment={deleteComment}
 					mutualFriends={props.otherFriends}
 				/>
@@ -279,10 +281,10 @@ const EmptyState = () => (
 );
 
 const FriendFeed = (props: RouteComponentProps<{ id: string }>) => {
-	const { jwt, curUser, peachFeed, darkMode } = useContext(PeachContext);
+	const { jwt, curUser, peachFeed, darkMode, curUserData } = useContext(
+		PeachContext
+	);
 	const [posts, setPosts] = useState<Post[]>([]);
-	const [requester, setRequester] = useState<User | null>(null);
-	// const { jwt, curUser, peachFeed } = props;
 
 	const [viewingUser, setCurUserProfile] = useState<User | null>(
 		peachFeed.filter(user => user.id === props.match.params['id'])[0] ||
@@ -290,6 +292,7 @@ const FriendFeed = (props: RouteComponentProps<{ id: string }>) => {
 	);
 	const [curFeedId, setCurFeedId] = useState<string>('');
 	const [otherFriends, setOtherFriends] = useState<MutualFriend[]>([]);
+	const [postsLoaded, setPostsLoaded] = useState<boolean>(false);
 
 	useEffect(() => {
 		if (!jwt || peachFeed.length === 0) {
@@ -297,68 +300,48 @@ const FriendFeed = (props: RouteComponentProps<{ id: string }>) => {
 		}
 		window.scroll(0, 0);
 		const getUserProfile = async () => {
-			try {
-				api(
-					ACTIONS.connectionStream,
+			const resp: { data: User } = await api(
+				ACTIONS.connectionStream,
+				jwt,
+				{},
+				props.match.params['id']
+			);
+
+			// get posts by this user
+			if (resp.data.posts) {
+				resp.data.posts = resp.data.posts.reverse();
+				setCurUserProfile(resp.data);
+				setPosts(resp.data.posts);
+				setPostsLoaded(true);
+
+				// get this user's friends
+				const otherFriendsResponse: {
+					data: FriendsOfFriendsResponse;
+				} = await api(
+					ACTIONS.getFriendsOfFriends,
 					jwt,
 					{},
-					props.match.params['id']
-				).then((resp: { data: User }) => {
-					if (resp.data.posts) {
-						resp.data.posts = resp.data.posts.reverse();
-						setCurUserProfile(resp.data);
-						setPosts(resp.data.posts);
-						api(
-							ACTIONS.getFriendsOfFriends,
-							jwt,
-							{},
-							resp.data.name
-						).then(
-							(response: { data: FriendsOfFriendsResponse }) => {
-								if (
-									response.data &&
-									response.data.connections
-								) {
-									setOtherFriends(response.data.connections);
-								} else {
-									console.log('ugh');
-								}
-							}
-						);
-					}
-
-					if (curUser) {
-						if (resp.data.id === curUser.id) {
-							setRequester(resp.data);
-						} else {
-							api(
-								ACTIONS.connectionStream,
-								jwt,
-								{},
-								curUser.id
-							).then((resp: { data: User }) => {
-								if (resp.data) {
-									setRequester(resp.data);
-								}
-							});
-
-							setCurFeedId(props.match.params['id']);
-						}
-					} else {
-						console.log('cant set curuser');
-					}
-				});
-			} catch (_error) {
-				console.log('poop');
+					resp.data.name
+				);
+				if (
+					otherFriendsResponse.data &&
+					otherFriendsResponse.data.connections
+				) {
+					setOtherFriends(otherFriendsResponse.data.connections);
+				} else {
+					console.log('ugh');
+				}
 			}
-		};
 
+			// used to show prev/next arrows on nav to go through feeds
+			setCurFeedId(props.match.params['id']);
+		};
 		getUserProfile();
-	}, [props.match.params]);
+	}, [props.match.params, jwt, peachFeed.length]);
 
 	useEffect(() => {
 		try {
-			if (curUser !== null) {
+			if (curUser !== null && curUser.id !== props.match.params['id']) {
 				const markRead = async () => {
 					api(
 						ACTIONS.markFeedRead,
@@ -370,7 +353,7 @@ const FriendFeed = (props: RouteComponentProps<{ id: string }>) => {
 				markRead();
 			}
 		} catch (_error) {}
-	}, [curUser, jwt, peachFeed]);
+	}, [curUser, jwt, peachFeed, props.match.params]);
 
 	const deletePost = (id: string) => {
 		api(ACTIONS.deletePost, jwt, {}, id).then(
@@ -390,14 +373,14 @@ const FriendFeed = (props: RouteComponentProps<{ id: string }>) => {
 		<>
 			<Navigation curFeed={curFeedId} />
 			<Page>
-				{viewingUser && requester ? (
+				{viewingUser && curUserData ? (
 					<>
 						<ProfileHeaderContainer darkMode={darkMode}>
 							<Avatar>
 								<img
 									src={
 										viewingUser.avatarSrc ||
-										'https://i.imgur.com/J9tsyuW.png'
+										'/defaultavatar.jpg'
 									}
 									alt={`${viewingUser.name}'s avatar`}
 								/>
@@ -410,13 +393,14 @@ const FriendFeed = (props: RouteComponentProps<{ id: string }>) => {
 								<p>{viewingUser.bio}</p>
 							</ProfileHeaderText>
 						</ProfileHeaderContainer>
-						{posts.length > 0 ? (
+						{!postsLoaded ? (
+							<Loading />
+						) : posts.length > 0 ? (
 							<div style={{ margin: '0' }}>
 								{posts.map(post => (
 									<FriendFeedContainer
 										{...post}
 										key={post.id}
-										requester={requester}
 										deletePost={deletePost}
 										author={viewingUser.id}
 										darkMode={darkMode}

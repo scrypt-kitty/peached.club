@@ -6,7 +6,7 @@ import Loading from '../Loading';
 import NewPost from '../NewPost';
 
 import { PeachContext } from '../PeachContext';
-import { Connections, User } from '../api/interfaces';
+import { Connections, User, CurUser } from '../api/interfaces';
 import ACTIONS from '../api/constants';
 import api from '../api';
 
@@ -17,10 +17,18 @@ import { Title } from '../Theme/Type';
 
 const Feed = (props: RouteComponentProps) => {
 	const [connections, setConnections] = useState<User[] | null>(null);
-	const { darkMode, jwt, setPeachFeed } = useContext(PeachContext);
+	const {
+		darkMode,
+		jwt,
+		setPeachFeed,
+		curUser,
+		curUserData,
+		setCurUserData,
+	} = useContext(PeachContext);
+
 	useEffect(() => {
 		window.scroll(0, 0);
-		if (jwt) {
+		if (jwt && curUser) {
 			api(ACTIONS.getConnections, jwt).then(
 				(response: { data: Connections; success: number }) => {
 					if (response.success === 1) {
@@ -44,10 +52,20 @@ const Feed = (props: RouteComponentProps) => {
 					}
 				}
 			);
+
+			if (!curUserData.id) {
+				api(ACTIONS.connectionStream, jwt, {}, curUser.id).then(
+					(response: { data: CurUser }) => {
+						if (response.data) {
+							setCurUserData(response.data);
+						}
+					}
+				);
+			}
 		}
 	}, []);
 
-	if (!jwt) {
+	if (!jwt || !curUser) {
 		return <Redirect push to='/login' />;
 	}
 
