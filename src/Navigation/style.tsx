@@ -45,4 +45,11 @@ export const AppLinks = styled.div`
 	align-content: center;
 `;
 
+export const IconImage = styled.img`
+	border-radius: 50%;
+	:hover {
+		background: #cacaca50;
+	}
+`;
+
 export const FeedControls = styled.div``;

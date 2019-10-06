@@ -3,7 +3,7 @@ import React, { useContext } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 
 import { PeachContext } from '../PeachContext';
-import { NavWrap, Link, FeedControls, AppLinks, Nav } from './style';
+import { NavWrap, Link, FeedControls, AppLinks, Nav, IconImage } from './style';
 import ArrowLeft from './ArrowLeft.svg';
 import ArrowRight from './ArrowRight.svg';
 import ActivityIcon from './Activity.svg';
@@ -94,7 +94,7 @@ const Navigation: React.FC<NavigationProps> = ({ curFeed }) => {
 						{showLeftArrow ? (
 							<Link>
 								<RouterLink to={`/friend/${prevUser}`}>
-									<img
+									<IconImage
 										src={
 											darkMode
 												? ArrowLeftDarkMode
@@ -108,7 +108,7 @@ const Navigation: React.FC<NavigationProps> = ({ curFeed }) => {
 						{showRightArrow ? (
 							<Link>
 								<RouterLink to={`/friend/${nextUser}`}>
-									<img
+									<IconImage
 										src={
 											darkMode
 												? ArrowRightDarkMode
