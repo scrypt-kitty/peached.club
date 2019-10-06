@@ -20,6 +20,12 @@ export const MiniMenu = styled.div<MiniMenuProps>`
 	> img:hover {
 		cursor: pointer;
 	}
+
+	@media screen and (max-width: 700px) {
+		float: initial;
+		left: calc(100% - 1.5rem);
+		top: -1.5rem;
+	}
 `;
 
 export const DeletePost = styled(MiniMenu)`
@@ -116,6 +122,7 @@ export const InteractionArea = styled.div<{ darkMode: boolean }>`
 		cursor: pointer;
 		background: ${props => (props.darkMode ? '#cacaca30' : '#cacaca')};
 	}
+	height: 0.8rem;
 `;
 
 /**

@@ -11,7 +11,6 @@ import {
 
 import Button from '../Theme/Button';
 import { ModalContainer, ModalBackdrop } from '../Theme/Modal';
-import { DisplayName3 } from '../Theme/Profile';
 
 import PrivateProfile from '../PrivateProfile';
 
@@ -104,6 +103,8 @@ const CommentText = styled.div`
 
 	> p {
 		word-wrap: break-word;
+		font-size: 0.9rem;
+		margin-top: 0;
 	}
 `;
 
@@ -132,7 +133,7 @@ export const Input = styled.textarea<{ darkMode: boolean }>`
 	padding: 0.25rem 4rem 0.25rem 0.25rem;
 	@media screen and (max-height: 700px) {
 		@media screen and (max-width: 700px) {
-			height: 5.5rem;
+			height: 3rem;
 		}
 	}
 `;
@@ -218,6 +219,19 @@ const BasicContainer = styled.div`
 	cursor: pointer;
 `;
 
+const HandleStyled = styled(Handle)`
+	@media screen and (max-width: 700px) {
+		margin-bottom: 0.5rem;
+	}
+`;
+
+const AuthorName = styled(HandleStyled)<{ darkMode: boolean }>`
+	font-weight: bold;
+	@media screen and (max-width: 700px) {
+		color: ${props => (props.darkMode ? 'white' : 'black')};
+	}
+`;
+
 interface CommentProps extends PostCommentProps {
 	avatarSrc: string;
 	isRequester: boolean;
@@ -240,8 +254,10 @@ export const Comment: React.FC<CommentProps> = (props: CommentProps) => {
 	);
 	const Name = (
 		<>
-			<DisplayName3>{props.author.displayName}</DisplayName3>
-			<Handle>@{props.author.name}</Handle>
+			<AuthorName darkMode={props.darkMode}>
+				{props.author.displayName}
+			</AuthorName>
+			<HandleStyled>@{props.author.name}</HandleStyled>
 		</>
 	);
 	return (

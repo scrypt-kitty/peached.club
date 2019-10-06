@@ -28,6 +28,10 @@ const Dropdown = styled.div`
 	display: flex;
 	flex-direction: column;
 	border-radius: 0.25rem;
+
+	@media screen and (max-width: 700px) {
+		max-height: 50%;
+	}
 `;
 
 const DropdownUserItemContainer = styled.div<{ darkMode: boolean }>`
