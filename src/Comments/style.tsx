@@ -45,6 +45,7 @@ const DeleteOptions = styled.div`
 
 export const AllComments = styled.div`
 	overflow: scroll;
+	margin-top: 1.5rem;
 `;
 
 interface DeletePromptProps {
@@ -58,7 +59,7 @@ export const DeletePrompt = (props: DeletePromptProps) => (
 	<ModalBackdrop entering>
 		<DeletePromptContainer
 			alignTop={false}
-			isMini={false}
+			isMini={true}
 			darkMode={props.darkMode}
 		>
 			{props.children}
@@ -131,7 +132,7 @@ export const Input = styled.textarea<{ darkMode: boolean }>`
 	padding: 0.25rem 4rem 0.25rem 0.25rem;
 	@media screen and (max-height: 700px) {
 		@media screen and (max-width: 700px) {
-			height: 7.5rem;
+			height: 5.5rem;
 		}
 	}
 `;
@@ -147,9 +148,24 @@ export const ButtonWrapper = styled.div`
 	transform: translate(calc(50% - 4.5rem), 0.5rem);
 
 	@media screen and (max-width: 800px) {
-		transform: translate(calc(80% - 4.5rem), 0.5rem);
+		transform: translate(calc(70% - 4.5rem), 0.5rem);
 	}
 	width: inherit;
+`;
+
+/*
+ * also aligned with ../Theme/Modal
+ */
+export const DismissCommentsButtonContainer = styled.div`
+	cursor: pointer;
+	margin: 0;
+	max-height: 2rem;
+	position: absolute;
+	left: 75%;
+	top: 10%;
+	@media screen and (max-width: 800px) {
+		left: 85%;
+	}
 `;
 
 const AvatarStyled = styled(Avatar)`

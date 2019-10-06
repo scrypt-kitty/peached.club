@@ -37,7 +37,7 @@ const DropdownUserItemContainer = styled.div<{ darkMode: boolean }>`
 	color: ${props => (props.darkMode ? 'white' : 'black')};
 	font-size: smaller;
 	border-top: 1px solid #cacaca;
-	height: 2.5rem;
+	height: 100%;
 
 	> img {
 		border-radius: 50%;
