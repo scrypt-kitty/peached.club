@@ -16,6 +16,7 @@ export const MiniMenu = styled.div<MiniMenuProps>`
 	visibility: hidden;
 	position: relative;
 	transform: translateY(1rem);
+	float: right;
 	> img:hover {
 		cursor: pointer;
 	}
@@ -137,7 +138,9 @@ export const Avatar = styled.div`
 	display: flex;
 	> img {
 		border-radius: 50%;
+		width: 100px;
 		height: 100px;
+		object-fit: cover;
 	}
 `;
 
