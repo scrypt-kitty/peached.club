@@ -130,8 +130,10 @@ const Settings = (props: {}) => {
 					>
 						Submit
 					</Button>
-					<br />
-					<Link to='/logout'>Log out</Link>
+					<hr />
+					<Link to='/logout'>
+						<Button color='#ff4c4c'>Log out</Button>
+					</Link>
 				</SettingsWrapper>
 			</Page>
 		</>
