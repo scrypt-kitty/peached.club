@@ -43,14 +43,14 @@ const ButtonStyle = styled.button<ButtonStyleProps>`
 interface ButtonProps extends ButtonStyleProps {
 	children: React.ReactNode;
 	link?: string;
-	onClick: () => void;
+	onClick?: () => void;
 	centered?: boolean;
 }
 
 const Button: React.FC<ButtonProps> = (props: ButtonProps) => (
 	<ButtonLink
 		href={props.link || '#'}
-		onClick={e => props.onClick()}
+		onClick={e => (props.onClick ? props.onClick() : {})}
 		centered={props.centered}
 	>
 		<ButtonStyle
