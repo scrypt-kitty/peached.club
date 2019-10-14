@@ -1,7 +1,7 @@
 import React, { useEffect, useContext, useState } from 'react';
 import { Redirect } from 'react-router';
 
-import { GlobalContextProps, PeachContext } from '../PeachContext';
+import { PeachContext } from '../PeachContext';
 import api from '../api';
 import ACTIONS from '../api/constants';
 import { ActivityResponse, ActivityItem } from '../api/interfaces';
@@ -12,12 +12,11 @@ import { Page } from '../Theme/Layout';
 import { Title } from '../Theme/Type';
 import Preview from '../Feed/Preview';
 
-const Activity = (props: GlobalContextProps) => {
-	const { peachFeed, jwt } = props;
+const Activity = () => {
 	const [activityFeed, setActivityFeed] = useState<ActivityItem[] | null>(
 		null
 	);
-	const { darkMode } = useContext(PeachContext);
+	const { darkMode, peachFeed, jwt } = useContext(PeachContext);
 
 	useEffect(() => {
 		try {
