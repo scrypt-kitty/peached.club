@@ -20,10 +20,8 @@ export const MiniMenu = styled.div<MiniMenuProps>`
 	> img:hover {
 		cursor: pointer;
 	}
-
 	@media screen and (max-width: 700px) {
 		float: initial;
-		left: calc(100% - 1.5rem);
 		top: -1.5rem;
 	}
 `;
