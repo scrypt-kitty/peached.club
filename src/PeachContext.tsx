@@ -31,12 +31,4 @@ const defaults = {
 	setCurUserData: (newCurUser: CurUser) => {},
 };
 
-export interface GlobalContextProps {
-	jwt: string;
-	peachFeed: User[];
-	curUser: LoginStream | null;
-	setCurFeedIndex: (newIndex: number) => void;
-	setPeachFeed: (newPeachFeed: User[]) => void;
-}
-
 export const PeachContext = React.createContext<PeachContextTypes>(defaults);
