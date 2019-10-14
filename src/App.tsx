@@ -94,18 +94,7 @@ const App: React.FC = () => {
 					<Route path='/login' component={Login} />
 					<Route path='/feed' component={Feed} />
 					<Route path='/friend/:id' component={FriendFeed} />
-					<Route
-						path='/activity'
-						render={routeProps => (
-							<Activity
-								peachFeed={peachFeed}
-								jwt={newJwt}
-								setCurFeedIndex={updateCurFeedIndex}
-								curUser={curUser}
-								setPeachFeed={updatePeachFeed}
-							/>
-						)}
-					/>
+					<Route path='/activity' component={Activity} />
 					<Route path='/settings' component={Settings} />
 					<Route
 						path='/logout'
