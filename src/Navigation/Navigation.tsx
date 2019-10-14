@@ -14,6 +14,10 @@ import NightModeDark from './NightModeDark.svg';
 import NightModeLight from './NightModeLight.svg';
 import SettingsIcon from './SettingsIcon.svg';
 import SettingsIconDarkMode from './SettingsIconDarkMode.svg';
+import UserIcon from './UserIcon.svg';
+import UserIconDarkMode from './UserIconDarkMode.svg';
+import HomeIcon from './HomeIcon.svg';
+import HomeIconDarkMode from './HomeIconDarkMode.svg';
 
 interface NavigationProps {
 	curFeed?: string;
@@ -51,11 +55,19 @@ const Navigation: React.FC<NavigationProps> = ({ curFeed }) => {
 			<Nav>
 				<AppLinks>
 					<Link>
-						<RouterLink to='/feed'>Feeds</RouterLink>
+						<RouterLink to='/feed'>
+							<img
+								src={darkMode ? HomeIconDarkMode : HomeIcon}
+								alt='Home'
+							/>
+						</RouterLink>
 					</Link>
 					<Link>
 						<RouterLink to={`/friend/${curUser ? curUser.id : ''}`}>
-							Me
+							<img
+								src={darkMode ? UserIconDarkMode : UserIcon}
+								alt='Me'
+							/>
 						</RouterLink>
 					</Link>
 					<Link>

@@ -5,7 +5,7 @@ export const NavWrap = styled.div<{ darkMode: boolean }>`
 	position: fixed;
 	top: 0;
 	left: 0;
-	background: ${props => (props.darkMode ? 'black' : '#fff0e6')};
+	background: ${props => (props.darkMode ? 'black' : 'white')};
 	z-index: 100;
 `;
 
