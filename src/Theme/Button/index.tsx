@@ -18,6 +18,7 @@ interface ButtonStyleProps {
 	lg?: boolean;
 	disabled?: boolean;
 	isSmall?: boolean;
+	colorHover?: string;
 }
 // background: ${props => (props.disabled ? '#b0b0b0' : '#e6395b')};
 
@@ -33,11 +34,30 @@ const ButtonStyle = styled.button<ButtonStyleProps>`
 	color: white;
 	font-size: ${props => (props.lg ? '1.1rem' : '1rem')};
 	:hover {
-		background: ${props => (props.disabled ? '#cacaca' : '#e6395b')};
-		border-color: ${props => (props.disabled ? '#cacaca' : '#e6395b')};
+		background: ${props =>
+			props.disabled
+				? '#cacaca'
+				: props.colorHover
+				? props.colorHover
+				: '#ffa79b'};
+		border-color: ${props =>
+			props.disabled
+				? '#cacaca'
+				: props.colorHover
+				? props.colorHover
+				: '#ffa79b'};
 		cursor: ${props => (props.disabled ? 'default' : 'pointer')};
 	}
 	transition: 0.25s all ease;
+	display: flex;
+	justify-content: center;
+	align-content: center;
+	align-items: center;
+
+	> img {
+		height: 1.1rem;
+		margin-right: 0.25rem;
+	}
 `;
 
 interface ButtonProps extends ButtonStyleProps {
@@ -59,6 +79,7 @@ const Button: React.FC<ButtonProps> = (props: ButtonProps) => (
 			lg={props.lg}
 			disabled={props.disabled}
 			isSmall={props.isSmall}
+			colorHover={props.colorHover}
 		>
 			{props.children}
 		</ButtonStyle>
