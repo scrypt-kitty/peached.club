@@ -11,11 +11,18 @@ import { Page } from '../Theme/Layout';
 import { Title, SubTitle } from '../Theme/Type';
 import Button from '../Theme/Button';
 import { Input, Label, Fieldset } from '../Theme/Form';
-import { SettingsWrapper, ErrText, SuccessText } from './style';
+import NightModeDark from '../Navigation/NightModeDark.svg';
+import {
+	SettingsWrapper,
+	ErrText,
+	SuccessText,
+	SettingsSection,
+	LogoutButtonWrapper,
+} from './style';
 import { ERROR } from '../api/error';
 
 const Settings = (props: {}) => {
-	const { darkMode, jwt } = useContext(PeachContext);
+	const { darkMode, jwt, toggleDarkMode } = useContext(PeachContext);
 	const [isButtonDisabled, setButtonDisabled] = useState<boolean>(true);
 	const [newUserName, setNewUserName] = useState<string>('');
 	const [newDisplayName, setNewDisplayName] = useState<string>('');
@@ -79,61 +86,92 @@ const Settings = (props: {}) => {
 			<Page>
 				<Title darkMode={darkMode}>Settings</Title>
 				<SettingsWrapper darkMode={darkMode}>
-					<SubTitle darkMode={darkMode}>
-						Change your identity
-					</SubTitle>
-					<Fieldset>
-						<Label htmlFor='displayName'>Change display name</Label>
-						<Input
-							id='displayName'
-							type='text'
-							onChange={e => setNewDisplayName(e.target.value)}
-						/>
-						{isLoaderShowing && newDisplayName ? (
-							<MiniLoader />
-						) : null}
-						{showError && newDisplayName ? (
-							<ErrText>
-								Can't change display name at the moment.,..
-								please try again later!
-							</ErrText>
-						) : null}
-						{!showError && newDisplayName && nameChangeSuccess ? (
-							<SuccessText>
-								Successfully changed your display name! Hi,{' '}
-								{newDisplayName}!
-							</SuccessText>
-						) : null}
-					</Fieldset>
-					<Fieldset>
-						<Label htmlFor='userName'>Change user name</Label>
-						<Input
-							id='userName'
-							type='text'
-							onChange={e => setNewUserName(e.target.value)}
-						/>
-						{isLoaderShowing && newUserName ? <MiniLoader /> : null}
-						{showError && newUserName ? (
-							<ErrText>Username is already taken!</ErrText>
-						) : null}
-						{!showError && newUserName && nameChangeSuccess ? (
-							<SuccessText>
-								Successfully changed your username! Hello,{' '}
-								{newUserName}!
-							</SuccessText>
-						) : null}
-					</Fieldset>
-					<br />
-					<Button
-						disabled={isButtonDisabled}
-						onClick={() => onSubmit()}
-					>
-						Submit
-					</Button>
-					<hr />
-					<Link to='/logout'>
-						<Button color='#ff4c4c'>Log out</Button>
-					</Link>
+					<SettingsSection>
+						<SubTitle darkMode={darkMode}>
+							Customize app appearance
+						</SubTitle>
+
+						<Button
+							onClick={() => toggleDarkMode()}
+							color={darkMode ? 'black' : '#7b7b7b'}
+							colorHover={darkMode ? '#7b7b7b' : 'black'}
+						>
+							<img src={NightModeDark} alt='Dark Mode Icon' />
+							Toggle dark mode
+						</Button>
+					</SettingsSection>
+					<SettingsSection>
+						<SubTitle darkMode={darkMode}>
+							Change your identity
+						</SubTitle>
+						<Fieldset>
+							<Label htmlFor='displayName'>
+								Change display name
+							</Label>
+							<Input
+								id='displayName'
+								type='text'
+								onChange={e =>
+									setNewDisplayName(e.target.value)
+								}
+							/>
+							{isLoaderShowing && newDisplayName ? (
+								<MiniLoader />
+							) : null}
+							{showError && newDisplayName ? (
+								<ErrText>
+									Can't change display name at the moment.,..
+									please try again later!
+								</ErrText>
+							) : null}
+							{!showError &&
+							newDisplayName &&
+							nameChangeSuccess ? (
+								<SuccessText>
+									Successfully changed your display name! Hi,{' '}
+									{newDisplayName}!
+								</SuccessText>
+							) : null}
+						</Fieldset>
+						<Fieldset>
+							<Label htmlFor='userName'>Change user name</Label>
+							<Input
+								id='userName'
+								type='text'
+								onChange={e => setNewUserName(e.target.value)}
+							/>
+							{isLoaderShowing && newUserName ? (
+								<MiniLoader />
+							) : null}
+							{showError && newUserName ? (
+								<ErrText>Username is already taken!</ErrText>
+							) : null}
+							{!showError && newUserName && nameChangeSuccess ? (
+								<SuccessText>
+									Successfully changed your username! Hello,{' '}
+									{newUserName}!
+								</SuccessText>
+							) : null}
+						</Fieldset>
+						<br />
+						<Button
+							disabled={isButtonDisabled}
+							onClick={() => onSubmit()}
+						>
+							Submit
+						</Button>
+						<LogoutButtonWrapper>
+							<Link to='/logout'>
+								<Button
+									isSmall
+									color='#ff4c4c'
+									colorHover='#ce2222'
+								>
+									Log out
+								</Button>
+							</Link>
+						</LogoutButtonWrapper>
+					</SettingsSection>
 				</SettingsWrapper>
 			</Page>
 		</>
