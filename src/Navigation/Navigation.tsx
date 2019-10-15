@@ -3,15 +3,13 @@ import React, { useContext } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 
 import { PeachContext } from '../PeachContext';
-import { NavWrap, Link, FeedControls, AppLinks, Nav, IconImage } from './style';
+import { NavWrap, Link, Nav, IconImage, FeedsNav } from './style';
 import ArrowLeft from './ArrowLeft.svg';
 import ArrowRight from './ArrowRight.svg';
 import ActivityIcon from './Activity.svg';
 import ArrowLeftDarkMode from './ArrowLeftDarkMode.svg';
 import ArrowRightDarkMode from './ArrowRightDarkMode.svg';
 import ActivityIconDarkMode from './ActivityDarkMode.svg';
-import NightModeDark from './NightModeDark.svg';
-import NightModeLight from './NightModeLight.svg';
 import SettingsIcon from './SettingsIcon.svg';
 import SettingsIconDarkMode from './SettingsIconDarkMode.svg';
 import UserIcon from './UserIcon.svg';
@@ -21,12 +19,14 @@ import HomeIconDarkMode from './HomeIconDarkMode.svg';
 
 interface NavigationProps {
 	curFeed?: string;
+	onCurUsersProfile?: boolean;
 }
 
-const Navigation: React.FC<NavigationProps> = ({ curFeed }) => {
-	const { darkMode, curUser, toggleDarkMode, peachFeed } = useContext(
-		PeachContext
-	);
+const Navigation: React.FC<NavigationProps> = ({
+	curFeed,
+	onCurUsersProfile,
+}) => {
+	const { darkMode, curUser, peachFeed } = useContext(PeachContext);
 	let feedListIDs: string[] = [];
 
 	let showRightArrow = false;
@@ -34,7 +34,7 @@ const Navigation: React.FC<NavigationProps> = ({ curFeed }) => {
 	let nextUser = '';
 	let prevUser = '';
 
-	if (curFeed) {
+	if (curFeed && !onCurUsersProfile) {
 		feedListIDs = peachFeed
 			.filter(user => user.unreadPostCount > 0)
 			.map(user => user.id);
@@ -51,9 +51,40 @@ const Navigation: React.FC<NavigationProps> = ({ curFeed }) => {
 	}
 
 	return (
-		<NavWrap darkMode={darkMode}>
-			<Nav>
-				<AppLinks>
+		<>
+			{curFeed && !onCurUsersProfile ? (
+				<>
+					{showLeftArrow ? (
+						<RouterLink to={`/friend/${prevUser}`}>
+							<FeedsNav darkMode={darkMode}>
+								<img
+									src={
+										darkMode ? ArrowLeftDarkMode : ArrowLeft
+									}
+									alt='Prev feed'
+								/>
+							</FeedsNav>
+						</RouterLink>
+					) : null}
+					{showRightArrow ? (
+						<RouterLink to={`/friend/${nextUser}`}>
+							<FeedsNav darkMode={darkMode} right>
+								<img
+									src={
+										darkMode
+											? ArrowRightDarkMode
+											: ArrowRight
+									}
+									alt='Next feed'
+								/>
+							</FeedsNav>
+						</RouterLink>
+					) : null}
+				</>
+			) : null}
+
+			<NavWrap darkMode={darkMode}>
+				<Nav>
 					<Link>
 						<RouterLink to='/feed'>
 							<img
@@ -82,12 +113,6 @@ const Navigation: React.FC<NavigationProps> = ({ curFeed }) => {
 							/>
 						</RouterLink>
 					</Link>
-					<Link onClick={() => toggleDarkMode()}>
-						<img
-							src={darkMode ? NightModeDark : NightModeLight}
-							alt='Toggle dark mode'
-						/>
-					</Link>
 					<Link>
 						<RouterLink to='/settings'>
 							<img
@@ -100,41 +125,9 @@ const Navigation: React.FC<NavigationProps> = ({ curFeed }) => {
 							/>
 						</RouterLink>
 					</Link>
-				</AppLinks>
-				{curFeed ? (
-					<FeedControls>
-						{showLeftArrow ? (
-							<Link>
-								<RouterLink to={`/friend/${prevUser}`}>
-									<IconImage
-										src={
-											darkMode
-												? ArrowLeftDarkMode
-												: ArrowLeft
-										}
-										alt='Prev feed'
-									/>
-								</RouterLink>
-							</Link>
-						) : null}
-						{showRightArrow ? (
-							<Link>
-								<RouterLink to={`/friend/${nextUser}`}>
-									<IconImage
-										src={
-											darkMode
-												? ArrowRightDarkMode
-												: ArrowRight
-										}
-										alt='Next feed'
-									/>
-								</RouterLink>
-							</Link>
-						) : null}
-					</FeedControls>
-				) : null}
-			</Nav>
-		</NavWrap>
+				</Nav>
+			</NavWrap>
+		</>
 	);
 };
 
