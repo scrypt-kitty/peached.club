@@ -42,7 +42,6 @@ import {
 import Liked from './Liked.svg';
 import Unliked from './Unliked.svg';
 import UnlikedDarkMode from './UnlikedDarkMode.svg';
-// import LikeHover from './Unliked.svg';
 import CommentIcon from './CommentIcon.svg';
 import CommentIconDarkMode from './CommentIconDarkMode.svg';
 import LinkIcon from './LinkIcon.svg';
@@ -80,7 +79,6 @@ const LikeButton = (props: { liked: boolean; darkMode: boolean }) => (
 interface FriendFeedProps extends Post {
 	deletePost: (id: string) => void;
 	author: string;
-	darkMode: boolean;
 	otherFriends: MutualFriend[];
 	postAuthorAvatarSrc: string;
 }
@@ -93,7 +91,7 @@ export const FriendFeedContainer = (props: FriendFeedProps) => {
 		false
 	);
 	const [likeCount, setLikeCount] = useState<number>(props.likeCount);
-	const { curUserData } = useContext(PeachContext);
+	const { curUserData, darkMode, jwt } = useContext(PeachContext);
 
 	let msgKey = 0;
 	const msgs = props.message.map(obj => {
@@ -113,7 +111,7 @@ export const FriendFeedContainer = (props: FriendFeedProps) => {
 				<div key={msgKey}>
 					<LinkText href={obj.url}>
 						<img
-							src={props.darkMode ? LinkIconDarkMode : LinkIcon}
+							src={darkMode ? LinkIconDarkMode : LinkIcon}
 							alt='Link'
 						/>{' '}
 						{obj.title}
@@ -130,8 +128,6 @@ export const FriendFeedContainer = (props: FriendFeedProps) => {
 		}
 	});
 
-	const peachContext = useContext(PeachContext);
-
 	const onClickLike = () => {
 		toggleLiked(liked => !liked);
 		if (liked) {
@@ -142,7 +138,14 @@ export const FriendFeedContainer = (props: FriendFeedProps) => {
 
 		// this is redundant and should be fixed
 		if (liked) {
-			api(ACTIONS.unlike, peachContext.jwt).then(
+			api(ACTIONS.unlike, jwt).then((response: LikePostResponse) => {
+				if (response.success !== 1) {
+					toggleLiked(liked => !liked);
+					return;
+				}
+			});
+		} else {
+			api(ACTIONS.like, jwt, { postId: props.id }, props.id).then(
 				(response: LikePostResponse) => {
 					if (response.success !== 1) {
 						toggleLiked(liked => !liked);
@@ -150,18 +153,6 @@ export const FriendFeedContainer = (props: FriendFeedProps) => {
 					}
 				}
 			);
-		} else {
-			api(
-				ACTIONS.like,
-				peachContext.jwt,
-				{ postId: props.id },
-				props.id
-			).then((response: LikePostResponse) => {
-				if (response.success !== 1) {
-					toggleLiked(liked => !liked);
-					return;
-				}
-			});
 		}
 	};
 
@@ -171,7 +162,7 @@ export const FriendFeedContainer = (props: FriendFeedProps) => {
 
 	const updateComments = (txt: string) => {
 		const windowPositionY = window.scrollY;
-		api(ACTIONS.comment, peachContext.jwt, {
+		api(ACTIONS.comment, jwt, {
 			body: txt,
 			postId: props.id,
 		}).then((response: { data: CommentResponse }) => {
@@ -198,7 +189,7 @@ export const FriendFeedContainer = (props: FriendFeedProps) => {
 	};
 
 	const deleteComment = (id: string) => {
-		api(ACTIONS.deleteComment, peachContext.jwt, {}, id).then(
+		api(ACTIONS.deleteComment, jwt, {}, id).then(
 			(response: { success: number }) => {
 				if (response.success === 1) {
 					setComments(comments.filter(c => c.id !== id));
@@ -208,7 +199,7 @@ export const FriendFeedContainer = (props: FriendFeedProps) => {
 	};
 
 	return (
-		<PostWrapper darkMode={peachContext.darkMode}>
+		<PostWrapper darkMode={darkMode}>
 			<>
 				{curUserData.id === props.author ? (
 					<>
@@ -221,7 +212,7 @@ export const FriendFeedContainer = (props: FriendFeedProps) => {
 						</DeletePost>
 						{deletePromptShowing ? (
 							<DeletePrompt
-								darkMode={peachContext.darkMode}
+								darkMode={darkMode}
 								onDelete={() => props.deletePost(props.id)}
 								onCancel={() => setDeletePromptShowing(false)}
 							>
@@ -235,24 +226,17 @@ export const FriendFeedContainer = (props: FriendFeedProps) => {
 			<PostInteraction>
 				<InteractionArea
 					onClick={e => onClickLike()}
-					darkMode={peachContext.darkMode}
+					darkMode={darkMode}
 				>
-					<LikeButton
-						liked={liked}
-						darkMode={peachContext.darkMode}
-					/>{' '}
+					<LikeButton liked={liked} darkMode={darkMode} />{' '}
 					<InteractionInfo>{likeCount}</InteractionInfo>
 				</InteractionArea>
 				<InteractionArea
 					onClick={e => onClickComments()}
-					darkMode={peachContext.darkMode}
+					darkMode={darkMode}
 				>
 					<img
-						src={
-							peachContext.darkMode
-								? CommentIconDarkMode
-								: CommentIcon
-						}
+						src={darkMode ? CommentIconDarkMode : CommentIcon}
 						alt='Comment'
 					/>
 					<InteractionInfo>{comments.length}</InteractionInfo>
@@ -295,10 +279,13 @@ const FriendFeed = (props: RouteComponentProps<{ id: string }>) => {
 	const [postsLoaded, setPostsLoaded] = useState<boolean>(false);
 
 	useEffect(() => {
+		window.scroll(0, 0);
+	}, [props.match.params['id']]);
+
+	useEffect(() => {
 		if (!jwt || peachFeed.length === 0) {
 			return;
 		}
-		window.scroll(0, 0);
 		const getUserProfile = async () => {
 			const resp: { data: User } = await api(
 				ACTIONS.connectionStream,
@@ -356,10 +343,12 @@ const FriendFeed = (props: RouteComponentProps<{ id: string }>) => {
 	}, [curUser, jwt, peachFeed, props.match.params]);
 
 	const deletePost = (id: string) => {
+		const windowPositionY = window.scrollY;
 		api(ACTIONS.deletePost, jwt, {}, id).then(
 			(response: { success: number }) => {
 				if (response.success === 1) {
 					setPosts(posts.filter(p => p.id !== id));
+					window.scrollTo(0, windowPositionY);
 				}
 			}
 		);
@@ -371,7 +360,13 @@ const FriendFeed = (props: RouteComponentProps<{ id: string }>) => {
 
 	return (
 		<>
-			<Navigation curFeed={curFeedId} />
+			<Navigation
+				curFeed={curFeedId}
+				onCurUsersProfile={
+					(curUser && curUser.id === props.match.params['id']) ||
+					false
+				}
+			/>
 			<Page>
 				{viewingUser && curUserData ? (
 					<>
@@ -403,7 +398,6 @@ const FriendFeed = (props: RouteComponentProps<{ id: string }>) => {
 										key={post.id}
 										deletePost={deletePost}
 										author={viewingUser.id}
-										darkMode={darkMode}
 										otherFriends={otherFriends}
 										postAuthorAvatarSrc={
 											viewingUser.avatarSrc
@@ -414,7 +408,10 @@ const FriendFeed = (props: RouteComponentProps<{ id: string }>) => {
 						) : (
 							<EmptyState />
 						)}
-						<NewPost />
+						{curUser !== null &&
+						curUser.id === props.match.params['id'] ? (
+							<NewPost />
+						) : null}
 					</>
 				) : (
 					<Loading />
