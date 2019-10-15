@@ -5,13 +5,14 @@ export const NewPostButton = styled.div`
 	position: fixed;
 	bottom: 2rem;
 	right: 2rem;
-	background: #fe4f72;
+	background: #ffa79b;
 	padding: 1.5rem;
 	border-radius: 50%;
 	width: 1rem;
 	height: 1rem;
 	text-align: center;
 	box-shadow: 5px 5px 5px #00000050;
+	transition: all cubic-bezier(0.23, 1, 0.32, 1) 0.1s;
 
 	> img {
 		width: 1rem;
@@ -20,6 +21,11 @@ export const NewPostButton = styled.div`
 
 	:hover {
 		cursor: pointer;
+		transform: scale(0.9);
+	}
+
+	@media screen and (max-width: 700px) {
+		bottom: 3.5rem;
 	}
 `;
 
