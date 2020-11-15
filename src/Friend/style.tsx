@@ -34,7 +34,7 @@ export const DeletePost = styled(MiniMenu)`
 
 export const PostWrapper = styled.div<{ darkMode?: boolean }>`
 	background: ${props => (props.darkMode ? '#262628' : 'white')};
-	color: ${props => (props.darkMode ? 'white' : 'black')}
+	color: ${props => (props.darkMode ? 'white' : 'black')};
 	word-wrap: break-word;
 	padding: 2rem 3rem 0;
 	:last-child {
@@ -120,6 +120,15 @@ export const InteractionArea = styled.div<{ darkMode: boolean }>`
 		cursor: pointer;
 		background: ${props => (props.darkMode ? '#cacaca30' : '#cacaca')};
 	}
+	height: 0.8rem;
+`;
+
+export const PostTime = styled.div`
+	display: inline-flex;
+	align-items: center;
+	padding: 0.5rem 0.5rem;
+	border-radius: 1rem;
+	transition: 0.25s all ease;
 	height: 0.8rem;
 `;
 

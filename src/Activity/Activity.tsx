@@ -51,6 +51,7 @@ const Activity = () => {
 							id={item.body.authorStream.id}
 							darkMode={darkMode}
 							message={item.body.postMessage[0]}
+							createdTime={item.createdTime}
 						>
 							<p>
 								{item.type === 'comment' &&

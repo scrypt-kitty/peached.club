@@ -90,6 +90,7 @@ const Feed = (props: RouteComponentProps) => {
 										: { type: 'text', text: '' }
 								}
 								unread={user.unreadPostCount > 0}
+								createdTime={user.posts && user.posts[0] ? user.posts[0].createdTime : null}
 							/>
 						</LinkStyled>
 					))

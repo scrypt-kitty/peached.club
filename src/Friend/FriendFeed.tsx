@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect } from 'react';
 import { withRouter, RouteComponentProps, Redirect } from 'react-router';
 import api from '../api';
 import Loading from '../Loading';
+import getPostTime from '../utils/getPostTime';
 
 import Comments from '../Comments';
 
@@ -38,6 +39,7 @@ import {
 	LinkText,
 	LinkInfo,
 	EmptyStateWrapper,
+	PostTime,
 } from './style';
 import Liked from './Liked.svg';
 import Unliked from './Unliked.svg';
@@ -46,6 +48,7 @@ import CommentIcon from './CommentIcon.svg';
 import CommentIconDarkMode from './CommentIconDarkMode.svg';
 import LinkIcon from './LinkIcon.svg';
 import LinkIconDarkMode from './LinkIconDarkMode.svg';
+import Clock from '../Theme/Icons/Clock';
 import { PeachContext } from '../PeachContext';
 
 import Navigation from '../Navigation';
@@ -241,6 +244,10 @@ export const FriendFeedContainer = (props: FriendFeedProps) => {
 					/>
 					<InteractionInfo>{comments.length}</InteractionInfo>
 				</InteractionArea>
+				<PostTime>
+					<Clock darkMode={darkMode} titleId={`post-${props.id}-posted-time`} title='Posted time' />
+					<InteractionInfo>{getPostTime(props.createdTime)}</InteractionInfo>
+				</PostTime>
 			</PostInteraction>
 			{showComments ? (
 				<Comments

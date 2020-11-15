@@ -1,5 +1,6 @@
 import React from 'react';
 import { createPostPreview } from '../utils';
+import getPostTime from '../utils/getPostTime';
 import {
 	FeedPostWrapper,
 	ProfilePic,
@@ -10,6 +11,7 @@ import {
 } from './style';
 
 import { TextMessage, ImageMessage, LinkMessage } from '../api/interfaces';
+import { create } from 'domain';
 
 interface PreviewProps {
 	id: string;
@@ -20,6 +22,7 @@ interface PreviewProps {
 	darkMode: boolean;
 	children?: React.ReactNode;
 	unread?: boolean;
+	createdTime: number|null;
 }
 
 const Preview: React.FC<PreviewProps> = props => {
@@ -37,6 +40,7 @@ const Preview: React.FC<PreviewProps> = props => {
 				{props.children}
 				<PostPreview>{createPostPreview(props.message)}</PostPreview>
 			</InfoContainer>
+			{props.createdTime && <p>{getPostTime(props.createdTime)}</p>}
 		</FeedPostWrapper>
 	);
 };
