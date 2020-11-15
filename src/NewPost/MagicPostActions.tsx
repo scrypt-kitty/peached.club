@@ -1,11 +1,11 @@
-export const getCurrentTime = () => {
+export const getCurrentTime = (currentPostLen: number) => {
 	const d = new Date();
 	const [time, hour = ''] = d.toLocaleTimeString().split(' ');
 	// remove the milliseconds part of the time string
-	return `\n🕓 ${time.slice(0, -3)} ${hour}\n`;
+	return `${currentPostLen ? '\n' : ''}🕓 ${time.slice(0, -3)} ${hour}\n`;
 };
 
-export const getCurrentDate = () => {
+export const getCurrentDate = (currentPostLen: number) => {
 	const d = new Date();
-	return `\n📰 ${d.toDateString()}\n`;
+	return `${currentPostLen ? '\n' : ''}📰 ${d.toDateString()}\n`;
 };

@@ -121,7 +121,7 @@ const ComposerForm: React.FC<ComposerProps> = ({
 				<ImageUploadButton>
 					<img
 						onClick={() =>
-							setPostText(postText => postText + getCurrentTime())
+							setPostText(postText => postText + getCurrentTime(postText.length))
 						}
 						src={darkMode ? ClockIconDarkMode : ClockIcon}
 						alt='Add current time'
@@ -130,7 +130,7 @@ const ComposerForm: React.FC<ComposerProps> = ({
 				<ImageUploadButton>
 					<img
 						onClick={() =>
-							setPostText(postText => postText + getCurrentDate())
+							setPostText(postText => postText + getCurrentDate(postText.length))
 						}
 						src={darkMode ? CalendarIconDarkMode : CalendarIcon}
 						alt='Add current date'
