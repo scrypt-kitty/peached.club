@@ -18,6 +18,20 @@ export const ProfilePic = styled.img<{ unread?: boolean }>`
 	}
 `;
 
+export const AlternateProfilePic = styled.div<{ unread?: boolean }>`
+	border-radius: 50%;
+	width: 100%;
+	border: ${props => (props.unread ? '2px solid #1bb76e' : 'none')};
+	width: 75px;
+	height: 75px;
+	font-size: 60px;
+	@media screen and (max-width: 500px) {
+		width: 50px;
+		height: 50px;
+		font-size: 40px;
+	}
+`;
+
 export const InfoContainer = styled.div`
 	flex: 7;
 	height: 100%;
@@ -87,9 +101,23 @@ export const ProfileLink = styled.a`
 	}
 `;
 
-export const PostPreview = styled.p`
+export const PostPreview = styled.div`
 	color: #a8a8a8;
-	line-break: normal;
+	display: flex;
+	> p {
+		line-break: normal;
+		margin: 0;
+	}
+
+	> :first-child {
+		flex-basis: 95%;
+	}
+
+	@media screen and (max-width: 500px) {
+		> :first-child {
+			flex-basis: 90%;
+		}
+	}
 `;
 
 export const DisplayName = styled.h3`

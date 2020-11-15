@@ -8,10 +8,10 @@ import {
 	InfoContainer,
 	PostPreview,
 	DisplayName,
+	AlternateProfilePic
 } from './style';
 
 import { TextMessage, ImageMessage, LinkMessage } from '../api/interfaces';
-import { create } from 'domain';
 
 interface PreviewProps {
 	id: string;
@@ -22,25 +22,31 @@ interface PreviewProps {
 	darkMode: boolean;
 	children?: React.ReactNode;
 	unread?: boolean;
-	createdTime: number|null;
+	createdTime: number | null;
 }
 
 const Preview: React.FC<PreviewProps> = props => {
 	return (
 		<FeedPostWrapper darkMode={props.darkMode} isUnread={false}>
 			<PicFrame>
+				{props.avatarSrc ? (
 				<ProfilePic
 					unread={props.unread}
 					src={props.avatarSrc}
 					alt={props.name}
-				/>
+				/>) : <AlternateProfilePic>🍑</AlternateProfilePic>}
 			</PicFrame>
 			<InfoContainer>
 				<DisplayName>{props.displayName}</DisplayName>
 				{props.children}
-				<PostPreview>{createPostPreview(props.message)}</PostPreview>
+				<PostPreview>
+					<p>{createPostPreview(props.message)}</p>
+
+					{props.createdTime && (
+						<p>{getPostTime(props.createdTime)}</p>
+					)}
+				</PostPreview>
 			</InfoContainer>
-			{props.createdTime && <p>{getPostTime(props.createdTime)}</p>}
 		</FeedPostWrapper>
 	);
 };
