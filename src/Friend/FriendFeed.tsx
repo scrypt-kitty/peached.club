@@ -265,8 +265,8 @@ export const FriendFeedContainer = (props: FriendFeedProps) => {
 	);
 };
 
-const EmptyState = () => (
-	<EmptyStateWrapper>
+const EmptyState = ({ darkMode }: { darkMode: boolean}) => (
+	<EmptyStateWrapper darkMode={darkMode}>
 		<FriendPostContent>No posts yet!</FriendPostContent>
 	</EmptyStateWrapper>
 );
@@ -413,7 +413,7 @@ const FriendFeed = (props: RouteComponentProps<{ id: string }>) => {
 								))}
 							</div>
 						) : (
-							<EmptyState />
+							<EmptyState darkMode={darkMode} />
 						)}
 						{curUser !== null &&
 						curUser.id === props.match.params['id'] ? (

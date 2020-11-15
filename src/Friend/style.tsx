@@ -54,7 +54,7 @@ export const PostWrapper = styled.div<{ darkMode?: boolean }>`
 	}
 `;
 
-export const EmptyStateWrapper = styled(PostWrapper)`
+export const EmptyStateWrapper = styled(PostWrapper)<{darkMode?: boolean }>`
 	height: 20%;
 	text-align: center;
 `;
