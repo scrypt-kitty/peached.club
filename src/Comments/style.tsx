@@ -180,10 +180,21 @@ const AvatarStyled = styled(Avatar)`
 		height: 5rem;
 	}
 
+	> span {
+		width: 5rem;
+		height: 5rem;
+		font-size: 45px;
+	}
+
 	@media screen and (max-width: 800px) {
 		> img {
 			width: 50px;
 			height: auto;
+		}
+
+		> span {
+			width: 50px;
+			font-size: 45px;
 		}
 		margin-top: 0.5rem;
 	}
@@ -249,7 +260,11 @@ export const Comment: React.FC<CommentProps> = (props: CommentProps) => {
 	);
 	const Avatar = (
 		<AvatarStyled>
-			<img src={props.avatarSrc} alt={props.author.displayName} />
+			{props.avatarSrc ? (
+				<img src={props.avatarSrc} alt={props.author.displayName} />
+			) : (
+				<span>🍑</span>
+			)}
 		</AvatarStyled>
 	);
 	const Name = (
