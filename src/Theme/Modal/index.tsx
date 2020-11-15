@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
 
-export const ModalBackdrop = styled.div<{
+type ModalBackdropProps = {
 	entering: boolean;
 	isMini?: boolean;
-}>`
+};
+
+export const ModalBackdrop = styled.div<ModalBackdropProps>`
 	top: 0;
 	left: 0;
 	width: 100vw;
@@ -41,12 +43,14 @@ const DisableBodyScroll = createGlobalStyle`
 
 `;
 
-export const ModalContainer = styled.div<{
+type ModalContainerProps = {
 	darkMode: boolean;
 	isMini: boolean;
 	alignTop: boolean;
 	noSpaceBetween?: boolean;
-}>`
+};
+
+export const ModalContainer = styled.div<ModalContainerProps>`
 	background: ${props => (props.darkMode ? '#262628' : 'white')};
 	margin: 0;
 	padding: 1rem 2rem;

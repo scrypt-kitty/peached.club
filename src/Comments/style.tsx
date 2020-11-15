@@ -263,7 +263,7 @@ export const Comment: React.FC<CommentProps> = (props: CommentProps) => {
 			{props.avatarSrc ? (
 				<img src={props.avatarSrc} alt={props.author.displayName} />
 			) : (
-				<span>🍑</span>
+				<span role='img' aria-label={props.author.displayName}>🍑</span>
 			)}
 		</AvatarStyled>
 	);

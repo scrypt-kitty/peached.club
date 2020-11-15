@@ -287,6 +287,7 @@ const FriendFeed = (props: RouteComponentProps<{ id: string }>) => {
 
 	useEffect(() => {
 		window.scroll(0, 0);
+	// eslint-disable-next-line
 	}, [props.match.params['id']]);
 
 	useEffect(() => {

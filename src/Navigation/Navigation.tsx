@@ -3,7 +3,7 @@ import React, { useContext } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 
 import { PeachContext } from '../PeachContext';
-import { NavWrap, Link, Nav, IconImage, FeedsNav } from './style';
+import { NavWrap, Link, Nav, FeedsNav } from './style';
 import ArrowLeft from './ArrowLeft.svg';
 import ArrowRight from './ArrowRight.svg';
 import ActivityIcon from './Activity.svg';

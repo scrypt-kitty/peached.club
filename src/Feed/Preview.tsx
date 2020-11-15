@@ -8,7 +8,6 @@ import {
 	InfoContainer,
 	PostPreview,
 	DisplayName,
-	AlternateProfilePic
 } from './style';
 
 import { TextMessage, ImageMessage, LinkMessage } from '../api/interfaces';
@@ -30,11 +29,16 @@ const Preview: React.FC<PreviewProps> = props => {
 		<FeedPostWrapper darkMode={props.darkMode} isUnread={false}>
 			<PicFrame>
 				{props.avatarSrc ? (
-				<ProfilePic
-					unread={props.unread}
-					src={props.avatarSrc}
-					alt={props.name}
-				/>) : <AlternateProfilePic>🍑</AlternateProfilePic>}
+					<ProfilePic
+						unread={props.unread}
+						src={props.avatarSrc}
+						alt={props.name}
+					/>
+				) : (
+					<span role='img' aria-label={props.name}>
+						🍑
+					</span>
+				)}
 			</PicFrame>
 			<InfoContainer>
 				<DisplayName>{props.displayName}</DisplayName>

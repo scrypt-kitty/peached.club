@@ -3,6 +3,18 @@ import { Link } from 'react-router-dom';
 
 export const PicFrame = styled.div`
 	flex: 1;
+	> span {
+		border-radius: 50%;
+		width: 100%;
+		width: 75px;
+		height: 75px;
+		font-size: 60px;
+		@media screen and (max-width: 500px) {
+			width: 50px;
+			height: 50px;
+			font-size: 40px;
+		}
+	}
 `;
 
 export const ProfilePic = styled.img<{ unread?: boolean }>`
@@ -15,20 +27,6 @@ export const ProfilePic = styled.img<{ unread?: boolean }>`
 	@media screen and (max-width: 500px) {
 		width: 50px;
 		height: 50px;
-	}
-`;
-
-export const AlternateProfilePic = styled.div<{ unread?: boolean }>`
-	border-radius: 50%;
-	width: 100%;
-	border: ${props => (props.unread ? '2px solid #1bb76e' : 'none')};
-	width: 75px;
-	height: 75px;
-	font-size: 60px;
-	@media screen and (max-width: 500px) {
-		width: 50px;
-		height: 50px;
-		font-size: 40px;
 	}
 `;
 

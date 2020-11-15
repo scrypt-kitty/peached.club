@@ -63,6 +63,7 @@ const Feed = (props: RouteComponentProps) => {
 				);
 			}
 		}
+		 // eslint-disable-next-line
 	}, []);
 
 	if (!jwt || !curUser) {
