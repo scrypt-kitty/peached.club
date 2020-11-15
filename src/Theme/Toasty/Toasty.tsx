@@ -34,6 +34,7 @@ const ToastyWrapper = styled.div`
 	animation-direction: alternate;
 	animation-duration: 0.25s;
 	animation-iteration-count: 1;
+	z-index: 1000;
 `;
 
 const Toasty: React.FC<ToastyProps> = ({ children, onClick }) => {

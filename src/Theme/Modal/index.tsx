@@ -21,7 +21,7 @@ export const ModalBackdrop = styled.div<{
 
 	animation: 0.5s ${props => (props.entering ? '' : 'reverse')} EnterBackdrop;
 	background: rgba(0, 0, 0, 0.3);
-	z-index: ${props => (props.isMini ? '99999' : '9999')};
+	z-index: ${props => (props.isMini ? '999' : '99')};
 `;
 
 const DisableBodyScroll = createGlobalStyle`
