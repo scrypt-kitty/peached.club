@@ -89,6 +89,7 @@ export const ProfileLink = styled.a`
 
 export const PostPreview = styled.p`
 	color: #a8a8a8;
+	line-break: normal;
 `;
 
 export const DisplayName = styled.h3`
