@@ -29,7 +29,7 @@ export const MiniMenu = styled.div<MiniMenuProps>`
 export const DeletePost = styled(MiniMenu)`
 	width: 100%;
 	display: flex;
-	justify-content: end;
+	justify-content: flex-end;
 `;
 
 export const PostWrapper = styled.div<{ darkMode?: boolean }>`
