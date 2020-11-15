@@ -62,6 +62,7 @@ export const EmptyStateWrapper = styled(PostWrapper)`
 export const PostInteraction = styled.div`
 	width: 100%;
 	text-align: left;
+	transform: translateX(-0.5rem);
 `;
 
 export const Image = styled.img`
