@@ -16,7 +16,7 @@ export const Heading = styled.h1<{ darkMode: boolean }>`
 `;
 
 export const Castle = styled.div<{ darkMode: boolean }>`
-	background: ${props => (props.darkMode ? 'black' : '#fff0e6')};
+	${props => (props.darkMode ? 'background: black;' : '')};
 
 	@media screen and (max-width: 800px) {
 		width: 70%;
