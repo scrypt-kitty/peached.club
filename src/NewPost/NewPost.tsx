@@ -210,6 +210,7 @@ const NewPost = (props: {}) => {
 			setPosting(false);
 			if (response.success === 1) {
 				setPostSuccess(true);
+				setShowComposer(false);
 			} else {
 				setPostSuccess(false);
 			}
@@ -223,6 +224,15 @@ const NewPost = (props: {}) => {
 
 	return (
 		<>
+			{submitted && showToasty ? (
+				<Toasty onClick={() => setShowToasty(false)}>
+					{postSuccess
+						? 'Successfully created post!'
+						: posting
+						? 'Posting...'
+						: "Couldn't submit post. Please try again later."}
+				</Toasty>
+			) : null}
 			{showComposer ? (
 				<>
 					<ComposerForm
@@ -230,15 +240,6 @@ const NewPost = (props: {}) => {
 						onSubmit={submitPost}
 						toggleComposer={() => setShowComposer(false)}
 					/>
-					{submitted && showToasty ? (
-						<Toasty onClick={() => setShowToasty(false)}>
-							{postSuccess
-								? 'Successfully created post!'
-								: posting
-								? 'Posting...'
-								: "Couldn't submit post. Please try again later."}
-						</Toasty>
-					) : null}
 				</>
 			) : (
 				<NewPostButton
