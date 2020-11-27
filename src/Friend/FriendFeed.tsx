@@ -120,10 +120,12 @@ export const FriendFeedContainer = (props: FriendFeedProps) => {
 						{obj.title}
 						<LinkInfo>
 							<i>{obj.description}</i>
-							<Image
-								src={obj.imageURL}
-								alt={`Link preview thumbnail`}
-							/>
+							{obj.imageURL ? (
+								<Image
+									src={obj.imageURL}
+									alt={`Link preview thumbnail`}
+								/>
+							) : null}
 						</LinkInfo>
 					</LinkText>
 				</div>
@@ -245,8 +247,14 @@ export const FriendFeedContainer = (props: FriendFeedProps) => {
 					<InteractionInfo>{comments.length}</InteractionInfo>
 				</InteractionArea>
 				<PostTime>
-					<Clock darkMode={darkMode} titleId={`post-${props.id}-posted-time`} title='Posted time' />
-					<InteractionInfo>{getPostTime(props.createdTime)}</InteractionInfo>
+					<Clock
+						darkMode={darkMode}
+						titleId={`post-${props.id}-posted-time`}
+						title='Posted time'
+					/>
+					<InteractionInfo>
+						{getPostTime(props.createdTime)}
+					</InteractionInfo>
 				</PostTime>
 			</PostInteraction>
 			{showComments ? (
@@ -265,7 +273,7 @@ export const FriendFeedContainer = (props: FriendFeedProps) => {
 	);
 };
 
-const EmptyState = ({ darkMode }: { darkMode: boolean}) => (
+const EmptyState = ({ darkMode }: { darkMode: boolean }) => (
 	<EmptyStateWrapper darkMode={darkMode}>
 		<FriendPostContent>No posts yet!</FriendPostContent>
 	</EmptyStateWrapper>
@@ -287,7 +295,7 @@ const FriendFeed = (props: RouteComponentProps<{ id: string }>) => {
 
 	useEffect(() => {
 		window.scroll(0, 0);
-	// eslint-disable-next-line
+		// eslint-disable-next-line
 	}, [props.match.params['id']]);
 
 	useEffect(() => {
