@@ -109,6 +109,7 @@ export const PostPreview = styled.div`
 
 	> :first-child {
 		flex-basis: 95%;
+		margin-right: 1rem;
 	}
 
 	@media screen and (max-width: 500px) {
