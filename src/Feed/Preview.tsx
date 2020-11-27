@@ -17,7 +17,7 @@ interface PreviewProps {
 	avatarSrc: string;
 	name: string;
 	displayName: string;
-	message: TextMessage | ImageMessage | LinkMessage;
+	message: TextMessage | ImageMessage | LinkMessage | string;
 	darkMode: boolean;
 	children?: React.ReactNode;
 	unread?: boolean;
@@ -44,7 +44,7 @@ const Preview: React.FC<PreviewProps> = props => {
 				<DisplayName>{props.displayName}</DisplayName>
 				{props.children}
 				<PostPreview>
-					<p>{createPostPreview(props.message)}</p>
+					<p>{typeof props.message === 'string' ? props.message : createPostPreview(props.message)}</p>
 
 					{props.createdTime && (
 						<p>{getPostTime(props.createdTime)}</p>

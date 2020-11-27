@@ -198,27 +198,73 @@ export interface CreatePostResponse {
 	success: number;
 }
 
-export interface ActivityItem {
-	type: 'comment' | 'like';
-	body: {
-		authorStream: {
-			id: string;
-			name: string;
-			displayName: string;
-			avatarSrc: string;
-			bio: string;
-			isPublic: boolean;
-			unreadPostCount: number;
-			lastRead: number;
-		};
-		postID: string;
-		postMessage: Post['message'];
-		commentBody?: string;
-	};
+interface AuthorStream {
+	id: string;
+	name: string;
+	displayName: string;
+	avatarSrc: string;
+	bio: string;
+	isPublic: boolean;
+	unreadPostCount: number;
+	lastRead: number;
+}
 
+export enum NOTIFICATION_TYPE {
+	LIKE = 'like',
+	COMMENT = 'comment',
+	WAVE = 'wave',
+	MENTION = 'mention',
+}
+export interface MentionNotification {
+	type: typeof NOTIFICATION_TYPE.MENTION;
+	body: {
+		authorStream: AuthorStream;
+		postAuthorStream: AuthorStream;
+		postId: string;
+		postMessage: Post['message'];
+		commentBody: string;
+	};
 	isUnread: boolean;
 	createdTime: number;
 }
+export interface LikeNotification {
+	type: typeof NOTIFICATION_TYPE.LIKE;
+	body: {
+		authorStream: AuthorStream;
+		postId: string;
+		postMessage: Post['message'];
+	};
+	isUnread: boolean;
+	createdTime: number;
+}
+
+export interface CommentNotification {
+	type: typeof NOTIFICATION_TYPE.COMMENT;
+	body: {
+		authorStream: AuthorStream;
+		postId: string;
+		postMessage: Post['message'];
+		commentBody: string;
+	};
+	isUnread: boolean;
+	createdTime: number;
+}
+
+export interface WaveNotification {
+	type: typeof NOTIFICATION_TYPE.WAVE;
+	body: {
+		authorStream: AuthorStream;
+		message: string;
+	};
+	isUnread: boolean;
+	createdTime: number;
+}
+
+export type ActivityItem =
+	| CommentNotification
+	| WaveNotification
+	| LikeNotification
+	| MentionNotification;
 
 export interface ActivityResponse {
 	streamID: string;

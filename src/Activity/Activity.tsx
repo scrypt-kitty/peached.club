@@ -4,13 +4,57 @@ import { Redirect } from 'react-router';
 import { PeachContext } from '../PeachContext';
 import api from '../api';
 import ACTIONS from '../api/constants';
-import { ActivityResponse, ActivityItem } from '../api/interfaces';
+import {
+	ActivityResponse,
+	ActivityItem,
+	NOTIFICATION_TYPE,
+	Post,
+} from '../api/interfaces';
 
 import Loading from '../Loading';
 import Navigation from '../Navigation';
 import { Page } from '../Theme/Layout';
 import { Title } from '../Theme/Type';
 import Preview from '../Feed/Preview';
+
+function shortenPost(text: string): string {
+	return text.length > 300 ? text.slice(0,300) + '...' : text;
+}
+
+function getPostPreviewMessage(postMessage: Post['message']): string {
+	const message = postMessage[0];
+	if (message.text) return shortenPost(message.text);
+	if (message.src) return 'Image';
+	if (message.url) return 'Link';
+	return '';
+}
+
+function getActivityPreviewMessage(item: ActivityItem): string {
+	switch (item.type) {
+		case NOTIFICATION_TYPE.COMMENT:
+		case NOTIFICATION_TYPE.MENTION:
+			return item.body.commentBody;
+		case NOTIFICATION_TYPE.LIKE:
+			return getPostPreviewMessage(item.body.postMessage);
+		case NOTIFICATION_TYPE.WAVE:
+			return item.body.message;
+		default:
+			return '';
+	}
+}
+
+function getActivityDescription(item: ActivityItem): string {
+	switch (item.type) {
+		case NOTIFICATION_TYPE.COMMENT:
+			return 'left a comment';
+		case NOTIFICATION_TYPE.MENTION:
+			return 'mentioned you in a comment';
+		case NOTIFICATION_TYPE.LIKE:
+			return 'liked your post';
+		default:
+			return '';
+	}
+}
 
 const Activity = () => {
 	const [activityFeed, setActivityFeed] = useState<ActivityItem[] | null>(
@@ -44,21 +88,16 @@ const Activity = () => {
 				{activityFeed ? (
 					activityFeed.map((item: ActivityItem) => (
 						<Preview
-							key={`${item.createdTime}${item.body.authorStream.id}${item.body.postID}`}
+							key={`${item.createdTime}${item.body.authorStream.id}`}
 							avatarSrc={item.body.authorStream.avatarSrc}
 							displayName={item.body.authorStream.displayName}
 							name={item.body.authorStream.name}
 							id={item.body.authorStream.id}
 							darkMode={darkMode}
-							message={item.body.postMessage[0]}
+							message={getActivityPreviewMessage(item)}
 							createdTime={item.createdTime}
 						>
-							<p>
-								{item.type === 'comment' &&
-								item.body.commentBody
-									? item.body.commentBody
-									: 'liked your post'}
-							</p>
+							<p>{getActivityDescription(item)}</p>
 						</Preview>
 					))
 				) : (
