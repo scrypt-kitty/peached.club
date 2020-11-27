@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
 import { Link } from 'react-router-dom';
 
-import { Comment as PostCommentProps } from '../api/interfaces';
+import { Comment as PostCommentProps, MutualFriend } from '../api/interfaces';
 import {
 	Avatar,
 	ProfileHeaderHandle as Handle,
@@ -162,10 +162,13 @@ export const DismissCommentsButtonContainer = styled.div`
 	margin: 0;
 	max-height: 2rem;
 	position: absolute;
-	left: 75%;
-	top: 10%;
+	width: 50%;
+	display: flex;
+	justify-content: flex-end;
+	z-index:999;
 	@media screen and (max-width: 800px) {
-		left: 85%;
+		width: 70%;
+		transform: translateY(-40%);
 	}
 `;
 
@@ -249,6 +252,7 @@ interface CommentProps extends PostCommentProps {
 	deleteComment: (id: string) => void;
 	darkMode: boolean;
 	isFriend: boolean;
+	mutualFriends: MutualFriend[];
 }
 
 export const Comment: React.FC<CommentProps> = (props: CommentProps) => {
@@ -258,6 +262,9 @@ export const Comment: React.FC<CommentProps> = (props: CommentProps) => {
 	const [profilePreviewShowing, setProfilePreviewShowing] = useState<boolean>(
 		false
 	);
+
+	const authorData = props.mutualFriends.filter(f => f.id === props.author.id)[0];
+
 	const Avatar = (
 		<AvatarStyled>
 			{props.avatarSrc ? (
@@ -329,7 +336,7 @@ export const Comment: React.FC<CommentProps> = (props: CommentProps) => {
 						setProfilePreviewShowing(false)
 					}
 					avatarSrc={props.avatarSrc}
-					user={props.author}
+					user={authorData ? authorData : props.author}
 				/>
 			) : null}
 		</CommentContainer>

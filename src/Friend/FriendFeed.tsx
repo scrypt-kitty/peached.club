@@ -303,6 +303,7 @@ const FriendFeed = (props: RouteComponentProps<{ id: string }>) => {
 			return;
 		}
 		const getUserProfile = async () => {
+			setPostsLoaded(false);
 			const resp: { data: User } = await api(
 				ACTIONS.connectionStream,
 				jwt,

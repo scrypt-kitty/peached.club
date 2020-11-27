@@ -58,6 +58,7 @@ const Comments: React.FC<CommentsProps> = ({
 						avatarSrc={getAvatar(c.author.id)}
 						{...c}
 						deleteComment={deleteComment}
+						mutualFriends={mutualFriends}
 					/>
 				))}
 			</AllComments>

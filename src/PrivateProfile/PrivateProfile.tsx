@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 
 import api from '../api/api';
-import { Comment, AddFriendResponse } from '../api/interfaces';
+import { Comment, AddFriendResponse, MutualFriend } from '../api/interfaces';
 import ACTIONS from '../api/constants';
 import { PeachContext } from '../PeachContext';
 import Modal from '../Theme/Modal';
@@ -12,7 +12,7 @@ import Toasty from '../Theme/Toasty';
 
 interface PrivateProfileProps {
 	onDismissPrivateProfile: () => void;
-	user: Comment['author'];
+	user: Comment['author'] | MutualFriend;
 	avatarSrc: string;
 }
 
@@ -33,6 +33,10 @@ const PrivateProfileContainer = styled.div<{ darkMode: boolean }>`
 		${props => (props.darkMode ? 'color: white;' : '')}
 		margin-bottom: 0.25rem;
 	}
+`;
+
+const Bio = styled.p`
+	margin: 0 0 1rem;
 `;
 
 const AvatarPreview = styled.img`
@@ -58,7 +62,6 @@ const PrivateProfile: React.FC<PrivateProfileProps> = ({
 		api(ACTIONS.addFriend, jwt, {}, user.name).then(
 			(response: AddFriendResponse) => {
 				if (response.success === 1) {
-					console.log('yay');
 					setRequestSuccess(true);
 				}
 				setRequestSending(false);
@@ -76,7 +79,7 @@ const PrivateProfile: React.FC<PrivateProfileProps> = ({
 				<AvatarPreview src={avatarSrc} alt='a profile pic' />
 				<Title darkMode={darkMode}>{user.displayName}</Title>
 				<Handle>@{user.name}</Handle>
-				<p>{user.bio}</p>
+				<Bio>{user.bio}</Bio>
 				<Button
 					isSmall
 					centered
