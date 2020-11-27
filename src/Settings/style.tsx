@@ -29,7 +29,7 @@ export const SettingsSection = styled.div`
 `;
 
 export const LogoutButtonWrapper = styled.div`
-	margin: 0;
+	margin: 1rem 0;
 	padding: 0;
 	display: flex;
 	justify-content: end;

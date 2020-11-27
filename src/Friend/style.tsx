@@ -15,7 +15,7 @@ export const MiniMenu = styled.div<MiniMenuProps>`
 	height: 100%;
 	visibility: hidden;
 	position: relative;
-	transform: translateY(1rem);
+	transform: translateY(2rem);
 	float: right;
 	> img:hover {
 		cursor: pointer;
@@ -54,7 +54,7 @@ export const PostWrapper = styled.div<{ darkMode?: boolean }>`
 	}
 `;
 
-export const EmptyStateWrapper = styled(PostWrapper)<{darkMode?: boolean }>`
+export const EmptyStateWrapper = styled(PostWrapper)<{ darkMode?: boolean }>`
 	height: 20%;
 	text-align: center;
 `;

@@ -18,7 +18,7 @@ import { Title } from '../Theme/Type';
 import Preview from '../Feed/Preview';
 
 function shortenPost(text: string): string {
-	return text.length > 300 ? text.slice(0,300) + '...' : text;
+	return text.length > 300 ? text.slice(0, 300) + '...' : text;
 }
 
 function getPostPreviewMessage(postMessage: Post['message']): string {
