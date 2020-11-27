@@ -20,6 +20,7 @@ import {
 	LogoutButtonWrapper,
 } from './style';
 import { ERROR } from '../api/error';
+import { LinkText } from '../Friend/style';
 
 const Settings = (props: {}) => {
 	const { darkMode, jwt, toggleDarkMode } = useContext(PeachContext);
@@ -171,6 +172,30 @@ const Settings = (props: {}) => {
 								</Button>
 							</Link>
 						</LogoutButtonWrapper>
+						<SettingsSection>
+							<SubTitle darkMode={darkMode}>
+								Help or suggestions?
+							</SubTitle>
+							<p>
+								Contact @jastronaute on{' '}
+								<LinkText
+									href='https://twitter.com/jastronaute'
+									title='jastronaute on twitter'
+								>
+									twitter
+								</LinkText>{' '}
+								or{' '}
+								<LinkText
+									href='https://www.instagram.com/jastronaute/'
+									title='jastronaute on instagram'
+								>
+									instagram
+								</LinkText>
+								, or email jas [at] jasdelgado [dot] com. (Or
+								you can contact me on peach if you're already
+								friends with me!)
+							</p>
+						</SettingsSection>
 					</SettingsSection>
 				</SettingsWrapper>
 			</Page>
