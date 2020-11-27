@@ -7,8 +7,7 @@ import {
 import { PeachContext } from '../PeachContext';
 
 import AddComment from './AddComment';
-import { Comment, AllComments, DismissCommentsButtonContainer } from './style';
-import DeleteIcon from '../Comments/DeleteIcon.svg';
+import { Comment, AllComments } from './style';
 import Modal from '../Theme/Modal';
 
 interface CommentsProps {
@@ -45,13 +44,6 @@ const Comments: React.FC<CommentsProps> = ({
 	return (
 		<Modal darkMode={darkMode} onKeyDown={onDismissComments}>
 			<AllComments>
-				<DismissCommentsButtonContainer>
-					<img
-						onClick={() => onDismissComments()}
-						src={DeleteIcon}
-						alt='Close comments'
-					/>
-				</DismissCommentsButtonContainer>
 				{comments.map(c => (
 					<Comment
 						isFriend={
