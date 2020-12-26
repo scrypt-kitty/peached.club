@@ -176,3 +176,32 @@ export const ProfileHeaderText = styled.div`
 		margin: 0 auto;
 	}
 `;
+
+export const LocationWrapper = styled.div`
+	display: flex;
+	flex-direction: row;
+	margin-bottom: 1rem;
+`;
+
+export const LocationIcon = styled.div`
+	background-color: #aaa;
+	border-radius: 50%;
+	width: 50px;
+	height: 50px;
+	> img {
+		width: 50px;
+		height: 50px;
+	}
+`;
+
+export const LocationInfo = styled.div`
+	margin-left: 1rem;
+	> p {
+		margin: 0;
+	}
+`;
+
+export const LocationAddress = styled.p`
+	margin: 0;
+	color: #aaa;
+`;

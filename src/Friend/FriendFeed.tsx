@@ -22,6 +22,8 @@ import {
 	CommentResponse,
 	MutualFriend,
 	FriendsOfFriendsResponse,
+	POST_TYPE,
+	LocationMessage,
 } from '../api/interfaces';
 import ACTIONS from '../api/constants';
 import {
@@ -40,6 +42,10 @@ import {
 	LinkInfo,
 	EmptyStateWrapper,
 	PostTime,
+	LocationWrapper,
+	LocationIcon,
+	LocationAddress,
+	LocationInfo
 } from './style';
 import Liked from './Liked.svg';
 import Unliked from './Unliked.svg';
@@ -53,14 +59,21 @@ import { PeachContext } from '../PeachContext';
 
 import Navigation from '../Navigation';
 
-/*eslint-disable */
-function isText(object: any): object is TextMessage {
-	return 'text' in object;
-}
-function isImage(object: any): object is ImageMessage {
-	return 'src' in object;
-}
-/*eslint-enable*/
+const LocationPost = (props: LocationMessage) => {
+	return (
+		<LocationWrapper>
+			<LocationIcon>
+				<img src={props.iconSrc} />
+			</LocationIcon>
+			<LocationInfo>
+				<p>{props.name}</p>
+				{props.formattedAddress.map(addrLine => (
+					<LocationAddress key={addrLine}>{addrLine}</LocationAddress>
+				))}
+			</LocationInfo>
+		</LocationWrapper>
+	);
+};
 
 const addNewlines = (txt: string) =>
 	txt.indexOf('\n') < 0
@@ -99,37 +112,43 @@ export const FriendFeedContainer = (props: FriendFeedProps) => {
 	let msgKey = 0;
 	const msgs = props.message.map(obj => {
 		msgKey++;
-		if (isText(obj) && obj.text) {
-			return <p key={msgKey}>{addNewlines(obj.text)}</p>;
-		} else if (isImage(obj) && obj.src) {
-			return (
-				<Image
-					key={msgKey}
-					src={obj.src}
-					alt={`image for post ${props.id}`}
-				/>
-			);
-		} else {
-			return (
-				<div key={msgKey}>
-					<LinkText href={obj.url}>
-						<img
-							src={darkMode ? LinkIconDarkMode : LinkIcon}
-							alt='Link'
-						/>{' '}
-						{obj.title}
-						<LinkInfo>
-							<i>{obj.description}</i>
-							{obj.imageURL ? (
-								<Image
-									src={obj.imageURL}
-									alt={`Link preview thumbnail`}
-								/>
-							) : null}
-						</LinkInfo>
-					</LinkText>
-				</div>
-			);
+		switch (obj.type) {
+			case POST_TYPE.TEXT:
+				return <p key={msgKey}>{addNewlines(obj.text)}</p>;
+			case POST_TYPE.IMAGE:
+				return (
+					<Image
+						key={msgKey}
+						src={obj.src}
+						alt={`image for post ${props.id}`}
+					/>
+				);
+			case POST_TYPE.LINK:
+				return (
+					<div key={msgKey}>
+						<LinkText href={obj.url}>
+							<img
+								src={darkMode ? LinkIconDarkMode : LinkIcon}
+								alt='Link'
+							/>{' '}
+							{obj.title}
+							<LinkInfo>
+								<i>{obj.description}</i>
+								{obj.imageURL ? (
+									<Image
+										src={obj.imageURL}
+										alt={`Link preview thumbnail`}
+									/>
+								) : null}
+							</LinkInfo>
+						</LinkText>
+					</div>
+				);
+			case POST_TYPE.LOCATION:
+				return <LocationPost {...obj} />;
+
+			default:
+				return '';
 		}
 	});
 

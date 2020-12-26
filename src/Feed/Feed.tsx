@@ -63,7 +63,7 @@ const Feed = (props: RouteComponentProps) => {
 				);
 			}
 		}
-		 // eslint-disable-next-line
+		// eslint-disable-next-line
 	}, []);
 
 	if (!jwt || !curUser) {
@@ -88,10 +88,14 @@ const Feed = (props: RouteComponentProps) => {
 								message={
 									user.posts && user.posts[0]
 										? user.posts[0].message[0]
-										: { type: 'text', text: '' }
+										: ''
 								}
 								unread={user.unreadPostCount > 0}
-								createdTime={user.posts && user.posts[0] ? user.posts[0].createdTime : null}
+								createdTime={
+									user.posts && user.posts[0]
+										? user.posts[0].createdTime
+										: null
+								}
 							/>
 						</LinkStyled>
 					))

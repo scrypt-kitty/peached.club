@@ -9,6 +9,7 @@ import {
 	ActivityItem,
 	NOTIFICATION_TYPE,
 	Post,
+	POST_TYPE,
 } from '../api/interfaces';
 
 import Loading from '../Loading';
@@ -23,10 +24,18 @@ function shortenPost(text: string): string {
 
 function getPostPreviewMessage(postMessage: Post['message']): string {
 	const message = postMessage[0];
-	if (message.text) return shortenPost(message.text);
-	if (message.src) return 'Image';
-	if (message.url) return 'Link';
-	return '';
+	switch (message.type) {
+		case POST_TYPE.TEXT:
+			return shortenPost(message.text);
+		case POST_TYPE.IMAGE:
+			return 'Image';
+		case POST_TYPE.LINK:
+			return 'Link';
+		case POST_TYPE.LOCATION:
+			return 'Location';
+		default:
+			return '';
+	}
 }
 
 function getActivityPreviewMessage(item: ActivityItem): string {

@@ -1,20 +1,18 @@
-import {
-	TextMessage,
-	ImageMessage,
-	LinkMessage,
-	isText,
-	isImage,
-} from './api/interfaces';
+import { PostContent, POST_TYPE } from './api/interfaces';
 
-export const createPostPreview = (
-	post: TextMessage | ImageMessage | LinkMessage
-) => {
-	if (isText(post) && post.text) {
-		if (post.text.length > 300) {
-			return post.text.slice(0, 300) + '...';
-		} else {
-			return post.text;
-		}
-	} else if (isImage(post)) return 'Image post';
-	else return 'Link post';
+export const createPostPreview = (post: PostContent) => {
+	switch (post.type) {
+		case POST_TYPE.TEXT:
+			return post.text.length > 300
+				? post.text.slice(0, 300) + '...'
+				: post.text;
+		case POST_TYPE.IMAGE:
+			return 'Image post';
+		case POST_TYPE.LINK:
+			return 'Link post';
+		case POST_TYPE.LOCATION:
+			return 'Location post';
+		default:
+			return '';
+	}
 };

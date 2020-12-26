@@ -10,14 +10,14 @@ import {
 	DisplayName,
 } from './style';
 
-import { TextMessage, ImageMessage, LinkMessage } from '../api/interfaces';
+import { PostContent } from '../api/interfaces';
 
 interface PreviewProps {
 	id: string;
 	avatarSrc: string;
 	name: string;
 	displayName: string;
-	message: TextMessage | ImageMessage | LinkMessage | string;
+	message: PostContent | string;
 	darkMode: boolean;
 	children?: React.ReactNode;
 	unread?: boolean;
@@ -44,7 +44,11 @@ const Preview: React.FC<PreviewProps> = props => {
 				<DisplayName>{props.displayName}</DisplayName>
 				{props.children}
 				<PostPreview>
-					<p>{typeof props.message === 'string' ? props.message : createPostPreview(props.message)}</p>
+					<p>
+						{typeof props.message === 'string'
+							? props.message
+							: createPostPreview(props.message)}
+					</p>
 
 					{props.createdTime && (
 						<p>{getPostTime(props.createdTime)}</p>

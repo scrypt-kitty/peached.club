@@ -6,26 +6,44 @@ interface ResponseError {
  * POSTS
  */
 
-export interface Message {
-	type: string;
+export enum POST_TYPE {
+	TEXT = 'text',
+	IMAGE = 'image',
+	LINK = 'link',
+	LOCATION = 'location'
 }
 
-export interface TextMessage extends Message {
-	text?: string;
+export type TextMessage = {
+	type: typeof POST_TYPE.TEXT;
+	text: string;
 }
 
-export interface ImageMessage extends Message {
-	height?: number;
-	src?: string;
-	width?: number;
+export type ImageMessage = {
+	type: typeof POST_TYPE.IMAGE;
+	src: string;
+	height: number;
+	width: number;
 }
 
-export interface LinkMessage extends Message {
-	description?: string;
+export type LinkMessage = {
+	type: typeof POST_TYPE.LINK;
+	description: string;
 	imageURL?: string;
-	title?: string;
-	url?: string;
+	title: string;
+	url: string;
 }
+
+export interface LocationMessage {
+	type: typeof POST_TYPE.LOCATION;
+	formattedAddress: string[];
+	foursquareId: string;
+	iconSrc: string;
+	lat: number;
+	long: number;
+	name: string;
+}
+
+export type PostContent = TextMessage | ImageMessage | LinkMessage | LocationMessage;
 
 /*eslint-disable */
 export function isLink(object: any): object is LinkMessage {
@@ -36,6 +54,9 @@ export function isText(object: any): object is TextMessage {
 }
 export function isImage(object: any): object is ImageMessage {
 	return 'src' in object;
+}
+export function isLocation(object: any): object is LocationMessage {
+	return 'formattedAddress' in object;
 }
 /*eslint-enable*/
 
@@ -85,7 +106,7 @@ export interface DeleteCommentResponse {
 
 export interface Post {
 	id: string;
-	message: (TextMessage & ImageMessage & LinkMessage)[];
+	message: PostContent[];
 	commentCount: number;
 	likeCount: number;
 	likedByMe: boolean;

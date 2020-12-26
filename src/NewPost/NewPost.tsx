@@ -34,6 +34,7 @@ import {
 	ImageMessage,
 	TextMessage,
 	isImage,
+	POST_TYPE
 } from '../api/interfaces';
 import { PeachContext } from '../PeachContext';
 
@@ -81,7 +82,7 @@ const ComposerForm: React.FC<ComposerProps> = ({
 				setImages(images =>
 					images.concat([
 						{
-							type: 'image',
+							type: POST_TYPE.IMAGE,
 							src: resp.data.link,
 							height: resp.data.height,
 							width: resp.data.width,
@@ -174,7 +175,7 @@ const ComposerForm: React.FC<ComposerProps> = ({
 						postText.length > 0
 							? ([
 									{
-										type: 'text',
+										type: POST_TYPE.TEXT,
 										text: postText,
 									},
 							  ] as ((ImageMessage | TextMessage)[])).concat(
