@@ -74,34 +74,6 @@ export const Image = styled.img`
 	}
 `;
 
-export const LinkText = styled.a`
-	text-decoration: none;
-	color: #fe4f72;
-
-	:visited {
-		text-decoration: none;
-		color: #fe4f72;
-	}
-
-	> a:first-child {
-		height: 1rem;
-	}
-`;
-
-export const LinkInfo = styled.div`
-	margin: 0 0;
-	padding: 0 0;
-	padding-top: 0.5rem;
-	padding-left: 1rem;
-	padding-bottom: 0.5rem;
-	margin-left: 0.25rem;
-	border-left: 0.25rem solid #cacaca;
-
-	> img {
-		margin-top: 0.5rem;
-	}
-`;
-
 export const InteractionInfo = styled.p`
 	display: inline;
 	margin: 0;
@@ -177,31 +149,4 @@ export const ProfileHeaderText = styled.div`
 	}
 `;
 
-export const LocationWrapper = styled.div`
-	display: flex;
-	flex-direction: row;
-	margin-bottom: 1rem;
-`;
 
-export const LocationIcon = styled.div`
-	background-color: #aaa;
-	border-radius: 50%;
-	width: 50px;
-	height: 50px;
-	> img {
-		width: 50px;
-		height: 50px;
-	}
-`;
-
-export const LocationInfo = styled.div`
-	margin-left: 1rem;
-	> p {
-		margin: 0;
-	}
-`;
-
-export const LocationAddress = styled.p`
-	margin: 0;
-	color: #aaa;
-`;

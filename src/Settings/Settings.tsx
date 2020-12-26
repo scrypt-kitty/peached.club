@@ -20,7 +20,7 @@ import {
 	LogoutButtonWrapper,
 } from './style';
 import { ERROR } from '../api/error';
-import { LinkText } from '../Friend/style';
+import { LinkText } from '../Friend/Posts/LinkPost';
 
 const Settings = (props: {}) => {
 	const { darkMode, jwt, toggleDarkMode } = useContext(PeachContext);

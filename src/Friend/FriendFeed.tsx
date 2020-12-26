@@ -13,8 +13,6 @@ import NewPost from '../NewPost';
 
 import { Page } from '../Theme/Layout';
 import {
-	TextMessage,
-	ImageMessage,
 	Post,
 	LikePostResponse,
 	User,
@@ -23,7 +21,6 @@ import {
 	MutualFriend,
 	FriendsOfFriendsResponse,
 	POST_TYPE,
-	LocationMessage,
 } from '../api/interfaces';
 import ACTIONS from '../api/constants';
 import {
@@ -38,42 +35,21 @@ import {
 	ProfileHeaderContainer,
 	ProfileHeaderText,
 	ProfileHeaderHandle,
-	LinkText,
-	LinkInfo,
 	EmptyStateWrapper,
 	PostTime,
-	LocationWrapper,
-	LocationIcon,
-	LocationAddress,
-	LocationInfo
 } from './style';
 import Liked from './Liked.svg';
 import Unliked from './Unliked.svg';
 import UnlikedDarkMode from './UnlikedDarkMode.svg';
 import CommentIcon from './CommentIcon.svg';
 import CommentIconDarkMode from './CommentIconDarkMode.svg';
-import LinkIcon from './LinkIcon.svg';
-import LinkIconDarkMode from './LinkIconDarkMode.svg';
 import Clock from '../Theme/Icons/Clock';
 import { PeachContext } from '../PeachContext';
 
-import Navigation from '../Navigation';
+import LocationPost from './Posts/LocationPost';
+import LinkPost from './Posts/LinkPost';
 
-const LocationPost = (props: LocationMessage) => {
-	return (
-		<LocationWrapper>
-			<LocationIcon>
-				<img src={props.iconSrc} />
-			</LocationIcon>
-			<LocationInfo>
-				<p>{props.name}</p>
-				{props.formattedAddress.map(addrLine => (
-					<LocationAddress key={addrLine}>{addrLine}</LocationAddress>
-				))}
-			</LocationInfo>
-		</LocationWrapper>
-	);
-};
+import Navigation from '../Navigation';
 
 const addNewlines = (txt: string) =>
 	txt.indexOf('\n') < 0
@@ -124,27 +100,11 @@ export const FriendFeedContainer = (props: FriendFeedProps) => {
 					/>
 				);
 			case POST_TYPE.LINK:
-				return (
-					<div key={msgKey}>
-						<LinkText href={obj.url}>
-							<img
-								src={darkMode ? LinkIconDarkMode : LinkIcon}
-								alt='Link'
-							/>{' '}
-							{obj.title}
-							<LinkInfo>
-								<i>{obj.description}</i>
-								{obj.imageURL ? (
-									<Image
-										src={obj.imageURL}
-										alt={`Link preview thumbnail`}
-									/>
-								) : null}
-							</LinkInfo>
-						</LinkText>
-					</div>
-				);
+				// @ts-ignore
+				return <LinkPost {...obj} darkMode={darkMode} />;
+
 			case POST_TYPE.LOCATION:
+				// @ts-ignore
 				return <LocationPost {...obj} />;
 
 			default:
