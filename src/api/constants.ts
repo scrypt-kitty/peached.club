@@ -1,4 +1,4 @@
-const PROXY = 'https://proxy.peached.club/';
+const PROXY = 'https://peached-club-proxy.herokuapp.com';
 export const LOGIN = PROXY + 'https://v1.peachapi.com/login';
 export const LIKE = PROXY + 'https://v1.peachapi.com/like';
 export const UNLIKE = (id: string) =>
