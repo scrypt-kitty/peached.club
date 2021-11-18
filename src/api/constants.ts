@@ -1,4 +1,4 @@
-const PROXY = 'https://cors-anywhere.herokuapp.com/';
+const PROXY = 'https://proxy.peached.club/';
 export const LOGIN = PROXY + 'https://v1.peachapi.com/login';
 export const LIKE = PROXY + 'https://v1.peachapi.com/like';
 export const UNLIKE = (id: string) =>
