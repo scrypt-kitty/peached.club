@@ -90,7 +90,7 @@ const App: React.FC = () => {
 			>
 				<GlobalStyle darkMode={darkMode} />
 				<Switch>
-					<Route exact path='/' component={Loading} />
+					<Route exact path='/' component={Feed} />
 					<Route path='/login' component={Login} />
 					<Route path='/feed' component={Feed} />
 					<Route path='/friend/:id' component={FriendFeed} />
