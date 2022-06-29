@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Loading from './Loading';
 import Login from './Login';
 import Feed from './Feed';
 import FriendFeed from './Friend';
