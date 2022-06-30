@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
-import Login from './Login';
-import Feed from './Feed';
-import FriendFeed from './Friend';
-import Activity from './Activity';
+import { Login } from './Login';
+import { Logout } from './Login/Logout';
+import { Feed } from './Feed';
+import { FriendFeed } from './Friend';
+import { Activity } from './Activity';
 import Settings from './Settings';
-import { Redirect } from 'react-router';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+
+import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import { GlobalStyle } from './style';
 import { PeachContext } from './PeachContext';
 import { LoginStream, User, CurUser, DummyCurUser } from './api/interfaces';
+import { ThemeProvider } from 'styled-components';
+import { darkTheme, lightTheme } from './Theme/theme';
 
 function getUserFromStorage() {
 	const user = localStorage.getItem('user');
@@ -87,26 +90,20 @@ const App: React.FC = () => {
 					setCurUserData: setCurUserData,
 				}}
 			>
-				<GlobalStyle darkMode={darkMode} />
-				<Switch>
-					<Route exact path='/' component={Feed} />
-					<Route path='/login' component={Login} />
-					<Route path='/feed' component={Feed} />
-					<Route path='/friend/:id' component={FriendFeed} />
-					<Route path='/activity' component={Activity} />
-					<Route path='/settings' component={Settings} />
-					<Route
-						path='/logout'
-						render={() => {
-							localStorage.removeItem('peachedToken');
-							localStorage.removeItem('user');
-							localStorage.removeItem('peachedDarkMode');
-							updateJwt('');
-							updatePeachFeed([]);
-							return <Redirect to='/login' />;
-						}}
-					/>
-				</Switch>
+				<ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
+					<GlobalStyle darkMode={darkMode} />
+					<Routes>
+						<Route path='/' element={<Feed />} />
+						<Route path='/login' element={<Login />} />
+						<Route path='/feed' element={<Feed />} />
+						<Route path='/friend'>
+							<Route path=':id' element={<FriendFeed />} />
+						</Route>
+						<Route path='/activity' element={<Activity />} />
+						<Route path='/settings' element={<Settings />} />
+						<Route path='/logout' element={<Logout />} />
+					</Routes>
+				</ThemeProvider>
 			</PeachContext.Provider>
 		</BrowserRouter>
 	);

@@ -257,12 +257,10 @@ interface CommentProps extends PostCommentProps {
 }
 
 export const Comment: React.FC<CommentProps> = (props: CommentProps) => {
-	const [deletePromptShowing, setDeletePromptShowing] = useState<boolean>(
-		false
-	);
-	const [profilePreviewShowing, setProfilePreviewShowing] = useState<boolean>(
-		false
-	);
+	const [deletePromptShowing, setDeletePromptShowing] =
+		useState<boolean>(false);
+	const [profilePreviewShowing, setProfilePreviewShowing] =
+		useState<boolean>(false);
 
 	const authorData = props.mutualFriends.filter(
 		f => f.id === props.author.id
