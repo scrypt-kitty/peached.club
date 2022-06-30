@@ -9,30 +9,39 @@ import { User } from '../api/interfaces';
 interface AddCommentProps {
 	onSubmit: (txt: string) => void;
 	darkMode: boolean;
+	newCommentText?: string;
+	setNewCommentText: Function;
 }
 
-const AddComment: React.FC<AddCommentProps> = ({ onSubmit, darkMode }) => {
-	const [newComment, setNewComment] = useState<string>('');
+const AddComment: React.FC<AddCommentProps> = ({
+	onSubmit,
+	darkMode,
+	newCommentText = '',
+	setNewCommentText,
+}) => {
 	const [isDropdownShowing, setDropdownShowing] = useState<boolean>(false);
 	const [nameSuggestions, setNameSuggestions] = useState<User[]>([]);
 
 	const { peachFeed } = useContext(PeachContext);
 
 	useEffect(() => {
-		if (newComment.slice(-1) === ' ' || newComment.slice(-1) === '@') {
+		if (
+			newCommentText.slice(-1) === ' ' ||
+			newCommentText.slice(-1) === '@'
+		) {
 			setDropdownShowing(false);
 			setNameSuggestions([]);
 			return;
 		}
 
-		if (newComment.slice(-2, -1) === '@') {
+		if (newCommentText.slice(-2, -1) === '@') {
 			setDropdownShowing(true);
 		}
-	}, [newComment]);
+	}, [newCommentText]);
 
 	useEffect(() => {
 		if (!isDropdownShowing) return;
-		const commenttxt = newComment.split(' ');
+		const commenttxt = newCommentText.split(' ');
 		if (commenttxt.length < 1) return;
 		let handle = commenttxt[commenttxt.length - 1];
 		if (handle.indexOf('@') !== 0) return;
@@ -47,12 +56,12 @@ const AddComment: React.FC<AddCommentProps> = ({ onSubmit, darkMode }) => {
 				.slice(0, 6)
 				.reverse()
 		);
-	}, [isDropdownShowing, newComment, peachFeed]);
+	}, [isDropdownShowing, newCommentText, peachFeed]);
 
 	const autofillUsername = (username: string) => {
-		setNewComment(
-			newComment =>
-				newComment.slice(0, newComment.lastIndexOf('@') + 1) +
+		setNewCommentText(
+			(newCommentText: string) =>
+				newCommentText.slice(0, newCommentText.lastIndexOf('@') + 1) +
 				username +
 				' '
 		);
@@ -75,25 +84,25 @@ const AddComment: React.FC<AddCommentProps> = ({ onSubmit, darkMode }) => {
 					))}
 				</Dropdown>
 			) : null}
+			<Input
+				darkMode={darkMode}
+				value={newCommentText}
+				onChange={e => setNewCommentText(e.target.value)}
+				placeholder='Write a comment...'
+			/>{' '}
 			<ButtonWrapper>
 				<Button
-					disabled={newComment.length < 1}
+					disabled={newCommentText.length < 1}
 					onClick={() => {
-						if (newComment.length > 0) {
-							onSubmit(newComment);
-							setNewComment('');
+						if (newCommentText.length > 0) {
+							onSubmit(newCommentText);
+							setNewCommentText('');
 						}
 					}}
 				>
 					Post
 				</Button>
 			</ButtonWrapper>
-			<Input
-				darkMode={darkMode}
-				value={newComment}
-				onChange={e => setNewComment(e.target.value)}
-				placeholder='Write a comment...'
-			/>
 		</AddCommentContainer>
 	);
 };
