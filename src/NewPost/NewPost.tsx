@@ -12,19 +12,16 @@ import {
 	Image,
 	UploadedImage,
 	DeleteImage,
-	ImageUploadButton,
-	MagicPostActionsContainer,
 } from './style';
 import Plus from './Plus.svg';
-import ImageIcon from './ImageIcon.svg';
-import ImageIconDarkMode from './ImageIconDarkMode.svg';
-import ClockIconDarkMode from './ClockIconDarkMode.svg';
-import ClockIcon from './ClockIcon.svg';
-import CalendarIcon from './CalendarIcon.svg';
-import CalendarIconDarkMode from './CalendarIconDarkMode.svg';
+
 import DeleteIcon from '../Comments/DeleteIcon.svg';
 
-import { getCurrentTime, getCurrentDate } from './MagicPostActions';
+import {
+	getCurrentTime,
+	getCurrentDate,
+	MagicPostActions,
+} from './MagicPostActions';
 
 import ACTIONS, { IMGUR_ID } from '../api/constants';
 import api from '../api';
@@ -34,7 +31,7 @@ import {
 	ImageMessage,
 	TextMessage,
 	isImage,
-	POST_TYPE
+	POST_TYPE,
 } from '../api/interfaces';
 import { PeachContext } from '../PeachContext';
 
@@ -103,41 +100,11 @@ const ComposerForm: React.FC<ComposerProps> = ({
 				value={postText}
 			/>
 
-			<MagicPostActionsContainer>
-				<ImageUploadButton>
-					<img
-						src={darkMode ? ImageIconDarkMode : ImageIcon}
-						alt='Upload'
-					/>
-					<input
-						type='file'
-						accept='image*'
-						onChange={e =>
-							curUser
-								? uploadImage(e.target.files, curUser.id)
-								: null
-						}
-					/>
-				</ImageUploadButton>
-				<ImageUploadButton>
-					<img
-						onClick={() =>
-							setPostText(postText => postText + getCurrentTime(postText.length))
-						}
-						src={darkMode ? ClockIconDarkMode : ClockIcon}
-						alt='Add current time'
-					/>
-				</ImageUploadButton>
-				<ImageUploadButton>
-					<img
-						onClick={() =>
-							setPostText(postText => postText + getCurrentDate(postText.length))
-						}
-						src={darkMode ? CalendarIconDarkMode : CalendarIcon}
-						alt='Add current date'
-					/>
-				</ImageUploadButton>
-			</MagicPostActionsContainer>
+			<MagicPostActions
+				setPostText={setPostText}
+				curUserId={curUser ? curUser.id : null}
+				uploadImage={uploadImage}
+			/>
 
 			{images.length > 0 ? (
 				<ImagesHolder>
@@ -173,14 +140,14 @@ const ComposerForm: React.FC<ComposerProps> = ({
 				onClick={() =>
 					onSubmit(
 						postText.length > 0
-							? ([
-									{
-										type: POST_TYPE.TEXT,
-										text: postText,
-									},
-							  ] as ((ImageMessage | TextMessage)[])).concat(
-									images
-							  )
+							? (
+									[
+										{
+											type: POST_TYPE.TEXT,
+											text: postText,
+										},
+									] as (ImageMessage | TextMessage)[]
+							  ).concat(images)
 							: images
 					)
 				}

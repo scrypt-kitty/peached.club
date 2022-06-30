@@ -10,20 +10,20 @@ export enum POST_TYPE {
 	TEXT = 'text',
 	IMAGE = 'image',
 	LINK = 'link',
-	LOCATION = 'location'
+	LOCATION = 'location',
 }
 
 export type TextMessage = {
 	type: typeof POST_TYPE.TEXT;
 	text: string;
-}
+};
 
 export type ImageMessage = {
 	type: typeof POST_TYPE.IMAGE;
 	src: string;
 	height: number;
 	width: number;
-}
+};
 
 export type LinkMessage = {
 	type: typeof POST_TYPE.LINK;
@@ -31,7 +31,7 @@ export type LinkMessage = {
 	imageURL?: string;
 	title: string;
 	url: string;
-}
+};
 
 export interface LocationMessage {
 	type: typeof POST_TYPE.LOCATION;
@@ -43,7 +43,11 @@ export interface LocationMessage {
 	name: string;
 }
 
-export type PostContent = TextMessage | ImageMessage | LinkMessage | LocationMessage;
+export type PostContent =
+	| TextMessage
+	| ImageMessage
+	| LinkMessage
+	| LocationMessage;
 
 /*eslint-disable */
 export function isLink(object: any): object is LinkMessage {

@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Redirect } from 'react-router';
-import { Link } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import Navigation from '../Navigation';
 import { MiniLoader } from '../Loading';
 import { PeachContext } from '../PeachContext';
@@ -22,7 +21,8 @@ import {
 import { ERROR } from '../api/error';
 import { LinkText } from '../Friend/Posts/LinkPost';
 
-const Settings = (props: {}) => {
+const Settings = () => {
+	const navigate = useNavigate();
 	const { darkMode, jwt, toggleDarkMode } = useContext(PeachContext);
 	const [isButtonDisabled, setButtonDisabled] = useState<boolean>(true);
 	const [newUserName, setNewUserName] = useState<string>('');
@@ -79,7 +79,9 @@ const Settings = (props: {}) => {
 		} else setButtonDisabled(true);
 	}, [newUserName, newDisplayName]);
 
-	if (!jwt) return <Redirect push to='/login' />;
+	if (!jwt) {
+		navigate('/login', { replace: true });
+	}
 
 	return (
 		<>
