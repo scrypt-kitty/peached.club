@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import {
 	Comment as CommentType,
 	MutualFriend,
@@ -32,6 +32,7 @@ const Comments: React.FC<CommentsProps> = ({
 	postAuthorId,
 }) => {
 	const { darkMode, peachFeed } = useContext(PeachContext);
+	const [newCommentText, setNewCommentText] = useState('');
 
 	const getAvatar = (id: string) => {
 		if (id === postAuthorId) return postAuthorAvatarSrc;
@@ -41,8 +42,14 @@ const Comments: React.FC<CommentsProps> = ({
 		return res[0].avatarSrc;
 	};
 
+	const tryDismissComments = () => {
+		// TODO: finish
+		// if (newCommentText.length)
+		onDismissComments();
+	};
+
 	return (
-		<Modal darkMode={darkMode} onKeyDown={onDismissComments}>
+		<Modal darkMode={darkMode} onKeyDown={tryDismissComments}>
 			<AllComments>
 				{comments.map(c => (
 					<Comment
@@ -62,7 +69,12 @@ const Comments: React.FC<CommentsProps> = ({
 					/>
 				))}
 			</AllComments>
-			<AddComment darkMode={darkMode} onSubmit={updateComments} />
+			<AddComment
+				darkMode={darkMode}
+				onSubmit={updateComments}
+				newCommentText={newCommentText}
+				setNewCommentText={setNewCommentText}
+			/>
 		</Modal>
 	);
 };

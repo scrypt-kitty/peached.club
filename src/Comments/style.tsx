@@ -119,7 +119,6 @@ export const Input = styled.textarea<{ darkMode: boolean }>`
 	background: ${props => (props.darkMode ? '#262628' : 'white')};
 	color: ${props => (props.darkMode ? 'white' : 'black')};
 	flex: 9;
-	margin-right: 1rem;
 	resize: none;
 	border-radius: 0.5rem;
 	border: 1px solid #cacaca;
@@ -128,9 +127,10 @@ export const Input = styled.textarea<{ darkMode: boolean }>`
 	font-size: 1rem;
 	min-height: 2.5rem;
 	height: 2rem;
+	margin-bottom: 0.25rem;
 
-	width: calc(100% - 4.25rem);
-	padding: 0.25rem 4rem 0.25rem 0.25rem;
+	width: 100%;
+	padding: 0.25rem;
 	@media screen and (max-height: 700px) {
 		@media screen and (max-width: 700px) {
 			height: 3rem;
@@ -144,13 +144,13 @@ export const Input = styled.textarea<{ darkMode: boolean }>`
 export const ButtonWrapper = styled.div`
 	margin: 0;
 	flex: 1;
-	position: absolute;
+	/* position: absolute; */
 	z-index: 9999;
-	transform: translate(calc(50% - 4.5rem), 0.5rem);
+	/* transform: translate(calc(50% - 4.5rem), 0.5rem); */
 
-	@media screen and (max-width: 800px) {
+	/* @media screen and (max-width: 800px) {
 		transform: translate(calc(70% - 4.5rem), 0.5rem);
-	}
+	} */
 	width: inherit;
 `;
 
@@ -165,7 +165,7 @@ export const DismissCommentsButtonContainer = styled.div`
 	width: 50%;
 	display: flex;
 	justify-content: flex-end;
-	z-index:999;
+	z-index: 999;
 	@media screen and (max-width: 800px) {
 		width: 70%;
 		transform: translateY(-40%);
@@ -241,6 +241,7 @@ const HandleStyled = styled(Handle)`
 
 const AuthorName = styled(HandleStyled)<{ darkMode: boolean }>`
 	font-weight: bold;
+	margin-bottom: 0.25rem;
 	@media screen and (max-width: 700px) {
 		color: ${props => (props.darkMode ? 'white' : 'black')};
 	}
@@ -263,14 +264,18 @@ export const Comment: React.FC<CommentProps> = (props: CommentProps) => {
 		false
 	);
 
-	const authorData = props.mutualFriends.filter(f => f.id === props.author.id)[0];
+	const authorData = props.mutualFriends.filter(
+		f => f.id === props.author.id
+	)[0];
 
 	const Avatar = (
 		<AvatarStyled>
 			{props.avatarSrc ? (
 				<img src={props.avatarSrc} alt={props.author.displayName} />
 			) : (
-				<span role='img' aria-label={props.author.displayName}>🍑</span>
+				<span role='img' aria-label={props.author.displayName}>
+					🍑
+				</span>
 			)}
 		</AvatarStyled>
 	);
