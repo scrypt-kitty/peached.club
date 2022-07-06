@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { resolvePath, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import api from '../api';
 import Loading from '../Loading';
 import getPostTime from '../utils/getPostTime';
@@ -100,6 +100,8 @@ export const FriendFeedContainer = (props: FriendFeedProps) => {
 						alt={`image for post ${props.id}`}
 					/>
 				);
+			case POST_TYPE.GIF:
+				return <Image key={msgKey} src={obj.src} alt={`GIF`} />;
 			case POST_TYPE.LINK:
 				// @ts-ignore
 				return <LinkPost {...obj} darkMode={darkMode} />;
