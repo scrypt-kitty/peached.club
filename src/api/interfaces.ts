@@ -2,6 +2,7 @@ interface ResponseError {
 	Code: number;
 	Message: string;
 }
+
 /**
  * POSTS
  */
@@ -11,6 +12,7 @@ export enum POST_TYPE {
 	IMAGE = 'image',
 	LINK = 'link',
 	LOCATION = 'location',
+	GIF = 'gif',
 }
 
 export type TextMessage = {
@@ -20,6 +22,13 @@ export type TextMessage = {
 
 export type ImageMessage = {
 	type: typeof POST_TYPE.IMAGE;
+	src: string;
+	height: number;
+	width: number;
+};
+
+export type GifMessage = {
+	type: typeof POST_TYPE.GIF;
 	src: string;
 	height: number;
 	width: number;
@@ -47,18 +56,22 @@ export type PostContent =
 	| TextMessage
 	| ImageMessage
 	| LinkMessage
-	| LocationMessage;
+	| LocationMessage
+	| GifMessage;
 
 /*eslint-disable */
 export function isLink(object: any): object is LinkMessage {
 	return 'imageURL' in object;
 }
+
 export function isText(object: any): object is TextMessage {
 	return 'text' in object;
 }
+
 export function isImage(object: any): object is ImageMessage {
 	return 'src' in object;
 }
+
 export function isLocation(object: any): object is LocationMessage {
 	return 'formattedAddress' in object;
 }

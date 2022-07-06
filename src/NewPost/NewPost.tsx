@@ -17,11 +17,7 @@ import Plus from './Plus.svg';
 
 import DeleteIcon from '../Comments/DeleteIcon.svg';
 
-import {
-	getCurrentTime,
-	getCurrentDate,
-	MagicPostActions,
-} from './MagicPostActions';
+import { MagicPostActions } from './MagicPostActions';
 
 import ACTIONS, { IMGUR_ID } from '../api/constants';
 import api from '../api';
@@ -158,7 +154,7 @@ const ComposerForm: React.FC<ComposerProps> = ({
 	);
 };
 
-const NewPost = (props: {}) => {
+const NewPost = () => {
 	const [showComposer, setShowComposer] = useState<boolean>(false);
 	const [submitted, setSubmitted] = useState<boolean>(false);
 	const [showToasty, setShowToasty] = useState<boolean>(false);
