@@ -100,7 +100,7 @@ const MainPeachApp = () => (
 
 const PeachRoutes = () => (
 	<Routes>
-		<Route path='/' element={<Feed />} />
+		<Route path='/' element={<Login />} />
 		<Route path='/login' element={<Login />} />
 		<Route path='/feed' element={<Feed />} />
 		<Route path='/friend'>
