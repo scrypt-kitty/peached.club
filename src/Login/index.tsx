@@ -1,34 +1,49 @@
-import React, { useState, useContext, useEffect, FormEvent } from 'react';
+import React, {
+	useState,
+	useContext,
+	useEffect,
+	FormEvent,
+	SetStateAction,
+} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PeachContext } from '../PeachContext';
 import {
 	AuthInput,
-	Moat,
-	Castle,
+	Page,
+	Container,
 	Heading,
 	DangerTxt,
 	Button,
 	ButtonCenter,
+	LoginFormContainer,
 } from './style';
 import { LoginResponse } from '../api/interfaces';
 import { LOGIN } from '../api/constants';
+import { STORAGE_TOKEN_KEY, STORAGE_USER_KEY } from '../constants';
 enum loginErrors {
 	OK,
 	INVALID_LOGIN,
 	MISSING_CREDENTIALS,
 }
 
+const displayError = (err: loginErrors) => {
+	let msg = '';
+	if (err === loginErrors.INVALID_LOGIN)
+		msg = 'Incorrect username and/or password';
+	else msg = 'Missing email and/or password';
+	return <DangerTxt>{msg}</DangerTxt>;
+};
+
 export const Login = () => {
 	const navigate = useNavigate();
 	const [email, setEmail] = useState<string>('');
-	const [pw, setPw] = useState<string>('');
+	const [pw, setPassword] = useState<string>('');
 	const [err, setErr] = useState<loginErrors>(loginErrors.OK);
 	const peachContext = useContext(PeachContext);
-	const darkMode = peachContext.darkMode;
 
 	useEffect(() => {
-		const peachedToken = localStorage.getItem('peachedToken');
-		const user = localStorage.getItem('user');
+		const peachedToken = localStorage.getItem(STORAGE_TOKEN_KEY);
+		const user = localStorage.getItem(STORAGE_USER_KEY);
 		if (
 			peachedToken !== null &&
 			peachedToken !== '' &&
@@ -68,7 +83,7 @@ export const Login = () => {
 				if (response.data && response.data.streams[0]) {
 					peachContext.setJwt(response.data.streams[0].token);
 					localStorage.setItem(
-						'peachedToken',
+						STORAGE_TOKEN_KEY,
 						response.data.streams[0].token
 					);
 
@@ -82,46 +97,58 @@ export const Login = () => {
 			});
 	};
 
-	const displayError = (err: loginErrors) => {
-		let msg = '';
-		if (err === loginErrors.INVALID_LOGIN)
-			msg = 'Incorrect username and/or password';
-		else msg = 'Missing email and/or password';
-		return <DangerTxt>{msg}</DangerTxt>;
-	};
-
 	const onSubmit = (event: FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		onClickSubmit();
 	};
 
 	return (
-		<Moat>
-			<Castle darkMode={darkMode}>
-				<Heading darkMode={darkMode}>Login</Heading>
-				<form onSubmit={onSubmit}>
-					<AuthInput
-						darkMode={darkMode}
-						onChange={e => setEmail(e.target.value)}
-						key='email'
-						type='text'
-						placeholder='email'
-					/>
-					<AuthInput
-						darkMode={darkMode}
-						onChange={e => setPw(e.target.value)}
-						key='password'
-						type='password'
-						placeholder='password'
-					/>
-					<ButtonCenter>
-						<Button onClick={onClickSubmit} link='#' lg>
-							Submit
-						</Button>
-					</ButtonCenter>
-				</form>
-				{err !== loginErrors.OK && displayError(err)}
-			</Castle>
-		</Moat>
+		<LoginFormContainer>
+			<form onSubmit={onSubmit}>
+				<LoginComponent
+					setEmail={setEmail}
+					setPassword={setPassword}
+					onClickSubmit={onClickSubmit}
+				/>
+			</form>
+			{err !== loginErrors.OK && displayError(err)}
+		</LoginFormContainer>
+	);
+};
+
+export type LoginComponentProps = {
+	setEmail: React.Dispatch<SetStateAction<string>>;
+	setPassword: React.Dispatch<SetStateAction<string>>;
+	onClickSubmit: () => void;
+};
+
+export const LoginComponent = ({
+	setEmail,
+	setPassword,
+	onClickSubmit,
+}: LoginComponentProps) => {
+	return (
+		<Page>
+			<Container>
+				<Heading>Log in to Peached</Heading>
+				<AuthInput
+					onChange={e => setEmail(e.target.value)}
+					key='email'
+					type='text'
+					placeholder='email'
+				/>
+				<AuthInput
+					onChange={e => setPassword(e.target.value)}
+					key='password'
+					type='password'
+					placeholder='password'
+				/>
+				<ButtonCenter>
+					<Button onClick={onClickSubmit} link='#' lg>
+						Submit
+					</Button>
+				</ButtonCenter>
+			</Container>
+		</Page>
 	);
 };

@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { rem } from 'polished';
 
 export const FriendPostContent = styled.div`
 	height: 100%;
@@ -7,22 +8,19 @@ export const FriendPostContent = styled.div`
 		margin-top: 0;
 	}
 `;
+
 interface MiniMenuProps {
 	onClick?: () => void;
 }
 
 export const MiniMenu = styled.div<MiniMenuProps>`
-	height: 100%;
 	visibility: hidden;
-	position: relative;
-	transform: translateY(2rem);
-	float: right;
-	> img:hover {
-		cursor: pointer;
-	}
+	background-color: initial;
+
 	@media screen and (max-width: 700px) {
 		float: initial;
 		top: -1.5rem;
+		margin-top: ${rem(12)};
 	}
 `;
 
@@ -32,13 +30,20 @@ export const DeletePost = styled(MiniMenu)`
 	justify-content: flex-end;
 `;
 
-export const PostWrapper = styled.div<{ darkMode?: boolean }>`
-	background: ${props => (props.darkMode ? '#262628' : 'white')};
-	color: ${props => (props.darkMode ? 'white' : 'black')};
+export const PostWrapper = styled.div`
+	background: ${props => props.theme.background.primary};
+
+	border-right: 1px solid ${props => props.theme.border.secondary};
+	border-left: 1px solid ${props => props.theme.border.secondary};
+	color: ${props => props.theme.text.primary};
 	word-wrap: break-word;
-	padding: 2rem 3rem 0;
+	padding: ${rem(32)} ${rem(48)} ${rem(16)};
+
 	:last-child {
-		padding: 2rem 3rem;
+		/* padding: 2rem 3rem; */
+
+		border-bottom-left-radius: ${rem(10)};
+		border-bottom-right-radius: ${rem(10)};
 	}
 
 	:hover {
@@ -46,15 +51,19 @@ export const PostWrapper = styled.div<{ darkMode?: boolean }>`
 			visibility: visible;
 		}
 	}
+
 	@media screen and (max-width: 500px) {
-		padding: 1rem 1.5rem 0;
+		/* padding: 1rem 1.5rem 0; */
+		margin: 0 ${rem(16)} 0;
+		padding: ${rem(24)} ${rem(24)} ${rem(16)};
 		:last-of-type {
-			padding: 1rem 1.5rem 1rem;
+			padding-bottom: ${rem(24)};
+			margin-bottom: ${rem(64)};
 		}
 	}
 `;
 
-export const EmptyStateWrapper = styled(PostWrapper)<{ darkMode?: boolean }>`
+export const EmptyStateWrapper = styled(PostWrapper)`
 	height: 20%;
 	text-align: center;
 `;
@@ -69,6 +78,8 @@ export const Image = styled.img`
 	max-width: 50%;
 	display: block;
 	margin-bottom: 1rem;
+	background-color: ${props => props.theme.background.primary};
+
 	@media screen and (max-width: 1000px) {
 		max-width: 100%;
 	}
@@ -80,20 +91,22 @@ export const InteractionInfo = styled.p`
 	margin-left: 0.5rem;
 `;
 
-export const InteractionArea = styled.div<{ darkMode: boolean }>`
+export const InteractionArea = styled.div`
 	display: inline-flex;
 	align-items: center;
 	padding: 0.5rem 0.5rem;
 	border-radius: 1rem;
 	transition: 0.25s all ease;
+	height: 0.8rem;
+
 	:last-child {
 		margin-left: 0.75rem;
 	}
+
 	:hover {
 		cursor: pointer;
-		background: ${props => (props.darkMode ? '#cacaca30' : '#cacaca')};
+		background: ${props => props.theme.background.hover};
 	}
-	height: 0.8rem;
 `;
 
 export const PostTime = styled.div`
@@ -103,48 +116,4 @@ export const PostTime = styled.div`
 	border-radius: 1rem;
 	transition: 0.25s all ease;
 	height: 0.8rem;
-`;
-
-/**
- * profile header stuff
- */
-
-export const ProfileHeaderContainer = styled.div<{ darkMode: boolean }>`
-	display: flex;
-	margin-bottom: 1rem;
-	color: ${props => (props.darkMode ? 'white' : 'black')};
-
-	@media screen and (max-width: 700px) {
-		margin: 3rem 1rem 1rem;
-	}
-`;
-
-export const Avatar = styled.div`
-	flex: 1;
-	align-items: center;
-	display: flex;
-	> img {
-		border-radius: 50%;
-		width: 100px;
-		height: 100px;
-		object-fit: cover;
-	}
-`;
-
-export const ProfileHeaderHandle = styled.p`
-	margin-top: 0;
-	margin-bottom: 1rem;
-	color: #cacaca;
-`;
-
-export const ProfileHeaderText = styled.div`
-	flex: 9;
-	margin: 1rem;
-	> h2 {
-		margin: 0;
-	}
-
-	> p:last-child {
-		margin: 0 auto;
-	}
 `;
