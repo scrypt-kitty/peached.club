@@ -1,22 +1,24 @@
 import styled from 'styled-components';
 
-export const NavWrap = styled.div<{ darkMode: boolean }>`
+export const NavWrap = styled.div`
 	width: 100%;
 	position: fixed;
 	top: 0;
 	left: 0;
 	background: none;
 	z-index: 100;
+	background: ${props => props.theme.background.accented};
+
 	@media screen and (max-width: 700px) {
 		top: initial;
 		bottom: 0;
 		border-top: 1px solid #cacaca;
-		background: ${props => (props.darkMode ? 'black' : 'white')};
+		background: ${props => props.theme.background.primary};
 	}
 `;
 
-export const FeedsNav = styled.div<{ darkMode: boolean; right?: boolean }>`
-	background: ${props => (props.darkMode ? 'black' : 'white')};
+export const FeedsNav = styled.div<{ right?: boolean }>`
+	background: ${props => props.theme.background.primary};
 	position: fixed;
 	top: 0.5rem;
 	${props => (props.right ? 'right: 1rem;' : 'left: 1rem;')};
@@ -44,8 +46,6 @@ export const Nav = styled.nav`
 
 	@media screen and (max-width: 700px) {
 		justify-content: space-between;
-		// margin: 0.5rem 1rem;
-		// padding: 0 2rem;
 		width: 100%;
 	}
 `;

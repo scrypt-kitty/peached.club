@@ -1,158 +1,17 @@
-import React, { useState, useRef, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 
-import Modal from '../Theme/Modal';
-import Button from '../Theme/Button';
-import Toasty from '../Theme/Toasty';
-
-import {
-	NewPostButton,
-	TextArea,
-	Header,
-	ImagesHolder,
-	Image,
-	UploadedImage,
-	DeleteImage,
-} from './style';
-import Plus from './Plus.svg';
-
-import DeleteIcon from '../Comments/DeleteIcon.svg';
-
-import { MagicPostActions } from './MagicPostActions';
-
-import ACTIONS, { IMGUR_ID } from '../api/constants';
+import ACTIONS from '../api/constants';
 import api from '../api';
 import {
 	CreatePostResponse,
-	ImgurUploadResponse,
 	ImageMessage,
 	TextMessage,
-	isImage,
-	POST_TYPE,
 } from '../api/interfaces';
 import { PeachContext } from '../PeachContext';
+import { Composer } from './Composer';
 
-interface ComposerProps {
-	onSubmit: (messages: (TextMessage | ImageMessage)[]) => void;
-	darkMode: boolean;
-	toggleComposer: () => void;
-}
-
-const ComposerForm: React.FC<ComposerProps> = ({
-	onSubmit,
-	darkMode,
-	toggleComposer,
-}) => {
-	const postRef = useRef<HTMLTextAreaElement>(null);
-	const [postText, setPostText] = useState<string>('');
-	const { curUser } = useContext(PeachContext);
-	const [images, setImages] = useState<(ImageMessage | TextMessage)[]>([]);
-
-	const uploadImage = async (files: FileList | null, id: string) => {
-		if (files === null || files.length < 1) return;
-		const file = files[0];
-		const formData = new FormData();
-		formData.append('image', file);
-		formData.append('type', 'file');
-		const req = {
-			method: 'POST',
-			headers: {
-				Authorization: 'Client-ID ' + IMGUR_ID,
-				Accept: 'application/json',
-			},
-			body: formData,
-		};
-
-		await fetch(
-			'https://cors-anywhere.herokuapp.com/https://api.imgur.com/3/image',
-			req
-		)
-			.then(resp => resp.json())
-			.then((resp: ImgurUploadResponse) => {
-				if (!resp.success) {
-					console.log('oh no');
-					return;
-				}
-				setImages(images =>
-					images.concat([
-						{
-							type: POST_TYPE.IMAGE,
-							src: resp.data.link,
-							height: resp.data.height,
-							width: resp.data.width,
-						},
-					])
-				);
-			});
-	};
-
-	return (
-		<Modal darkMode={darkMode} onKeyDown={() => toggleComposer()}>
-			<Header darkMode={darkMode}>Create a new post</Header>
-			<TextArea
-				darkMode={darkMode}
-				ref={postRef}
-				placeholder="What's going on?"
-				onChange={e => setPostText(e.target.value)}
-				value={postText}
-			/>
-
-			<MagicPostActions
-				setPostText={setPostText}
-				curUserId={curUser ? curUser.id : null}
-				uploadImage={uploadImage}
-			/>
-
-			{images.length > 0 ? (
-				<ImagesHolder>
-					{images.map(
-						img =>
-							isImage(img) && (
-								<Image key={img.src}>
-									<DeleteImage
-										src={DeleteIcon}
-										alt='Delete picture'
-										onClick={() =>
-											setImages(images =>
-												images.filter(
-													i =>
-														isImage(i) &&
-														i.src !== img.src
-												)
-											)
-										}
-									/>
-									<UploadedImage
-										src={img.src}
-										alt={img.src}
-									/>
-								</Image>
-							)
-					)}
-				</ImagesHolder>
-			) : null}
-
-			<Button
-				disabled={images.length < 1 && postText.length < 1}
-				onClick={() =>
-					onSubmit(
-						postText.length > 0
-							? (
-									[
-										{
-											type: POST_TYPE.TEXT,
-											text: postText,
-										},
-									] as (ImageMessage | TextMessage)[]
-							  ).concat(images)
-							: images
-					)
-				}
-			>
-				Post
-			</Button>
-		</Modal>
-	);
-};
+import Toasty from '../Theme/Toasty';
+import { NewPostButton } from './NewPostButton';
 
 const NewPost = () => {
 	const [showComposer, setShowComposer] = useState<boolean>(false);
@@ -160,7 +19,7 @@ const NewPost = () => {
 	const [showToasty, setShowToasty] = useState<boolean>(false);
 	const [postSuccess, setPostSuccess] = useState<boolean>(false);
 	const [posting, setPosting] = useState<boolean>(false);
-	const { jwt, darkMode } = useContext(PeachContext);
+	const { jwt } = useContext(PeachContext);
 
 	const submitPost = (messages: (TextMessage | ImageMessage)[]) => {
 		if (messages.length < 1) return;
@@ -186,33 +45,32 @@ const NewPost = () => {
 		});
 	};
 
+	const postStatusMessage = (postSuccess: boolean, posting: boolean) => {
+		return postSuccess
+			? 'Successfully created post!'
+			: posting
+			? 'Posting...'
+			: "Couldn't submit post. Please try again later.";
+	};
+
 	return (
 		<>
 			{submitted && showToasty ? (
 				<Toasty onClick={() => setShowToasty(false)}>
-					{postSuccess
-						? 'Successfully created post!'
-						: posting
-						? 'Posting...'
-						: "Couldn't submit post. Please try again later."}
+					{postStatusMessage(postSuccess, posting)}
 				</Toasty>
 			) : null}
 			{showComposer ? (
 				<>
-					<ComposerForm
-						darkMode={darkMode}
+					<Composer
 						onSubmit={submitPost}
 						toggleComposer={() => setShowComposer(false)}
 					/>
 				</>
 			) : (
 				<NewPostButton
-					onClick={() =>
-						setShowComposer(showComposer => !showComposer)
-					}
-				>
-					<img src={Plus} alt='+' title='Create a new post' />
-				</NewPostButton>
+					setShowComposer={() => setShowComposer(isShowing => !isShowing)}
+				/>
 			)}
 		</>
 	);

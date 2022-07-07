@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
+import { rem } from 'polished';
 
 type ModalBackdropProps = {
 	entering: boolean;
@@ -22,7 +23,7 @@ export const ModalBackdrop = styled.div<ModalBackdropProps>`
 	overflow: hidden;
 
 	animation: 0.5s ${props => (props.entering ? '' : 'reverse')} EnterBackdrop;
-	background: rgba(0, 0, 0, 0.3);
+	background: rgba(0, 0, 0, 0.4);
 	z-index: ${props => (props.isMini ? '999' : '99')};
 `;
 
@@ -44,21 +45,21 @@ const DisableBodyScroll = createGlobalStyle`
 `;
 
 type ModalContainerProps = {
-	darkMode: boolean;
 	isMini: boolean;
 	alignTop: boolean;
 	noSpaceBetween?: boolean;
 };
 
 export const ModalContainer = styled.div<ModalContainerProps>`
-	background: ${props => (props.darkMode ? '#262628' : 'white')};
+	background: ${props => props.theme.background.primary};
 	margin: 0;
-	padding: 1rem 2rem;
+	padding: ${rem(20)} ${rem(30)};
 	width: ${props => (props.isMini ? '30%' : '50%')};
 	height: ${props => (props.isMini ? '40%' : '60%')};
 	max-height: 80%;
 	overflow: scroll;
-	border-radius: 0.5rem;
+	border-radius: ${rem(6)};
+
 	@media screen and (max-width: 800px) {
 		width: ${props => (props.isMini ? '50%' : '70%')};
 	}
@@ -76,7 +77,6 @@ export const ModalContainer = styled.div<ModalContainerProps>`
 interface ModalProps {
 	children: React.ReactNode;
 	onKeyDown: () => void;
-	darkMode: boolean;
 	isMini?: boolean;
 	alignTop?: boolean;
 	noSpaceBetween?: boolean;
@@ -85,15 +85,12 @@ interface ModalProps {
 const Modal: React.FC<ModalProps> = ({
 	children,
 	onKeyDown,
-	darkMode,
 	isMini = false,
 	alignTop = false,
 	noSpaceBetween = false,
 }) => {
 	const [entering, setEntering] = useState<boolean>(true);
 	const keepModalOpen = (e: React.MouseEvent<HTMLDivElement>) => {
-		// This stops the event from bubbling up.
-		// So it won't trigger the parent div's "onClick" to fire.
 		e.stopPropagation();
 		onKeyDown();
 	};
@@ -122,7 +119,6 @@ const Modal: React.FC<ModalProps> = ({
 					noSpaceBetween={noSpaceBetween}
 					alignTop={alignTop}
 					isMini={isMini}
-					darkMode={darkMode}
 					onClick={e => e.stopPropagation()}
 				>
 					{children}
