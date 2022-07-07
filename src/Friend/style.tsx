@@ -19,7 +19,7 @@ export const MiniMenu = styled.div<MiniMenuProps>`
 
 	@media screen and (max-width: 700px) {
 		float: initial;
-		top: -1.5rem;
+		top: ${rem(24)};
 		margin-top: ${rem(12)};
 	}
 `;
@@ -33,15 +33,14 @@ export const DeletePost = styled(MiniMenu)`
 export const PostWrapper = styled.div`
 	background: ${props => props.theme.background.primary};
 
-	border-right: 1px solid ${props => props.theme.border.secondary};
-	border-left: 1px solid ${props => props.theme.border.secondary};
+	border: ${rem(1)} solid ${props => props.theme.border.secondary};
+	border-top: none;
+
 	color: ${props => props.theme.text.primary};
 	word-wrap: break-word;
-	padding: ${rem(32)} ${rem(48)} ${rem(16)};
+	padding: ${rem(32)} ${rem(48)};
 
 	:last-child {
-		/* padding: 2rem 3rem; */
-
 		border-bottom-left-radius: ${rem(10)};
 		border-bottom-right-radius: ${rem(10)};
 	}
@@ -77,7 +76,7 @@ export const PostInteraction = styled.div`
 export const Image = styled.img`
 	max-width: 50%;
 	display: block;
-	margin-bottom: 1rem;
+	margin-bottom: ${rem(16)};
 	background-color: ${props => props.theme.background.primary};
 
 	@media screen and (max-width: 1000px) {
@@ -88,19 +87,19 @@ export const Image = styled.img`
 export const InteractionInfo = styled.p`
 	display: inline;
 	margin: 0;
-	margin-left: 0.5rem;
+	margin-left: ${rem(8)};
 `;
 
 export const InteractionArea = styled.div`
 	display: inline-flex;
 	align-items: center;
-	padding: 0.5rem 0.5rem;
-	border-radius: 1rem;
+	padding: ${rem(8)};
+	border-radius: ${rem(16)};
 	transition: 0.25s all ease;
-	height: 0.8rem;
+	height: ${rem(13)};
 
 	:last-child {
-		margin-left: 0.75rem;
+		margin-left: ${rem(12)};
 	}
 
 	:hover {
@@ -112,8 +111,8 @@ export const InteractionArea = styled.div`
 export const PostTime = styled.div`
 	display: inline-flex;
 	align-items: center;
-	padding: 0.5rem 0.5rem;
-	border-radius: 1rem;
+	padding: ${rem(8)};
+	border-radius: ${rem(16)};
 	transition: 0.25s all ease;
-	height: 0.8rem;
+	height: ${rem(13)};
 `;
