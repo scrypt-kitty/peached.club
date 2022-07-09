@@ -1,4 +1,5 @@
 import React from 'react';
+import Linkify from 'linkify-react';
 
 import { User } from '../../api/interfaces';
 import {
@@ -12,6 +13,11 @@ import {
 export type ProfileHeaderProps = {
 	viewingUser: User;
 	postsLoaded: boolean;
+};
+
+const options = {
+	defaultProtocol: 'http',
+	target: '_blank',
 };
 
 export const ProfileHeader = ({
@@ -34,8 +40,18 @@ export const ProfileHeader = ({
 				</Avatar>
 				<ProfileHeaderText>
 					<h2>{postsLoaded ? viewingUser.displayName : '...'}</h2>
-					<ProfileHeaderHandle>@{viewingUser.name}</ProfileHeaderHandle>
-					<p>{postsLoaded ? viewingUser.bio : '...'}</p>
+					<ProfileHeaderHandle>
+						@{postsLoaded ? viewingUser.name : '...'}
+					</ProfileHeaderHandle>
+					<p>
+						{postsLoaded ? (
+							<Linkify tagName='span' options={options}>
+								{viewingUser.bio}
+							</Linkify>
+						) : (
+							'...'
+						)}
+					</p>
 				</ProfileHeaderText>
 			</ProfileHeaderContent>
 		</ProfileHeaderContainer>

@@ -7,6 +7,19 @@ export const GlobalStyle = createGlobalStyle`
         width: 100%;
         height: 100%;
         background-color: ${props => props.theme.background.accented};
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        font-family: 'Lato', sans-serif;
+    }
+    
+    h1, h2, h3 {
+        font-family: 'Montserrat', sans-serif;
+    }
+    
+    a, a:visited {
+        text-decoration: none;
+        color: ${props => props.theme.accent};
+    }
+    
+    a:hover {
+        text-decoration: underline;
     }
 `;

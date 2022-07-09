@@ -57,6 +57,16 @@ export const ProfileHeaderText = styled.div`
 	flex: 9;
 	margin: 1rem;
 
+	a,
+	a:visited {
+		color: ${props => props.theme.accent};
+		text-decoration: none;
+	}
+
+	a:hover {
+		text-decoration: underline;
+	}
+
 	> h2 {
 		margin: 0;
 	}

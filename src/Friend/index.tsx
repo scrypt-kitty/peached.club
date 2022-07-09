@@ -1,5 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import Linkify from 'linkify-react';
+
 import api from '../api';
 import Loading from '../Loading';
 import getPostTime from '../utils/getPostTime';
@@ -45,6 +47,11 @@ import LinkPost from './Posts/LinkPost';
 import Navigation from '../Navigation';
 import { ProfileHeader } from './ProfileHeader/ProfileHeader';
 
+const options = {
+	defaultProtocol: 'http',
+	target: '_blank',
+};
+
 const addNewlines = (txt: string) =>
 	txt.indexOf('\n') < 0
 		? txt
@@ -76,7 +83,13 @@ export const FriendFeedContainer = (props: FriendFeedProps) => {
 		msgKey++;
 		switch (obj.type) {
 			case POST_TYPE.TEXT:
-				return <p key={msgKey}>{addNewlines(obj.text)}</p>;
+				return (
+					<p>
+						<Linkify key='msgKey' tagName='span' options={options}>
+							{addNewlines(obj.text)}
+						</Linkify>
+					</p>
+				);
 			case POST_TYPE.IMAGE:
 				return (
 					<Image
