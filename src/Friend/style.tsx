@@ -57,7 +57,6 @@ export const PostWrapper = styled.div`
 	}
 
 	@media screen and (max-width: 500px) {
-		/* padding: 1rem 1.5rem 0; */
 		margin: 0 ${rem(16)} 0;
 		padding: ${rem(24)} ${rem(24)} ${rem(16)};
 		:last-of-type {
@@ -73,6 +72,7 @@ export const EmptyStateWrapper = styled(PostWrapper)`
 `;
 
 export const PostInteraction = styled.div`
+	color: ${props => props.theme.text.muted};
 	width: 100%;
 	text-align: left;
 	transform: translateX(-0.5rem);

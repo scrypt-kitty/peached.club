@@ -13,8 +13,8 @@ const SvgComponent = (props: Props) => {
 			xmlns='http://www.w3.org/2000/svg'
 			width={24}
 			height={24}
-			fill={isLiked ? 'red' : 'none'}
-			stroke={isLiked ? 'red' : theme.text.primary}
+			fill={isLiked ? theme.accent : 'none'}
+			stroke={isLiked ? theme.accent : theme.text.muted}
 			strokeWidth={2}
 			strokeLinecap='round'
 			strokeLinejoin='round'

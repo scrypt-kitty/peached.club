@@ -6,10 +6,10 @@ const SvgComponent = (props: SVGProps<SVGSVGElement>) => {
 	return (
 		<svg
 			xmlns='http://www.w3.org/2000/svg'
-			width='24px'
-			height='24px'
+			width={24}
+			height={24}
 			fill='none'
-			stroke={theme.text.primary}
+			stroke={theme.text.muted}
 			strokeWidth={2}
 			strokeLinecap='round'
 			strokeLinejoin='round'

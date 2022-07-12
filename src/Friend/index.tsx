@@ -11,6 +11,8 @@ import Comments from '../Comments';
 import { DeletePrompt } from '../Comments/style';
 import DeleteIcon from '../Theme/Icons/DeleteIcon';
 import LikeIcon from '../Theme/Icons/LikeIcon';
+import CommentIcon from '../Theme/Icons/CommentIcon';
+import ClockIcon from '../Theme/Icons/ClockIcon';
 
 import NewPost from '../NewPost';
 
@@ -37,8 +39,6 @@ import {
 	EmptyStateWrapper,
 	PostTime,
 } from './style';
-import CommentIcon from '../Theme/Icons/CommentIcon';
-import Clock from '../Theme/Icons/Clock';
 import { PeachContext } from '../PeachContext';
 
 import LocationPost from './Posts/LocationPost';
@@ -214,7 +214,7 @@ export const FriendFeedContainer = (props: FriendFeedProps) => {
 					<InteractionInfo>{comments.length}</InteractionInfo>
 				</InteractionArea>
 				<PostTime>
-					<Clock titleId={`post-${props.id}-posted-time`} title='Posted time' />
+					<ClockIcon />
 					<InteractionInfo>{getPostTime(props.createdTime)}</InteractionInfo>
 				</PostTime>
 			</PostInteraction>

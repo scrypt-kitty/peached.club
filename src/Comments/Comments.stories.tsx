@@ -24,7 +24,7 @@ const CommentsStory = (props: CommentsComponentProps & { variant: string }) => {
 };
 
 export default {
-	title: 'Friend/CommentsComponent',
+	title: 'Comments/CommentsComponent',
 	component: CommentsStory,
 	argTypes: {
 		variant: {
