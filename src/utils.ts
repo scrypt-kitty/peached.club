@@ -4,7 +4,7 @@ export const createPostPreview = (post: PostContent) => {
 	switch (post.type) {
 		case POST_TYPE.TEXT:
 			return post.text.length > 300
-				? post.text.slice(0, 300) + '...'
+				? post.text.slice(0, 140) + '...'
 				: post.text;
 		case POST_TYPE.IMAGE:
 			return 'Image post';

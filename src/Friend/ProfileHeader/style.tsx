@@ -27,12 +27,18 @@ export const ProfileHeaderContainer = styled.div`
 export const ProfileHeaderContent = styled.div`
 	background-color: ${props => props.theme.background.primary};
 	display: flex;
-	padding: ${rem(10)} ${rem(15)};
+	padding: ${rem(10)} ${rem(15)} ${rem(16)};
 	margin-top: ${rem(50)};
-	padding-bottom: ${rem(16)};
 	border-top: ${rem(10)} solid ${props => props.theme.background.primary};
 	border-top-left-radius: ${rem(20)};
 	border-top-right-radius: ${rem(20)};
+
+	@media screen and (max-width: 900px) {
+		padding-bottom: ${rem(6)};
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+	}
 `;
 
 export const Avatar = styled.div`
@@ -44,6 +50,14 @@ export const Avatar = styled.div`
 		width: 100px;
 		height: 100px;
 		object-fit: cover;
+	}
+
+	@media screen and (max-width: 900px) {
+		> img {
+			translate: translateY(-50%);
+			width: ${rem(75)};
+			height: ${rem(75)};
+		}
 	}
 `;
 

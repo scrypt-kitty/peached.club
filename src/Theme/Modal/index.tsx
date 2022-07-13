@@ -61,7 +61,8 @@ export const ModalContainer = styled.div<ModalContainerProps>`
 	border-radius: ${rem(6)};
 
 	@media screen and (max-width: 800px) {
-		width: ${props => (props.isMini ? '50%' : '70%')};
+		width: ${props => (props.isMini ? '65%' : '70%')};
+		padding: ${rem(20)} ${rem(24)};
 	}
 
 	@media screen and (max-height: 700px) {

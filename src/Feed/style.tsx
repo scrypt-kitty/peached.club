@@ -1,14 +1,22 @@
 import styled from 'styled-components';
+import { rem } from 'polished';
 import { Link } from 'react-router-dom';
 
 export const PicFrame = styled.div`
-	flex: 1;
+	/* flex: 1; */
+
+	> span,
+	> img {
+		margin-right: ${rem(8)};
+	}
+
 	> span {
 		border-radius: 50%;
 		width: 100%;
 		width: 75px;
 		height: 75px;
 		font-size: 60px;
+
 		@media screen and (max-width: 500px) {
 			width: 50px;
 			height: 50px;
@@ -23,6 +31,7 @@ export const ProfilePic = styled.img<{ unread?: boolean }>`
 	border: ${props => (props.unread ? '2px solid #1bb76e' : 'none')};
 	width: 75px;
 	height: 75px;
+
 	object-fit: cover;
 	@media screen and (max-width: 500px) {
 		width: 50px;
@@ -31,13 +40,21 @@ export const ProfilePic = styled.img<{ unread?: boolean }>`
 `;
 
 export const InfoContainer = styled.div`
-	flex: 7;
 	height: 100%;
+	width: 100%;
 	margin-left: 1.5rem;
+
 	> h3 {
-		margin: 0 0 0.5rem 0;
+		margin: 0;
 	}
-	> p {
+
+	> div {
+		margin: 0;
+		width: 100%;
+		display: flex;
+	}
+
+	p {
 		margin: 0;
 	}
 
@@ -71,7 +88,7 @@ export const FeedPostWrapper = styled.div<FeedPostWrapperProps>`
 	}
 
 	@media screen and (max-width: 700px) {
-		padding: 1rem 1.25rem;
+		padding: ${rem(8)} ${rem(16)};
 		margin: 0.5rem;
 		border-radius: 0.25rem;
 	}

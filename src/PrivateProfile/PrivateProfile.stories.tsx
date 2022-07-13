@@ -21,5 +21,5 @@ export const Story = () => {
 
 export default {
 	component: Story,
-	title: 'Friend/PrivateProfile',
+	title: 'Profile/PrivateProfile',
 } as ComponentMeta<typeof Story>;

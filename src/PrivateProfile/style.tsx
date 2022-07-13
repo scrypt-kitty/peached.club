@@ -11,12 +11,13 @@ export const PrivateProfileContainer = styled.div`
 	text-align: center;
 
 	> h1 {
-		margin: ${rem(4)} 0;
+		margin: ${rem(8)} 0 0;
+		font-size: ${rem(18)};
 	}
 
 	> p {
 		color: ${props => props.theme.text.primary};
-		margin-bottom: ${rem(4)};
+		margin: 0 0 ${rem(4)};
 	}
 `;
 

@@ -14,7 +14,7 @@ const SvgComponent = (props: Props) => {
 			width={24}
 			height={24}
 			fill={isLiked ? theme.accent : 'none'}
-			stroke={isLiked ? theme.accent : theme.text.muted}
+			stroke={isLiked ? theme.accent : theme.text.lightest}
 			strokeWidth={2}
 			strokeLinecap='round'
 			strokeLinejoin='round'

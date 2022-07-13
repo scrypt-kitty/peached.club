@@ -59,6 +59,7 @@ export const CommentText = styled.div`
 		word-wrap: break-word;
 		font-size: 0.9rem;
 		margin-top: 0;
+		margin-bottom: 0;
 		color: ${props => props.theme.text.primary};
 	}
 `;

@@ -19,7 +19,7 @@ const Story = (props: ProfileHeaderProps & { variant: string }) => {
 };
 
 export default {
-	title: 'Friend/ProfileHeader',
+	title: 'Profile/ProfileHeader',
 	component: Story,
 	argTypes: {
 		variant: {

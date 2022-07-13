@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { rem } from 'polished';
 
 export const NavWrap = styled.div`
 	width: 100%;
@@ -12,8 +13,7 @@ export const NavWrap = styled.div`
 	@media screen and (max-width: 700px) {
 		top: initial;
 		bottom: 0;
-		border-top: 1px solid #cacaca;
-		background: ${props => props.theme.background.primary};
+		border-top: 1px solid ${props => props.theme.border.primary};
 	}
 `;
 
@@ -47,18 +47,22 @@ export const Nav = styled.nav`
 	@media screen and (max-width: 700px) {
 		justify-content: space-between;
 		width: 100%;
+		padding: ${rem(2)} 0;
 	}
 `;
 
 export const Link = styled.span`
 	transition: all ease-in 0.1s;
 	text-align: center;
+
 	@media screen and (max-width: 700px) {
 		width: 25%;
 	}
+
 	@media screen and (min-width: 701px) {
 		margin-right: 1rem;
 	}
+
 	> a {
 		text-decoration: none;
 		color: #fe4f72;

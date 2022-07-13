@@ -9,7 +9,7 @@ const SvgComponent = (props: SVGProps<SVGSVGElement>) => {
 			width={24}
 			height={24}
 			fill='none'
-			stroke={theme.text.muted}
+			stroke={theme.text.lightest}
 			strokeWidth={2}
 			strokeLinecap='round'
 			strokeLinejoin='round'
