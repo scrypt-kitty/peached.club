@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { rem } from 'polished';
+
 const backgrounds = [
 	'https://imgur.com/upR9smx.jpg',
 	'https://imgur.com/FYvdKAb.jpg',
@@ -7,6 +8,7 @@ const backgrounds = [
 	'https://imgur.com/aqfkgt5.jpg',
 	'https://imgur.com/xyAcBRG.jpg',
 ];
+
 const numBackgrounds = backgrounds.length;
 
 const getRandomBackgroundUrl = () =>
@@ -33,12 +35,13 @@ export const ProfileHeaderContent = styled.div`
 	border-top-left-radius: ${rem(20)};
 	border-top-right-radius: ${rem(20)};
 
-	@media screen and (max-width: 900px) {
+	@media screen and (max-width: 500px) {
 		padding-bottom: ${rem(6)};
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
-		margin-top: 0;
+		margin-top: ${rem(24)};
+		text-align: center;
 	}
 `;
 

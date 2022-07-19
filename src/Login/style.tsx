@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { rem } from 'polished';
 
 export const Page = styled.div`
-	height: 100%;
+	height: 100vh;
 	width: 100%;
 	display: flex;
 	justify-content: center;
@@ -29,7 +29,7 @@ export const Container = styled.div`
 	align-content: center;
 	justify-content: center;
 	align-items: center;
-	height: 100%;
+	/* height: 100%; */
 	width: 50%;
 	padding: ${rem(60)};
 
@@ -44,7 +44,7 @@ export const Container = styled.div`
 `;
 
 export const AuthInput = styled.input`
-	padding: ${rem(5)} ${rem(3)};
+	padding: ${rem(12)} ${rem(6)};
 	display: block;
 	margin: 0 0;
 	font-size: ${rem(16)};
@@ -55,6 +55,7 @@ export const AuthInput = styled.input`
 	color: ${props => props.theme.text.primary};
 	background-color: ${props => props.theme.background.secondary};
 	outline-style: none;
+	font-family: monospace;
 `;
 
 export const DangerTxt = styled.p`

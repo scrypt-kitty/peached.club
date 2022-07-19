@@ -1,21 +1,15 @@
 import React, { useContext } from 'react';
-
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useLocation } from 'react-router-dom';
 
 import { PeachContext } from '../PeachContext';
-import { NavWrap, Link, Nav, FeedsNav } from './style';
-import ArrowLeft from './ArrowLeft.svg';
-import ArrowRight from './ArrowRight.svg';
-import ActivityIcon from './Activity.svg';
-import ArrowLeftDarkMode from './ArrowLeftDarkMode.svg';
-import ArrowRightDarkMode from './ArrowRightDarkMode.svg';
-import ActivityIconDarkMode from './ActivityDarkMode.svg';
-import SettingsIcon from './SettingsIcon.svg';
-import SettingsIconDarkMode from './SettingsIconDarkMode.svg';
-import UserIcon from './UserIcon.svg';
-import UserIconDarkMode from './UserIconDarkMode.svg';
-import HomeIcon from './HomeIcon.svg';
-import HomeIconDarkMode from './HomeIconDarkMode.svg';
+
+import { NavWrap, Link, Nav, FeedsNav, PageIconWrapper } from './style';
+import ArrowLeftIcon from '../Theme/Icons/ArrowLeftIcon';
+import ArrowRightIcon from '../Theme/Icons/ArrowRightIcon';
+import HomeIcon from '../Theme/Icons/HomeIcon';
+import UserIcon from '../Theme/Icons/UserIcon';
+import ActivityIcon from '../Theme/Icons/PulseIcon';
+import GearIcon from '../Theme/Icons/GearIcon';
 
 interface NavigationProps {
 	curFeed?: string;
@@ -26,7 +20,9 @@ const Navigation: React.FC<NavigationProps> = ({
 	curFeed,
 	onCurUsersProfile,
 }) => {
-	const { darkMode, curUser, peachFeed } = useContext(PeachContext);
+	const { curUser, peachFeed } = useContext(PeachContext);
+	const { pathname } = useLocation();
+
 	let feedListIDs: string[] = [];
 
 	let showRightArrow = false;
@@ -57,26 +53,14 @@ const Navigation: React.FC<NavigationProps> = ({
 					{showLeftArrow ? (
 						<RouterLink to={`/friend/${prevUser}`}>
 							<FeedsNav>
-								<img
-									src={
-										darkMode ? ArrowLeftDarkMode : ArrowLeft
-									}
-									alt='Prev feed'
-								/>
+								<ArrowLeftIcon />
 							</FeedsNav>
 						</RouterLink>
 					) : null}
 					{showRightArrow ? (
 						<RouterLink to={`/friend/${nextUser}`}>
 							<FeedsNav right>
-								<img
-									src={
-										darkMode
-											? ArrowRightDarkMode
-											: ArrowRight
-									}
-									alt='Next feed'
-								/>
+								<ArrowRightIcon />
 							</FeedsNav>
 						</RouterLink>
 					) : null}
@@ -87,42 +71,34 @@ const Navigation: React.FC<NavigationProps> = ({
 				<Nav>
 					<Link>
 						<RouterLink to='/feed'>
-							<img
-								src={darkMode ? HomeIconDarkMode : HomeIcon}
-								alt='Home'
-							/>
+							<PageIconWrapper isActive={pathname.includes('feed') ?? false}>
+								<HomeIcon />
+							</PageIconWrapper>
 						</RouterLink>
 					</Link>
 					<Link>
 						<RouterLink to={`/friend/${curUser ? curUser.id : ''}`}>
-							<img
-								src={darkMode ? UserIconDarkMode : UserIcon}
-								alt='Me'
-							/>
+							<PageIconWrapper isActive={onCurUsersProfile ?? false}>
+								<UserIcon />
+							</PageIconWrapper>
 						</RouterLink>
 					</Link>
 					<Link>
 						<RouterLink to='/activity'>
-							<img
-								src={
-									darkMode
-										? ActivityIconDarkMode
-										: ActivityIcon
-								}
-								alt='Activity'
-							/>
+							<PageIconWrapper
+								isActive={pathname.includes('activity') ?? false}
+							>
+								<ActivityIcon />
+							</PageIconWrapper>
 						</RouterLink>
 					</Link>
 					<Link>
 						<RouterLink to='/settings'>
-							<img
-								src={
-									darkMode
-										? SettingsIconDarkMode
-										: SettingsIcon
-								}
-								alt='Go to settings'
-							/>
+							<PageIconWrapper
+								isActive={pathname.includes('settings') ?? false}
+							>
+								<GearIcon />
+							</PageIconWrapper>
 						</RouterLink>
 					</Link>
 				</Nav>
