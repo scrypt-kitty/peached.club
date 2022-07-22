@@ -37,7 +37,6 @@ import { PeachContext } from '../PeachContext';
 import LocationPost from './Posts/LocationPost';
 import LinkPost from './Posts/LinkPost';
 
-import Navigation from '../Navigation';
 import { ProfileHeader } from './ProfileHeader/ProfileHeader';
 
 const options = {
@@ -227,7 +226,7 @@ const EmptyState = () => (
 	</EmptyStateWrapper>
 );
 
-export const FriendFeed = () => {
+export const FriendFeedPage = () => {
 	const { jwt, curUser, peachFeed, curUserData } = useContext(PeachContext);
 	const [posts, setPosts] = useState<Post[]>([]);
 
@@ -243,6 +242,12 @@ export const FriendFeed = () => {
 		window.scroll(0, 0);
 		// eslint-disable-next-line
 	}, [id]);
+
+	useEffect(() => {
+		if (peachFeed.length === 0) {
+			navigate('/feed', { replace: true });
+		}
+	}, [peachFeed.length]);
 
 	useEffect(() => {
 		if (!viewingUser && peachFeed) {
@@ -313,16 +318,8 @@ export const FriendFeed = () => {
 		);
 	};
 
-	if (!jwt || peachFeed.length === 0) {
-		navigate('/feed', { replace: true });
-	}
-
 	return (
 		<>
-			<Navigation
-				curFeed={curFeedId}
-				onCurUsersProfile={(curUser && curUser.id === id) || false}
-			/>
 			<Page>
 				{viewingUser && curUserData ? (
 					<>
