@@ -9,13 +9,14 @@ export const SettingsWrapper = styled.div`
 	word-wrap: break-word;
 	margin: 1rem;
 	border-radius: 0.5rem;
+
 	@media screen and (max-width: 700px) {
 		padding: 1rem 1.25rem;
 		margin: 0.5rem;
 		border-radius: 0.25rem;
 	}
 
-	p {
+	p:last-of-type {
 		margin-bottom: 0;
 	}
 `;

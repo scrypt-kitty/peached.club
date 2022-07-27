@@ -57,8 +57,18 @@ const ContactSection = () => (
 				title='peached.club issues on github'
 			>
 				GitHub
-			</LinkText>{' '}
+			</LinkText>
 			🥳
+		</p>
+		<SubTitle>Become an angel</SubTitle>
+		<p>
+			Support this project! Donate at{' '}
+			<LinkText
+				href='https://ko-fi.com/peachedclub'
+				title='donate at ko-fi to peachedclub'
+			>
+				ko-fi
+			</LinkText>
 		</p>
 	</SettingsSection>
 );
