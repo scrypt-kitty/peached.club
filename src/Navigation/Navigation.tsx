@@ -48,17 +48,17 @@ const Navigation = () => {
 				setJwt(storedJwt);
 				setCurUser(storedCurUser);
 
-				if (!curUserData.id) {
-					api(ACTIONS.connectionStream, storedJwt, {}, storedCurUser.id).then(
-						(response: { data: CurUser }) => {
-							if (response.data) {
-								setCurUserData(response.data);
-							} else {
-								navigate('/login', { replace: true });
-							}
-						}
-					);
-				}
+				// if (!curUserData.id) {
+				// 	api(ACTIONS.connectionStream, storedJwt, {}, storedCurUser.id).then(
+				// 		(response: { data: CurUser }) => {
+				// 			if (response.data) {
+				// 				setCurUserData(response.data);
+				// 			} else {
+				// 				navigate('/login', { replace: true });
+				// 			}
+				// 		}
+				// 	);
+				// }
 			}
 		}
 	}, [curUser, jwt, curUserData.id]);
