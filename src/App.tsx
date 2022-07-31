@@ -99,7 +99,13 @@ const App: React.FC = () => {
 				}
 			}
 		);
-	}, [jwt, curUser]);
+		const storedDarkMode = localStorage.getItem(STORAGE_IS_DARK_MODE);
+		if (!storedDarkMode || storedDarkMode === 'true') {
+			setDarkMode(true);
+		} else {
+			setDarkMode(false);
+		}
+	}, [jwt, curUser, darkMode]);
 
 	return (
 		<BrowserRouter>
