@@ -3,15 +3,14 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Linkify from 'linkify-react';
 
 import api from '../api';
-import Loading from '../Loading';
-import { PostInteractions } from './Posts/PostInteractions';
+import Loading from '../Theme/Loading';
+import { PostInteractions } from '../components/Posts/PostInteractions';
 
-import Comments from '../Comments';
+import Comments from '../components/Comments';
 
-import { DeletePrompt } from '../Comments/style';
-import DeleteIcon from '../Theme/Icons/DeleteIcon';
+import { DeletePrompt } from '../components/Comments/style';
 
-import NewPost from '../NewPost';
+import NewPost from '../components/NewPost';
 
 import { Page } from '../Theme/Layout';
 import {
@@ -25,6 +24,8 @@ import {
 	POST_TYPE,
 } from '../api/interfaces';
 import ACTIONS from '../api/constants';
+import { LINKIFY_OPTIONS } from '../constants';
+
 import {
 	DeletePost,
 	PostWrapper,
@@ -34,21 +35,16 @@ import {
 } from './style';
 import { PeachContext } from '../PeachContext';
 
-import LocationPost from './Posts/LocationPost';
-import LinkPost from './Posts/LinkPost';
+import LocationPost from '../components/Posts/LocationPost';
+import LinkPost from '../components/Posts/LinkPost';
 
-import { ProfileHeader } from './ProfileHeader/ProfileHeader';
+import { ProfileHeader } from '../pages/Profile/ProfileHeader/ProfileHeader';
 
-const options = {
-	defaultProtocol: 'http',
-	target: '_blank',
-};
-
-const addNewlines = (txt: string) =>
+const addNewlines = (txt: string, id: string) =>
 	txt.indexOf('\n') < 0
 		? txt
-		: txt.split('\n').map(item => (
-				<span>
+		: txt.split('\n').map((item, index) => (
+				<span key={`${id}-${index}`}>
 					{item}
 					<br />
 				</span>
@@ -69,37 +65,43 @@ export const FriendFeedContainer = (props: FriendFeedProps) => {
 		useState<boolean>(false);
 	const [likeCount, setLikeCount] = useState<number>(props.likeCount);
 	const { curUserData, jwt } = useContext(PeachContext);
+	const [newCommentText, setNewCommentText] = useState('');
 
-	let msgKey = 0;
-	const msgs = props.message.map(obj => {
-		msgKey++;
+	const msgs = props.message.map((obj, index) => {
 		switch (obj.type) {
 			case POST_TYPE.TEXT:
 				return (
-					<p>
-						<Linkify key='msgKey' tagName='span' options={options}>
-							{addNewlines(obj.text)}
+					<p key={`${props.id}-txt-${index}`}>
+						<Linkify tagName='span' options={LINKIFY_OPTIONS}>
+							{addNewlines(obj.text, props.id)}
 						</Linkify>
 					</p>
 				);
 			case POST_TYPE.IMAGE:
 				return (
 					<Image
-						key={msgKey}
+						key={`${props.id}-img-${index}`}
 						src={obj.src}
 						alt={`image for post ${props.id}`}
 						loading='lazy'
 					/>
 				);
 			case POST_TYPE.GIF:
-				return <Image key={msgKey} src={obj.src} alt={`GIF`} loading='lazy' />;
+				return (
+					<Image
+						key={`${props.id}-gif-${index}`}
+						src={obj.src}
+						alt={`GIF`}
+						loading='lazy'
+					/>
+				);
 			case POST_TYPE.LINK:
 				// @ts-ignore
-				return <LinkPost {...obj} />;
+				return <LinkPost key={`${props.id}-link-${index}`} {...obj} />;
 
 			case POST_TYPE.LOCATION:
 				// @ts-ignore
-				return <LocationPost {...obj} />;
+				return <LocationPost key={`${props.id}-loc-${index}`} {...obj} />;
 
 			default:
 				return '';
@@ -179,21 +181,13 @@ export const FriendFeedContainer = (props: FriendFeedProps) => {
 	return (
 		<PostWrapper>
 			<>
-				{curUserData.id === props.author ? (
-					<>
-						<DeletePost>
-							<DeleteIcon onClick={() => setDeletePromptShowing(true)} />
-						</DeletePost>
-						{deletePromptShowing ? (
-							<DeletePrompt
-								onDelete={() => props.deletePost(props.id)}
-								onCancel={() => setDeletePromptShowing(false)}
-							>
-								Are you sure you want to delete your post?
-							</DeletePrompt>
-						) : null}
-					</>
-				) : null}
+				<DeletePrompt
+					onDelete={() => props.deletePost(props.id)}
+					onCancel={() => setDeletePromptShowing(false)}
+					isShowing={deletePromptShowing}
+				>
+					Are you sure you want to delete your post?
+				</DeletePrompt>
 				<FriendPostContent>{msgs}</FriendPostContent>
 			</>
 			<PostInteractions
@@ -203,6 +197,8 @@ export const FriendFeedContainer = (props: FriendFeedProps) => {
 				isLiked={liked}
 				likeCount={likeCount}
 				createdTime={props.createdTime}
+				onClickDelete={() => setDeletePromptShowing(true)}
+				isCurUsersPost={curUserData.id === props.author}
 			/>
 			{showComments ? (
 				<Comments
@@ -214,6 +210,8 @@ export const FriendFeedContainer = (props: FriendFeedProps) => {
 					requesterId={curUserData.id}
 					deleteComment={deleteComment}
 					mutualFriends={props.otherFriends}
+					newCommentText={newCommentText}
+					setNewCommentText={setNewCommentText}
 				/>
 			) : null}
 		</PostWrapper>
@@ -259,6 +257,7 @@ export const FriendFeedPage = () => {
 		if (!jwt || peachFeed.length === 0 || !id) {
 			return;
 		}
+
 		const getUserProfile = async () => {
 			setPostsLoaded(false);
 			const resp: { data: User } = await api(
@@ -284,8 +283,6 @@ export const FriendFeedPage = () => {
 					otherFriendsResponse.data.connections
 				) {
 					setOtherFriends(otherFriendsResponse.data.connections);
-				} else {
-					console.log('ugh');
 				}
 			}
 

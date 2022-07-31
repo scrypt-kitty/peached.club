@@ -7,6 +7,14 @@ export const FriendPostContent = styled.div`
 	> p:first-of-type {
 		margin-top: 0;
 	}
+
+	p {
+		margin-bottom: 0;
+	}
+
+	> p:last-of-type {
+		margin-bottom: ${rem(8)};
+	}
 `;
 
 interface MiniMenuProps {
@@ -105,6 +113,10 @@ export const InteractionArea = styled.div`
 
 	:last-child {
 		margin-left: ${rem(12)};
+	}
+
+	:hover :last-child {
+		visibility: visible;
 	}
 
 	:hover {
