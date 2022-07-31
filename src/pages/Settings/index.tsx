@@ -1,6 +1,11 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import {
+	STORAGE_IS_DARK_MODE,
+	STORAGE_TOKEN_KEY,
+	STORAGE_USER_KEY,
+} from '../../constants';
 import { MiniLoader } from '../../Theme/Loading';
 import { PeachContext } from '../../PeachContext';
 import ACTIONS from '../../api/constants';
@@ -23,7 +28,8 @@ import { LinkText } from '../../components/Posts/LinkPost';
 
 export const SettingsPage = () => {
 	const navigate = useNavigate();
-	const { jwt, toggleDarkMode, curUser } = useContext(PeachContext);
+	const { jwt, toggleDarkMode, curUser, setJwt, setPeachFeed, setConnections } =
+		useContext(PeachContext);
 
 	useEffect(() => {
 		if (!jwt || !curUser) {
@@ -38,6 +44,12 @@ export const SettingsPage = () => {
 				<CustomizationSection toggleDarkMode={toggleDarkMode} />
 				<PeachAccountSection
 					logout={() => {
+						setConnections([]);
+						setJwt('');
+						setPeachFeed([]);
+						localStorage.removeItem(STORAGE_TOKEN_KEY);
+						localStorage.removeItem(STORAGE_USER_KEY);
+						localStorage.removeItem(STORAGE_IS_DARK_MODE);
 						navigate('/logout', { replace: true });
 					}}
 				/>

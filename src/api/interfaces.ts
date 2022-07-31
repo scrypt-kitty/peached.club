@@ -15,9 +15,15 @@ export enum POST_TYPE {
 	GIF = 'gif',
 }
 
+type PostAttributes = {
+	range: [];
+	type?: 'italic' | 'bold';
+};
+
 export type TextMessage = {
 	type: typeof POST_TYPE.TEXT;
 	text: string;
+	atrributes?: PostAttributes[];
 };
 
 export type ImageMessage = {

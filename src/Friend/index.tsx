@@ -237,15 +237,9 @@ export const FriendFeedPage = () => {
 	const navigate = useNavigate();
 
 	useEffect(() => {
-		window.scroll(0, 0);
+		window.scroll({ top: 0, left: 0, behavior: 'smooth' });
 		// eslint-disable-next-line
 	}, [id]);
-
-	useEffect(() => {
-		if (peachFeed.length === 0) {
-			navigate('/feed', { replace: true });
-		}
-	}, [peachFeed.length]);
 
 	useEffect(() => {
 		if (!viewingUser && peachFeed) {
@@ -254,7 +248,7 @@ export const FriendFeedPage = () => {
 	}, [peachFeed, viewingUser]);
 
 	useEffect(() => {
-		if (!jwt || peachFeed.length === 0 || !id) {
+		if (!id) {
 			return;
 		}
 

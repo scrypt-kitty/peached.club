@@ -1,10 +1,18 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import { PeachContext } from './PeachContext';
-import { LoginStream, User, CurUser, DummyCurUser } from './api/interfaces';
+import {
+	LoginStream,
+	User,
+	CurUser,
+	DummyCurUser,
+	Connections,
+} from './api/interfaces';
+import ACTIONS from './api/constants';
 import { STORAGE_IS_DARK_MODE, STORAGE_TOKEN_KEY } from './constants';
 import { getUserFromStorage } from './utils';
+import api from './api';
 
 import { LoginPage } from './pages/Login';
 import { Logout } from './pages/Login/Logout';
@@ -20,6 +28,7 @@ const App: React.FC = () => {
 		localStorage.getItem(STORAGE_TOKEN_KEY) || ''
 	);
 
+	const [connections, setConnections] = useState<User[]>([]);
 	const [peachFeed, setPeachFeed] = useState<User[]>([]);
 	const [curUser, setCurUser] = useState<LoginStream | null>(
 		getUserFromStorage()
@@ -35,6 +44,7 @@ const App: React.FC = () => {
 			setCurFeedIndex(0);
 			return;
 		}
+
 		setCurFeedIndex(curFeedIndex => {
 			const allFeedIds = Object.keys(peachFeed);
 			if (curFeedIndex + 1 === allFeedIds.length) {
@@ -52,6 +62,45 @@ const App: React.FC = () => {
 		});
 	};
 
+	useEffect(() => {
+		const storedJwt = localStorage.getItem(STORAGE_TOKEN_KEY);
+		const storedUser = getUserFromStorage();
+		if (!storedJwt || !storedUser) {
+			return;
+		}
+
+		setJwt(storedJwt);
+		setCurUser(storedUser);
+	}, []);
+
+	useEffect(() => {
+		if (!jwt || !curUser) {
+			return;
+		}
+
+		api(ACTIONS.getConnections, jwt).then(
+			(response: { data: Connections; success: number }) => {
+				if (response.success === 1) {
+					const connectionsUnread = response.data.connections.filter(
+						user => user.unreadPostCount
+					);
+					const connectionsRead = response.data.connections.filter(
+						user => !user.unreadPostCount
+					);
+					setConnections(connectionsUnread.concat(connectionsRead));
+					setPeachFeed(
+						response.data.connections.map(user => {
+							user.posts = user.posts.reverse();
+							return user;
+						})
+					);
+				} else {
+					console.error('😫 Error: Could not get peach feed!');
+				}
+			}
+		);
+	}, [jwt, curUser]);
+
 	return (
 		<BrowserRouter>
 			<PeachContext.Provider
@@ -68,6 +117,8 @@ const App: React.FC = () => {
 					toggleDarkMode,
 					curUserData,
 					setCurUserData,
+					connections,
+					setConnections,
 				}}
 			>
 				<PeachThemeProvider theme={darkMode ? darkTheme : lightTheme}>

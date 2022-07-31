@@ -14,6 +14,8 @@ interface PeachContextTypes {
 	toggleDarkMode: () => void;
 	curUserData: CurUser;
 	setCurUserData: (newCurUser: CurUser) => void;
+	connections: User[];
+	setConnections: (newConnections: User[]) => void;
 }
 
 const defaults = {
@@ -29,6 +31,8 @@ const defaults = {
 	toggleDarkMode: () => {},
 	curUserData: DummyCurUser,
 	setCurUserData: (newCurUser: CurUser) => {},
+	connections: [],
+	setConnections: (newConnections: User[]) => {},
 };
 
 export const PeachContext = React.createContext<PeachContextTypes>(defaults);

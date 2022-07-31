@@ -1,4 +1,6 @@
 import React from 'react';
+import { rem } from 'polished';
+
 import { createPostPreview } from '../../utils';
 import getPostTime from '../../utils/getPostTime';
 import {
@@ -32,6 +34,8 @@ const Preview: React.FC<PreviewProps> = props => {
 						unread={props.unread}
 						src={props.avatarSrc}
 						alt={props.name}
+						width={rem(75)}
+						height={rem(75)}
 					/>
 				) : (
 					<span role='img' aria-label={props.name}>

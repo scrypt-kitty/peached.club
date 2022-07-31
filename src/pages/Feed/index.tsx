@@ -40,8 +40,7 @@ const Feed = (props: { connections: User[] }) => {
 };
 
 export const FeedPage = () => {
-	const [connections, setConnections] = useState<User[] | null>(null);
-	const { jwt, setPeachFeed, curUser, curUserData, setCurUserData } =
+	const { jwt, curUser, curUserData, setCurUserData, connections } =
 		useContext(PeachContext);
 
 	const navigate = useNavigate();
@@ -52,43 +51,19 @@ export const FeedPage = () => {
 			navigate('/login', { replace: true });
 		}
 
-		if (jwt && curUser) {
-			api(ACTIONS.getConnections, jwt).then(
-				(response: { data: Connections; success: number }) => {
-					if (response.success === 1) {
-						const connectionsUnread = response.data.connections.filter(
-							user => user.unreadPostCount
-						);
-						const connectionsRead = response.data.connections.filter(
-							user => !user.unreadPostCount
-						);
-						setConnections(connectionsUnread.concat(connectionsRead));
-						setPeachFeed(
-							response.data.connections.map(user => {
-								user.posts = user.posts.reverse();
-								return user;
-							})
-						);
-					}
-				}
-			);
-
-			if (!curUserData.id) {
-				api(ACTIONS.connectionStream, jwt, {}, curUser.id).then(
-					(response: { data: CurUser }) => {
-						if (response.data) {
-							setCurUserData(response.data);
-						}
-					}
-				);
-			}
+		if (curUserData.id || !curUser) {
+			return;
 		}
-		// eslint-disable-next-line
-	}, []);
 
-	if (!jwt || !curUser) {
-		navigate('/logout', { replace: true });
-	}
+		api(ACTIONS.connectionStream, jwt, {}, curUser.id).then(
+			(response: { data: CurUser }) => {
+				if (response.data) {
+					setCurUserData(response.data);
+				}
+			}
+		);
+		// eslint-disable-next-line
+	}, [curUserData.id, curUser, jwt]);
 
 	return (
 		<>
