@@ -4,7 +4,7 @@ import { rem } from 'polished';
 import {
 	Avatar,
 	ProfileHeaderHandle as Handle,
-} from '../../../pages/Profile/ProfileHeader/style';
+} from '../../ProfileHeader/style';
 import { MiniMenu } from '../../../Friend/style';
 import { ModalContainer } from '../../../Theme/Modal';
 
@@ -126,6 +126,7 @@ export const BasicContainer = styled.div`
 `;
 
 export const HandleStyled = styled(Handle)`
+	width: fit-content;
 	margin-bottom: ${rem(5)};
 	font-size: ${rem(12)};
 
@@ -135,6 +136,7 @@ export const HandleStyled = styled(Handle)`
 `;
 
 export const AuthorName = styled.p`
+	width: fit-content;
 	font-weight: bold;
 	margin: 0;
 	font-size: ${rem(15)};
@@ -173,7 +175,6 @@ export const CommentContainer = styled.div`
 	display: flex;
 	margin: 0 auto;
 	padding: ${rem(8)} ${rem(16)};
-	border-bottom: ${rem(1)} solid ${props => props.theme.border.secondary};
 
 	:hover {
 		background: #cacaca30;

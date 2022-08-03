@@ -17,7 +17,7 @@ import api from './api';
 import { LoginPage } from './pages/Login';
 import { Logout } from './pages/Login/Logout';
 import { FeedPage } from './pages/Feed';
-import { FriendFeedPage } from './Friend';
+import { ProfilePage } from './pages/Profile/Profile';
 import { ActivityPage } from './pages/Activity';
 import { SettingsPage } from './pages/Settings';
 import { darkTheme, lightTheme, PeachThemeProvider } from './Theme/theme';
@@ -38,6 +38,7 @@ const App: React.FC = () => {
 		localStorage.getItem(STORAGE_IS_DARK_MODE) === 'true'
 	);
 	const [curUserData, setCurUserData] = useState<CurUser>(DummyCurUser);
+	const [isPeachLoading, setIsPeachLoading] = useState(false);
 
 	const updateCurFeedIndex = (newIndex: number) => {
 		if (!peachFeed) {
@@ -78,6 +79,8 @@ const App: React.FC = () => {
 			return;
 		}
 
+		setIsPeachLoading(true);
+
 		api(ACTIONS.getConnections, jwt).then(
 			(response: { data: Connections; success: number }) => {
 				if (response.success === 1) {
@@ -99,18 +102,22 @@ const App: React.FC = () => {
 				}
 			}
 		);
+
 		const storedDarkMode = localStorage.getItem(STORAGE_IS_DARK_MODE);
 		if (!storedDarkMode || storedDarkMode === 'true') {
 			setDarkMode(true);
 		} else {
 			setDarkMode(false);
 		}
+
+		setIsPeachLoading(false);
 	}, [jwt, curUser, darkMode]);
 
 	return (
 		<BrowserRouter>
 			<PeachContext.Provider
 				value={{
+					isPeachLoading,
 					jwt,
 					setJwt,
 					peachFeed,
@@ -148,7 +155,7 @@ const PeachRoutes = () => (
 		<Route path='/login' element={<LoginPage />} />
 		<Route path='/feed' element={<FeedPage />} />
 		<Route path='/friend'>
-			<Route path=':id' element={<FriendFeedPage />} />
+			<Route path=':id' element={<ProfilePage />} />
 		</Route>
 		<Route path='/activity' element={<ActivityPage />} />
 		<Route path='/settings' element={<SettingsPage />} />
