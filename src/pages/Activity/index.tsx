@@ -62,7 +62,6 @@ export const ActivityPage = () => {
 							<p>{getActivityDescription(item)}</p>
 						</Preview>
 					))}
-					<Button>See more</Button>) );
 				</>
 			) : (
 				<Loading />
