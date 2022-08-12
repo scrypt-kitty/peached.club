@@ -16,7 +16,6 @@ import {
 	AuthorName,
 	HandleStyled,
 	CommentText,
-	CommentInteractionsContainer,
 	CommentContent,
 	Container,
 	AvatarArea,
@@ -69,6 +68,7 @@ export interface CommentProps extends PostCommentProps {
 	mutualFriends: MutualFriend[];
 	requesterId: string;
 	addReplyHandle: (username: string) => void;
+	postAuthorId: string;
 }
 
 export const Comment: React.FC<CommentProps> = (props: CommentProps) => {
@@ -96,19 +96,9 @@ export const Comment: React.FC<CommentProps> = (props: CommentProps) => {
 					Are you sure you want to delete your comment?
 				</DeletePrompt>
 			) : null}
-			{isRequester && (
+			{props.postAuthorId === props.requesterId && (
 				<DeleteCommentContainer>
 					<Menu>
-						{/* <Menu.Target>
-							<span
-								role='img'
-								aria-label='Delete comment'
-								onClick={() => setDeletePromptShowing(p => !p)}
-							>
-								🗑
-							</span>
-						</Menu.Target> */}
-
 						<Menu.Item
 							color='red'
 							onClick={() => setDeletePromptShowing(p => !p)}
@@ -141,19 +131,7 @@ export const Comment: React.FC<CommentProps> = (props: CommentProps) => {
 						</Linkify>
 					</p>
 				</CommentText>
-				<CommentInteractionsContainer>
-					{/* {isRequester ? (
-						<>
-							hey
-							<MiniMenu onClick={() => setDeletePromptShowing(true)}>
-								<DeleteIconButton>
-									<DeleteIcon />
-								</DeleteIconButton>
-							</MiniMenu>
-							
-						</>
-					) : null} */}
-				</CommentInteractionsContainer>
+				{/* <CommentInteractionsContainer></CommentInteractionsContainer> */}
 				{profilePreviewShowing ? (
 					<PrivateProfile
 						onDismissPrivateProfile={() => setProfilePreviewShowing(false)}

@@ -30,6 +30,7 @@ export interface CommentsComponentProps extends SharedCommentsProps {
 	peachFeedIds: string[];
 	getAvatar: (id: string) => string;
 	addReplyHandle: (username: string) => void;
+	postAuthorId: string;
 }
 
 export const CommentsComponent = (props: CommentsComponentProps) => {
@@ -47,6 +48,7 @@ export const CommentsComponent = (props: CommentsComponentProps) => {
 					mutualFriends={props.mutualFriends}
 					requesterId={props.requesterId}
 					addReplyHandle={props.addReplyHandle}
+					postAuthorId={props.postAuthorId}
 				/>
 			))}
 		</AllComments>
@@ -129,6 +131,7 @@ export const Comments = (props: CommentsProps) => {
 				addReplyHandle={addReplyHandle}
 				newCommentText={newCommentText}
 				setNewCommentText={setNewCommentText}
+				postAuthorId={props.postAuthorId}
 			/>
 			<AddComment
 				onSubmit={props.updateComments}
