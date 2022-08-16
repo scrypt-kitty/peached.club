@@ -316,6 +316,22 @@ export type ActivityItem =
 	| LikeNotification
 	| MentionNotification;
 
+/*eslint-disable */
+export function isCommentNotification(
+	object: any
+): object is CommentNotification {
+	return 'type' in object && object.type === NOTIFICATION_TYPE.COMMENT;
+}
+
+export function isLikeNotification(object: any): object is LikeNotification {
+	return 'type' in object && object.type === NOTIFICATION_TYPE.LIKE;
+}
+
+export function isWaveNotification(object: any): object is WaveNotification {
+	return 'type' in object && object.type === NOTIFICATION_TYPE.WAVE;
+}
+/*eslint-enable*/
+
 export interface ActivityResponse {
 	streamID: string;
 	activityItems: ActivityItem[];
