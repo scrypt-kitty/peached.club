@@ -56,13 +56,9 @@ export const FeedPage = () => {
 			navigate('/login', { replace: true });
 		}
 
-		if (curUserData.id || !curUser) {
-			return;
-		}
-
 		setIsCurUserDataLoading(true);
 
-		api(ACTIONS.connectionStream, jwt, {}, curUser.id).then(
+		api(ACTIONS.connectionStream, jwt, {}, curUser?.id, 'FeedPage').then(
 			(response: { data: CurUser }) => {
 				if (response.data) {
 					setCurUserData(response.data);

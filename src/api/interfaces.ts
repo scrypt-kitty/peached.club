@@ -269,7 +269,6 @@ export interface MentionNotification {
 	type: typeof NOTIFICATION_TYPE.MENTION;
 	body: {
 		authorStream: AuthorStream;
-		postAuthorStream: AuthorStream;
 		postId: string;
 		postMessage: Post['message'];
 		commentBody: string;
@@ -321,6 +320,12 @@ export function isCommentNotification(
 	object: any
 ): object is CommentNotification {
 	return 'type' in object && object.type === NOTIFICATION_TYPE.COMMENT;
+}
+
+export function isMentionNotification(
+	object: any
+): object is MentionNotification {
+	return 'type' in object && object.type === NOTIFICATION_TYPE.MENTION;
 }
 
 export function isLikeNotification(object: any): object is LikeNotification {

@@ -1,13 +1,7 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Linkify from 'linkify-react';
 
 import api from '../../api';
-import { PostInteractions } from '../../components/Posts/PostInteractions';
-
-import Comments from '../../components/Comments';
-
-import { DeletePrompt } from '../../components/Comments/style';
-
 import {
 	LikePostResponse,
 	Comment,
@@ -16,14 +10,15 @@ import {
 	MutualFriend,
 	POST_TYPE,
 	Post,
-	CurUser,
 } from '../../api/interfaces';
 import ACTIONS from '../../api/constants';
-
-import { PostWrapper, FriendPostContent, Image } from './style';
 import { PeachContext } from '../../PeachContext';
 import { LINKIFY_OPTIONS } from '../../constants';
 
+import { PostInteractions } from '../../components/Posts/PostInteractions';
+import Comments from '../../components/Comments';
+import { DeletePrompt } from '../../components/Comments/style';
+import { PostWrapper, FriendPostContent, Image } from './style';
 import LocationPost from '../../components/Posts/LocationPost';
 import LinkPost from '../../components/Posts/LinkPost';
 
@@ -98,21 +93,8 @@ export const ProfilePosts = (props: Props) => {
 	const [deletePromptShowing, setDeletePromptShowing] =
 		useState<boolean>(false);
 	const [likeCount, setLikeCount] = useState<number>(props.likeCount);
-	const { curUserData, jwt, setCurUserData, curUser } =
-		useContext(PeachContext);
+	const { curUserData, jwt } = useContext(PeachContext);
 	const [newCommentText, setNewCommentText] = useState('');
-
-	// useEffect(() => {
-	// 	if ((!curUserData || !curUserData.id) && curUser && curUser.id) {
-	// 		api(ACTIONS.connectionStream, jwt, {}, curUser.id).then(
-	// 			(response: { data: CurUser }) => {
-	// 				if (response.data) {
-	// 					setCurUserData(response.data);
-	// 				}
-	// 			}
-	// 		);
-	// 	}
-	// }, [curUserData, curUser]);
 
 	const msgs = props.message.map((obj, index) => (
 		<DisplayedPost obj={obj} index={index} id={props.id} />

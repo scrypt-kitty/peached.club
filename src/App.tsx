@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
+import { useLocalStorage } from '@mantine/hooks';
 
 import { PeachContext } from './PeachContext';
 import {
@@ -10,16 +11,15 @@ import {
 	Connections,
 } from './api/interfaces';
 import ACTIONS from './api/constants';
-import { STORAGE_IS_DARK_MODE, STORAGE_TOKEN_KEY } from './constants';
+import {
+	STORAGE_IS_DARK_MODE,
+	STORAGE_TOKEN_KEY,
+	STORAGE_CUR_USER_DATA_KEY,
+} from './constants';
 import { getUserFromStorage } from './utils';
 import api from './api';
 
-import { LoginPage } from './pages/Login';
-import { Logout } from './pages/Login/Logout';
-import { FeedPage } from './pages/Feed';
-import { ProfilePage } from './pages/Profile/Profile';
-import { ActivityPage } from './pages/Activity';
-import { SettingsPage } from './pages/Settings';
+import { PeachRoutes } from './PeachRoutes';
 import { darkTheme, lightTheme, PeachThemeProvider } from './Theme/theme';
 import { GlobalStyle } from './style';
 
@@ -37,7 +37,10 @@ const App: React.FC = () => {
 	const [darkMode, setDarkMode] = useState<boolean>(
 		localStorage.getItem(STORAGE_IS_DARK_MODE) === 'true'
 	);
-	const [curUserData, setCurUserData] = useState<CurUser>(DummyCurUser);
+	const [curUserData, setCurUserData] = useLocalStorage({
+		key: STORAGE_CUR_USER_DATA_KEY,
+		defaultValue: DummyCurUser,
+	});
 	const [isPeachLoading, setIsPeachLoading] = useState(false);
 
 	const updateCurFeedIndex = (newIndex: number) => {
@@ -81,7 +84,7 @@ const App: React.FC = () => {
 
 		setIsPeachLoading(true);
 
-		api(ACTIONS.getConnections, jwt).then(
+		api(ACTIONS.getConnections, jwt, {}, '', '', 'App').then(
 			(response: { data: Connections; success: number }) => {
 				if (response.success === 1) {
 					const connectionsUnread = response.data.connections.filter(
@@ -147,20 +150,6 @@ const MainPeachApp = () => (
 		<GlobalStyle />
 		<PeachRoutes />
 	</>
-);
-
-const PeachRoutes = () => (
-	<Routes>
-		<Route path='/' element={<LoginPage />} />
-		<Route path='/login' element={<LoginPage />} />
-		<Route path='/feed' element={<FeedPage />} />
-		<Route path='/friend'>
-			<Route path=':id' element={<ProfilePage />} />
-		</Route>
-		<Route path='/activity' element={<ActivityPage />} />
-		<Route path='/settings' element={<SettingsPage />} />
-		<Route path='/logout' element={<Logout />} />
-	</Routes>
 );
 
 export default App;

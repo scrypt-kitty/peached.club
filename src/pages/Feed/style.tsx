@@ -3,8 +3,6 @@ import { rem } from 'polished';
 import { Link } from 'react-router-dom';
 
 export const PicFrame = styled.div`
-	/* flex: 1; */
-
 	> span,
 	> img {
 		margin-right: ${rem(8)};
@@ -31,8 +29,8 @@ export const ProfilePic = styled.img<{ unread?: boolean }>`
 	border: ${props => (props.unread ? '2px solid #1bb76e' : 'none')};
 	width: ${rem(75)};
 	height: ${rem(75)};
-
 	object-fit: cover;
+
 	@media screen and (max-width: 500px) {
 		width: ${rem(50)};
 		height: ${rem(50)};
@@ -56,6 +54,12 @@ export const InfoContainer = styled.div`
 
 	p {
 		margin: 0;
+	}
+
+	blockquote {
+		margin-left: ${rem(16)};
+		margin-top: ${rem(4)};
+		color: ${props => props.theme.text.muted};
 	}
 
 	@media screen and (max-width: 500px) {
@@ -83,7 +87,6 @@ export const FeedPostWrapper = styled.div<FeedPostWrapperProps>`
 
 	:hover {
 		background: ${props => props.theme.background.hover};
-		border-color: ${props => props.theme.background.hover};
 		cursor: pointer;
 	}
 

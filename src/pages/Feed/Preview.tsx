@@ -19,13 +19,15 @@ interface PreviewProps {
 	avatarSrc: string;
 	name: string;
 	displayName: string;
-	message: PostContent | string;
+	message?: PostContent | string | null;
 	children?: React.ReactNode;
 	unread?: boolean;
 	createdTime: number | null;
+	textPreview?: string | null;
 }
 
 const Preview: React.FC<PreviewProps> = props => {
+	const { textPreview = null, message = null } = props;
 	return (
 		<FeedPostWrapper isUnread={false}>
 			<PicFrame>
@@ -48,13 +50,19 @@ const Preview: React.FC<PreviewProps> = props => {
 				{props.children}
 				<PostPreview>
 					<p>
-						{typeof props.message === 'string'
-							? props.message
-							: createPostPreview(props.message)}
+						{!message
+							? ' '
+							: typeof message === 'string'
+							? message
+							: createPostPreview(message)}
 					</p>
-
 					{props.createdTime && <p>{getPostTime(props.createdTime)}</p>}
 				</PostPreview>
+				{props.textPreview && (
+					<blockquote>
+						<i>{props.textPreview}</i>
+					</blockquote>
+				)}
 			</InfoContainer>
 		</FeedPostWrapper>
 	);

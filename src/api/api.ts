@@ -18,7 +18,15 @@ import ACTIONS, {
 	CHANGE_BIO,
 } from './constants';
 
-const api = (action: ACTIONS, jwt: string, body = {}, id = '', params = '') => {
+const api = (
+	action: ACTIONS,
+	jwt: string,
+	body = {},
+	id = '',
+	params = '',
+	caller = ''
+) => {
+	console.log(`${caller} called ${action}.`);
 	const req = {
 		method: '',
 		body: JSON.stringify(body),

@@ -1,8 +1,16 @@
+import { text } from 'stream/consumers';
 import {
 	ActivityItem,
 	NOTIFICATION_TYPE,
 	Post,
 	POST_TYPE,
+	CommentNotification,
+	MentionNotification,
+	isImage,
+	LikeNotification,
+	isText,
+	WaveNotification,
+	isWaveNotification,
 } from '../../api/interfaces';
 
 function shortenPost(text: string): string {
@@ -50,4 +58,25 @@ export function getActivityDescription(item: ActivityItem): string {
 		default:
 			return '';
 	}
+}
+
+export function getTextPreview(
+	notif:
+		| CommentNotification
+		| MentionNotification
+		| LikeNotification
+		| WaveNotification
+): string | null {
+	if (isWaveNotification(notif)) {
+		return null;
+	}
+
+	const message = notif.body.postMessage[0];
+	if (isImage(message)) {
+		return 'Image post';
+	} else if (isText(message)) {
+		return message.text.slice(0, 100).trimEnd() + '...';
+	}
+
+	return null;
 }

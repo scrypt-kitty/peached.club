@@ -1,7 +1,5 @@
 import React, { useEffect, useContext, useState, useCallback } from 'react';
 import { Navigate } from 'react-router-dom';
-import { Tabs } from '@mantine/core';
-import { TabsWrapper } from './style';
 
 import { PeachContext } from '../../PeachContext';
 import api from '../../api';
@@ -12,13 +10,19 @@ import {
 	isCommentNotification,
 	isLikeNotification,
 	isWaveNotification,
+	isMentionNotification,
 } from '../../api/interfaces';
+import {
+	getActivityDescription,
+	getActivityPreviewMessage,
+	getTextPreview,
+} from './utils';
 
-import Loading from '../../Theme/Loading';
 import { Page } from '../../Theme/Layout';
 import { Title } from '../../Theme/Type';
 import Preview from '../Feed/Preview';
-import { getActivityDescription, getActivityPreviewMessage } from './utils';
+import { TabsWrapper } from './style';
+import { MTabs as Tabs } from '../../Theme/Mantine';
 
 export const ActivityPage = () => {
 	const [activityFeed, setActivityFeed] = useState<ActivityItem[] | null>(null);
@@ -28,16 +32,21 @@ export const ActivityPage = () => {
 	const getActivityFeed = useCallback(() => {
 		const cursorParams = cursor ? `?cursor=${cursor}` : '';
 		try {
-			api(ACTIONS.getActivityFeed, jwt, {}, '', cursorParams).then(
-				(response: { data: ActivityResponse }) => {
-					if (response.data.streamID) {
-						// const activityItems = response.data.activityItems;
+			api(
+				ACTIONS.getActivityFeed,
+				jwt,
+				{},
+				'',
+				cursorParams,
+				'ActivityPage'
+			).then((response: { data: ActivityResponse }) => {
+				if (response.data.streamID) {
+					// const activityItems = response.data.activityItems;
 
-						const resp = response.data.activityItems;
-						setActivityFeed(resp);
-					}
+					const resp = response.data.activityItems;
+					setActivityFeed(resp);
 				}
-			);
+			});
 		} catch (err) {
 			console.error(err);
 		}
@@ -70,10 +79,32 @@ export const ActivityPage = () => {
 									displayName={item.body.authorStream.displayName}
 									name={item.body.authorStream.name}
 									id={item.body.authorStream.id}
-									message={getActivityPreviewMessage(item)}
 									createdTime={item.createdTime}
+									message={getTextPreview(item)}
 								>
-									<p>{getActivityDescription(item)}</p>
+									<p>{getActivityPreviewMessage(item)}</p>
+								</Preview>
+							))}
+					</Tabs.Tab>
+					<Tabs.Tab label='Mentions'>
+						{activityFeed
+							?.filter(item => {
+								if (isMentionNotification(item)) {
+									return item;
+								}
+							})
+							.map(item => (
+								<Preview
+									key={`${item.createdTime}${item.body.authorStream.id}`}
+									avatarSrc={item.body.authorStream.avatarSrc}
+									displayName={item.body.authorStream.displayName}
+									name={item.body.authorStream.name}
+									id={item.body.authorStream.id}
+									// message={getActivityPreviewMessage(item)}
+									createdTime={item.createdTime}
+									message={getTextPreview(item)}
+								>
+									<p>{getActivityPreviewMessage(item)}</p>
 								</Preview>
 							))}
 					</Tabs.Tab>
@@ -91,10 +122,10 @@ export const ActivityPage = () => {
 									displayName={item.body.authorStream.displayName}
 									name={item.body.authorStream.name}
 									id={item.body.authorStream.id}
-									message={getActivityPreviewMessage(item)}
 									createdTime={item.createdTime}
+									message={getTextPreview(item)}
 								>
-									<p>{getActivityDescription(item)}</p>
+									{/* <p>{getActivityPreviewMessage(item)}</p> */}
 								</Preview>
 							))}
 					</Tabs.Tab>

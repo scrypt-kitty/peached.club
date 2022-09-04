@@ -63,12 +63,12 @@ const ContactSection = () => (
 	<SettingsSection>
 		<SubTitle>Help or suggestions?</SubTitle>
 		<p>
-			Create an issue on{' '}
+			Fill out this
 			<LinkText
-				href='https://github.com/jastronaut/peached.club/issues'
+				href='https://forms.gle/uydFBf1fDCp5gSu97'
 				title='peached.club issues on github'
 			>
-				GitHub
+				form
 			</LinkText>
 			🥳
 		</p>

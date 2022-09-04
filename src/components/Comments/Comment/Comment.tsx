@@ -96,19 +96,18 @@ export const Comment: React.FC<CommentProps> = (props: CommentProps) => {
 					Are you sure you want to delete your comment?
 				</DeletePrompt>
 			) : null}
-			{props.postAuthorId === props.requesterId ||
-				(isRequester && (
-					<DeleteCommentContainer>
-						<Menu>
-							<Menu.Item
-								color='red'
-								onClick={() => setDeletePromptShowing(p => !p)}
-							>
-								Delete comment
-							</Menu.Item>
-						</Menu>
-					</DeleteCommentContainer>
-				))}
+			{(props.postAuthorId === props.requesterId || isRequester) && (
+				<DeleteCommentContainer>
+					<Menu>
+						<Menu.Item
+							color='red'
+							onClick={() => setDeletePromptShowing(p => !p)}
+						>
+							Delete comment
+						</Menu.Item>
+					</Menu>
+				</DeleteCommentContainer>
+			)}
 			<CommentContent>
 				<AvatarArea>
 					<a href={`/friend/${props.author.id}`}>
@@ -132,7 +131,6 @@ export const Comment: React.FC<CommentProps> = (props: CommentProps) => {
 						</Linkify>
 					</p>
 				</CommentText>
-				{/* <CommentInteractionsContainer></CommentInteractionsContainer> */}
 				{profilePreviewShowing ? (
 					<PrivateProfile
 						onDismissPrivateProfile={() => setProfilePreviewShowing(false)}

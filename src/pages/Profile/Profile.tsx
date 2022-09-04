@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 import api from '../../api';
 import Loading from '../../Theme/Loading';
@@ -10,6 +10,7 @@ import {
 	User,
 	FriendsOfFriendsResponse,
 	MutualFriend,
+	CurUser,
 } from '../../api/interfaces';
 import ACTIONS from '../../api/constants';
 
@@ -26,15 +27,42 @@ const EmptyState = () => (
 );
 
 export const ProfilePage = () => {
-	const { jwt, curUser, peachFeed, curUserData } = useContext(PeachContext);
-	const [posts, setPosts] = useState<Post[]>([]);
+	const { jwt, curUser, peachFeed, curUserData, setCurUserData } =
+		useContext(PeachContext);
+	const navigate = useNavigate();
 
+	const [posts, setPosts] = useState<Post[]>([]);
 	const [viewingUser, setCurUserProfile] = useState<User | null>(null);
 	const [curFeedId, setCurFeedId] = useState<string>('');
 	const [otherFriends, setOtherFriends] = useState<MutualFriend[]>([]);
 	const [postsLoaded, setPostsLoaded] = useState<boolean>(false);
 
 	const { id } = useParams();
+
+	useEffect(() => {
+		window.scroll({ top: 0, left: 0, behavior: 'smooth' });
+		if (!jwt || !curUser) {
+			navigate('/login', { replace: true });
+		}
+
+		if (curUserData.id || !curUser) {
+			return;
+		}
+
+		api(
+			ACTIONS.connectionStream,
+			jwt,
+			{},
+			curUser.id,
+			'',
+			'ProfilePage useeffect1'
+		).then((response: { data: CurUser }) => {
+			if (response.data) {
+				setCurUserData(response.data);
+			}
+		});
+		// eslint-disable-next-line
+	}, [curUserData.id, curUser, jwt]);
 
 	useEffect(() => {
 		window.scroll({ top: 0, left: 0, behavior: 'smooth' });
@@ -58,7 +86,9 @@ export const ProfilePage = () => {
 				ACTIONS.connectionStream,
 				jwt,
 				{},
-				id
+				id,
+				'',
+				'ProfilePage getUserProfile useffect2'
 			);
 
 			// get posts by this user
