@@ -14,6 +14,7 @@ export enum POST_TYPE {
 	LOCATION = 'location',
 	GIF = 'gif',
 	MUSIC = 'music',
+	VIDEO = 'video',
 }
 
 type PostAttributes = {
@@ -76,13 +77,21 @@ export type MusicMessage = {
 	};
 };
 
+export interface VideoMessage {
+	width: number;
+	posterSrc: string;
+	src: string;
+	type: typeof POST_TYPE.VIDEO;
+}
+
 export type PostContent =
 	| TextMessage
 	| ImageMessage
 	| LinkMessage
 	| LocationMessage
 	| GifMessage
-	| MusicMessage;
+	| MusicMessage
+	| VideoMessage;
 
 export type UploadableMessageTypes = TextMessage | ImageMessage | GifMessage;
 

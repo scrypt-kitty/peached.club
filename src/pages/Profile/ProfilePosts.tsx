@@ -23,6 +23,7 @@ import { PostWrapper, FriendPostContent, Image } from './style';
 import LocationPost from '../../components/Posts/LocationPost';
 import LinkPost from '../../components/Posts/LinkPost';
 import { MusicPost } from '../../components/Posts/MusicPost';
+import { VideoPost } from '../../components/Posts/VideoPost';
 
 const addNewlines = (txt: string, id: string) =>
 	txt.indexOf('\n') < 0
@@ -71,6 +72,11 @@ const DisplayedPost = ({ obj, id, index }: DisplayedPostProps) => {
 		case POST_TYPE.LINK:
 			// @ts-ignore
 			return <LinkPost key={`${id}-link-${index}`} {...obj} />;
+
+		case POST_TYPE.VIDEO:
+			return (
+				<VideoPost key={`${id}-vid-${index}`} src={obj.src} width={obj.width} />
+			);
 
 		case POST_TYPE.LOCATION:
 			// @ts-ignore
