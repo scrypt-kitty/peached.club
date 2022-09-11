@@ -13,6 +13,7 @@ export enum POST_TYPE {
 	LINK = 'link',
 	LOCATION = 'location',
 	GIF = 'gif',
+	MUSIC = 'music',
 }
 
 type PostAttributes = {
@@ -58,12 +59,30 @@ export interface LocationMessage {
 	name: string;
 }
 
+export type MusicMessage = {
+	type: typeof POST_TYPE.MUSIC;
+	title: string;
+	spotifyData: {
+		album: {
+			name: string;
+		};
+		artists: {
+			name: string;
+		}[];
+		track: {
+			id: string;
+			name: string;
+		};
+	};
+};
+
 export type PostContent =
 	| TextMessage
 	| ImageMessage
 	| LinkMessage
 	| LocationMessage
-	| GifMessage;
+	| GifMessage
+	| MusicMessage;
 
 export type UploadableMessageTypes = TextMessage | ImageMessage | GifMessage;
 
@@ -86,6 +105,10 @@ export function isGif(object: any): object is GifMessage {
 
 export function isLocation(object: any): object is LocationMessage {
 	return 'formattedAddress' in object;
+}
+
+export function isMusic(object: any): object is MusicMessage {
+	return 'spotifyData' in object;
 }
 /*eslint-enable*/
 

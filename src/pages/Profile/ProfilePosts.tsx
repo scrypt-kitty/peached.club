@@ -19,8 +19,10 @@ import { PostInteractions } from '../../components/Posts/PostInteractions';
 import Comments from '../../components/Comments';
 import { DeletePrompt } from '../../components/Comments/style';
 import { PostWrapper, FriendPostContent, Image } from './style';
+
 import LocationPost from '../../components/Posts/LocationPost';
 import LinkPost from '../../components/Posts/LinkPost';
+import { MusicPost } from '../../components/Posts/MusicPost';
 
 const addNewlines = (txt: string, id: string) =>
 	txt.indexOf('\n') < 0
@@ -73,6 +75,14 @@ const DisplayedPost = ({ obj, id, index }: DisplayedPostProps) => {
 		case POST_TYPE.LOCATION:
 			// @ts-ignore
 			return <LocationPost key={`${id}-loc-${index}`} {...obj} />;
+
+		case POST_TYPE.MUSIC:
+			return (
+				<MusicPost
+					trackId={obj.spotifyData.track.id}
+					key={`${id}-music-${index}`}
+				/>
+			);
 
 		default:
 			return null;
