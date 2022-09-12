@@ -4,8 +4,9 @@ import {
 	ImgurUploadResponse,
 	POST_TYPE,
 	GifMessage,
+	ImgBBUploadResponse,
 } from '../../../api/interfaces';
-import { UPLOAD_IMAGE } from '../../../api/constants';
+import { UPLOAD_IMAGE, UPLOAD_TO_IMGBB } from '../../../api/constants';
 import { PeachContext } from '../../../PeachContext';
 
 import Button from '../../../Theme/Button';
@@ -64,7 +65,38 @@ export const ComposerComponent = (
 			body: createImageUploadRequest(files),
 		};
 
-		await fetch(UPLOAD_IMAGE, req)
+		const req2 = {
+			method: 'POST',
+			headers: {
+				Accept: 'application/json',
+			},
+			body: createImageUploadRequest(files),
+		};
+
+		await fetch(
+			UPLOAD_TO_IMGBB(
+				process.env.REACT_APP_IBB_API_KEY || process.env.IBB_API_KEY || ''
+			),
+			req2
+		)
+			.then(resp => resp.json())
+			.then((resp: ImgBBUploadResponse) => {
+				if (!resp.success) {
+					return;
+				}
+				setImages(images =>
+					images.concat([
+						{
+							type: POST_TYPE.IMAGE,
+							src: resp.data.url,
+							height: resp.data.height,
+							width: resp.data.width,
+						},
+					])
+				);
+			});
+		/*
+				await fetch(UPLOAD_IMAGE, req)
 			.then(resp => resp.json())
 			.then((resp: ImgurUploadResponse) => {
 				if (!resp.success) {
@@ -81,6 +113,7 @@ export const ComposerComponent = (
 					])
 				);
 			});
+		*/
 	};
 
 	const onSubmitPost = () => {

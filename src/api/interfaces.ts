@@ -17,8 +17,8 @@ export enum POST_TYPE {
 	VIDEO = 'video',
 }
 
-type PostAttributes = {
-	range: [];
+export type PostAttributes = {
+	range: number[];
 	type?: 'italic' | 'bold';
 };
 
@@ -462,4 +462,16 @@ export type GiphyResponse = {
 	meta: {
 		status: number;
 	};
+};
+
+export type ImgBBUploadResponse = {
+	data: {
+		id: string;
+		url: string;
+		display_url: string;
+		width: number;
+		height: number;
+	};
+	success: boolean;
+	status: number;
 };
