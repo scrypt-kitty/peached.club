@@ -1,4 +1,9 @@
 import React from 'react';
+import styled from 'styled-components';
+
+const Video = styled.video`
+	max-width: 100%;
+`;
 
 type Props = {
 	width: number;
@@ -7,8 +12,8 @@ type Props = {
 
 export const VideoPost = (props: Props) => {
 	return (
-		<video width={props.width} controls>
-			<source src={props.src} type='video/mp4' />{' '}
-		</video>
+		<Video width={props.width} controls>
+			<source src={props.src} type='video/mp4' />
+		</Video>
 	);
 };

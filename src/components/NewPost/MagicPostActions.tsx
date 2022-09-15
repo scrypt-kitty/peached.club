@@ -13,6 +13,7 @@ import CalendarIcon from '../../Theme/Icons/CalendarIcon';
 import GiftIcon from '../../Theme/Icons/GiftIcon';
 import { GifPicker } from './GifPicker/GifPicker';
 import { GiphyImage } from '../../api/interfaces';
+import { MTextInput } from '../../Theme/Mantine';
 
 export const getCurrentTime = (currentPostLen: number) => {
 	const now = dayjs().format('h:mm A');
@@ -23,6 +24,8 @@ export const getCurrentDate = (currentPostLen: number) => {
 	const now = dayjs().format('dddd, MMMM D, YYYY');
 	return `${currentPostLen ? '\n' : ''}📰 ${now} \n`;
 };
+
+type DisplayedActionInteraction = 'Oracle' | 'Gif';
 
 const GifPickerComponent = (props: {
 	onGifSelect: (selectedGif: GiphyImage) => void;
@@ -53,10 +56,26 @@ type MagicPostActionsProps = {
 
 export const MagicPostActions = (props: MagicPostActionsProps) => {
 	const [isGifPickerShowing, setIsGifPickerShowing] = useState(false);
+	const [isOracleInputShowing, setIsOracleInputShowing] = useState(false);
+	const [curDisplayedInteraction, setCurDisplayedInteraction] =
+		useState<DisplayedActionInteraction | null>(null);
+
+	const switchDisplayedInteraction = (next: DisplayedActionInteraction) => {
+		setCurDisplayedInteraction(cur => {
+			if (!next) {
+				return next;
+			}
+
+			if (next === cur) {
+				return null;
+			}
+
+			return next;
+		});
+	};
 
 	return (
 		<div>
-			{/* <MagicPostActionsContainer> */}
 			<MagicPostActionsGroup spacing={'xs'}>
 				<ActionButton>
 					<ImageIcon accented title='Add an image to your post' />
@@ -92,15 +111,25 @@ export const MagicPostActions = (props: MagicPostActionsProps) => {
 				</ActionButton>
 				<ActionButton>
 					<GiftIcon
-						onClick={() => setIsGifPickerShowing(i => !i)}
+						onClick={() => switchDisplayedInteraction('Gif')}
 						title='Add GIF to post'
 					/>
 				</ActionButton>
-				{/* </MagicPostActionsContainer> */}
+				<ActionButton>
+					<GiftIcon
+						onClick={() => switchDisplayedInteraction('Oracle')}
+						title='Ask the oracle'
+					/>
+				</ActionButton>
 			</MagicPostActionsGroup>
-			{isGifPickerShowing && (
+			{curDisplayedInteraction === 'Oracle' ? (
+				<MTextInput
+					label='🔮 Ask the oracle a question.'
+					placeholder='Will I see a rainbow today?'
+				/>
+			) : curDisplayedInteraction === 'Gif' ? (
 				<GifPickerComponent onGifSelect={props.onGifSelect} />
-			)}
+			) : null}
 		</div>
 	);
 };
