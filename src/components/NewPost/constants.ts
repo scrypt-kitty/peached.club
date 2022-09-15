@@ -1,0 +1,17 @@
+export const ORACLE_RESPONSES = [
+	'Some questions are better left unanswered.',
+	'Hell yes, imho.',
+	'The data suggests no.',
+	'Most definitely.',
+	'Meh. Probably not.',
+	'A thousand times yes.',
+	'Nah.',
+	'Impossible',
+	'Bruh. Come on.',
+	'Unclear.',
+	'Probably.',
+	'Very sorry, but no.',
+	'Ask again like you mean it.',
+	'No doubt.',
+	'🤐',
+];

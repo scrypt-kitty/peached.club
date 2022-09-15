@@ -24,6 +24,7 @@ interface CommentsProps extends SharedCommentsProps {
 	postAuthorId: string;
 	postAuthorAvatarSrc: string;
 	isShowing: boolean;
+	children?: React.ReactNode;
 }
 
 export interface CommentsComponentProps extends SharedCommentsProps {
@@ -121,6 +122,7 @@ export const Comments = (props: CommentsProps) => {
 			>
 				Are you sure you want to abandon this comment?
 			</DeletePrompt>
+			{props.children}
 			<CommentsComponent
 				getAvatar={getAvatar}
 				peachFeedIds={peachFeedIds}

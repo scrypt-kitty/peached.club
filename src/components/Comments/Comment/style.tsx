@@ -1,22 +1,14 @@
 import styled from 'styled-components';
 import { rem } from 'polished';
 
-import {
-	Avatar,
-	ProfileHeaderHandle as Handle,
-} from '../../ProfileHeader/style';
-import { MiniMenu } from '../../../Friend/style';
+import { MiniMenu } from '../../../pages/Profile/style';
+import { Avatar } from '../../ProfileHeader/style';
 import { ModalContainer } from '../../../Theme/Modal';
 import { MContainer } from '../../../Theme/Mantine';
 
 export const DeleteCommentContainer = styled.div`
-	/* visibility: hidden; */
 	display: flex;
 	justify-content: flex-end;
-
-	/* :hover span {
-		cursor: pointer;
-	} */
 
 	.mantine-Paper-root .mantine-Menu-body {
 		background-color: ${props => props.theme.background.primary};
@@ -37,9 +29,6 @@ export const Container = styled(MContainer)`
 	@media screen and (max-width: 600px) {
 		padding: ${rem(4)} ${rem(8)};
 	}
-	/* :hover ${DeleteCommentContainer} {
-		visibility: visible;
-	} */
 `;
 
 export const CommentContent = styled.div`
@@ -101,7 +90,7 @@ export const CommentText = styled.div`
 		margin-bottom: 0;
 	}
 
-	@media screen and (max-width: 500px) {
+	@media screen and (max-width: ${rem(500)}) {
 		> a > h3 {
 			margin-top: 0;
 		}
@@ -130,27 +119,27 @@ export const AvatarStyled = styled(Avatar)`
 	> span {
 		width: ${rem(50)};
 		height: ${rem(50)};
-		font-size: 45px;
+		font-size: ${rem(45)};
 	}
 
-	@media screen and (max-width: 800px) {
+	@media screen and (max-width: ${rem(800)}) {
 		> img {
 			width: ${rem(32)};
 			height: ${rem(32)};
 		}
 
 		> span {
-			width: 50px;
-			font-size: 45px;
+			width: ${rem(50)};
+			font-size: ${rem(45)};
 		}
-		margin-top: 0.5rem;
+		margin-top: ${rem(8)};
 	}
 `;
 
 export const ProfileLink = styled.span`
-	@media screen and (max-width: 800px) {
+	@media screen and (max-width: ${rem(800)}) {
 		> a > h3 {
-			margin-top: 0.5rem;
+			margin-top: ${rem(8)};
 		}
 	}
 
@@ -167,7 +156,7 @@ export const ProfileLink = styled.span`
 	}
 
 	> a > h3 {
-		border-radius: 0.25rem;
+		border-radius: ${rem(4)};
 	}
 `;
 
@@ -182,8 +171,8 @@ export const HandleStyled = styled.span`
 	margin-bottom: ${rem(5)};
 	font-size: ${rem(12)};
 	color: ${props => props.theme.text.muted};
-	@media screen and (max-width: 700px) {
-		margin-bottom: 0.5rem;
+	@media screen and (max-width: ${rem(700)}) {
+		margin-bottom: ${rem(8)};
 	}
 `;
 
@@ -235,10 +224,7 @@ export const CommentContainer = styled.div`
 	}
 
 	@media screen and (max-width: 500px) {
-		/* padding: 0; */
-		/* padding-left: 0.5rem; */
 		padding: ${rem(4)} ${rem(8)};
-		/* flex-direction: column; */
 	}
 `;
 

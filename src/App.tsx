@@ -21,7 +21,7 @@ import api from './api';
 
 import { PeachRoutes } from './PeachRoutes';
 import { darkTheme, lightTheme, PeachThemeProvider } from './Theme/theme';
-import { GlobalStyle } from './style';
+import { GlobalStyle } from './Theme/GlobalStyle';
 
 const App: React.FC = () => {
 	const [jwt, setJwt] = useState<string>(

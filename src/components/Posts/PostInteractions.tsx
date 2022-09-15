@@ -12,7 +12,7 @@ import {
 	InteractionInfo,
 	InteractionArea,
 	PostTime,
-} from '../../Friend/style';
+} from '../../pages/Profile/style';
 
 type Props = {
 	isCurUsersPost: boolean;

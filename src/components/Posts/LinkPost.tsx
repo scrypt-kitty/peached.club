@@ -1,9 +1,21 @@
 import React from 'react';
 import styled from 'styled-components';
+import { rem } from 'polished';
+
 import { LinkMessage } from '../../api/interfaces';
 
 import LinkIcon from '../../Theme/Icons/LinkIcon';
-import { Image } from '../../Friend/style';
+
+export const Image = styled.img`
+	max-width: 50%;
+	display: block;
+	margin-bottom: ${rem(16)};
+	background-color: ${props => props.theme.background.primary};
+
+	@media screen and (max-width: ${rem(1000)}) {
+		max-width: 100%;
+	}
+`;
 
 export const LinkText = styled.a`
 	text-decoration: none;
@@ -22,14 +34,14 @@ export const LinkText = styled.a`
 const LinkInfo = styled.div`
 	margin: 0 0;
 	padding: 0 0;
-	padding-top: 0.5rem;
-	padding-left: 1rem;
-	padding-bottom: 0.5rem;
-	margin-left: 0.25rem;
-	border-left: 0.25rem solid #cacaca;
+	padding-top: ${rem(8)};
+	padding-left: ${rem(16)};
+	padding-bottom: ${rem(8)};
+	margin-left: ${rem(4)};
+	border-left: ${rem(4)} solid #cacaca;
 
 	> img {
-		margin-top: 0.5rem;
+		margin-top: ${rem(8)};
 	}
 `;
 

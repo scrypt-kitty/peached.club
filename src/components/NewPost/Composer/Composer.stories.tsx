@@ -2,7 +2,6 @@ import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import { ComposerComponent, ComposerProps } from './Composer';
-import { Page } from '../../../Theme/Layout';
 
 import { darkTheme, lightTheme } from '../../../Theme/theme';
 import { ThemeProvider } from 'styled-components';
@@ -15,9 +14,7 @@ const ComposerStory = (
 	const { variant, ...rest } = props;
 	return (
 		<ThemeProvider theme={variant === 'dark' ? darkTheme : lightTheme}>
-			{/* <Page> */}
 			<ComposerComponent {...rest} />
-			{/* </Page> */}
 		</ThemeProvider>
 	);
 };

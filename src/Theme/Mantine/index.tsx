@@ -1,5 +1,13 @@
 import styled from 'styled-components';
-import { Textarea, Container, Avatar, Popover, Tabs } from '@mantine/core';
+import { rem } from 'polished';
+import {
+	Textarea,
+	TextInput,
+	Container,
+	Avatar,
+	Popover,
+	Tabs,
+} from '@mantine/core';
 
 export const MTextArea = styled(Textarea)`
 	.mantine-Textarea-input {
@@ -12,6 +20,21 @@ export const MTextArea = styled(Textarea)`
 	.mantine-Textarea-input:focus-within,
 	.mantine-Textarea-defaultVariant:active {
 		border-color: ${props => props.theme.border.primary};
+	}
+`;
+
+export const MTextInput = styled(TextInput)`
+	.mantine-TextInput-label {
+		color: ${props => props.theme.text.primary};
+	}
+
+	.mantine-TextInput-input,
+	.mantine-Input-defaultVariant {
+		background-color: ${props => props.theme.background.secondary};
+		border: 1px solid ${props => props.theme.border.secondary};
+		border-radius: ${rem(6)};
+		padding: ${rem(4)};
+		color: ${props => props.theme.text.primary};
 	}
 `;
 

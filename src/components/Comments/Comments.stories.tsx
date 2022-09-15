@@ -2,7 +2,6 @@ import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import { CommentsComponent, CommentsComponentProps } from './Comments';
-import { Page } from '../../Theme/Layout';
 
 import { darkTheme, lightTheme } from '../../Theme/theme';
 import { ThemeProvider } from 'styled-components';
@@ -16,9 +15,7 @@ const CommentsStory = (props: CommentsComponentProps & { variant: string }) => {
 	const { variant, ...rest } = props;
 	return (
 		<ThemeProvider theme={variant === 'dark' ? darkTheme : lightTheme}>
-			{/* <Page> */}
 			<CommentsComponent {...rest} />
-			{/* </Page> */}
 		</ThemeProvider>
 	);
 };
@@ -40,9 +37,7 @@ const Template: ComponentStory<typeof CommentsStory> = ({
 }) => {
 	return (
 		<ThemeProvider theme={variant === 'dark' ? darkTheme : lightTheme}>
-			<Page>
-				<CommentsComponent {...rest} />
-			</Page>
+			<CommentsComponent {...rest} />
 		</ThemeProvider>
 	);
 };
