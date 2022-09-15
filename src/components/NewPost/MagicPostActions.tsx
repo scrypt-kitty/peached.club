@@ -115,19 +115,18 @@ export const MagicPostActions = (props: MagicPostActionsProps) => {
 						title='Add GIF to post'
 					/>
 				</ActionButton>
-				<ActionButton>
+				{/* <ActionButton>
 					<GiftIcon
 						onClick={() => switchDisplayedInteraction('Oracle')}
 						title='Ask the oracle'
 					/>
-				</ActionButton>
+				</ActionButton> */}
 			</MagicPostActionsGroup>
-			{curDisplayedInteraction === 'Oracle' ? (
-				<MTextInput
-					label='🔮 Ask the oracle a question.'
-					placeholder='Will I see a rainbow today?'
-				/>
-			) : curDisplayedInteraction === 'Gif' ? (
+			{curDisplayedInteraction === 'Oracle' ? // <MTextInput
+			// 	label='🔮 Ask the oracle a question.'
+			// 	placeholder='Will I see a rainbow today?'
+			// />
+			null : curDisplayedInteraction === 'Gif' ? (
 				<GifPickerComponent onGifSelect={props.onGifSelect} />
 			) : null}
 		</div>
