@@ -158,6 +158,7 @@ export interface Comment {
 		posts: Post[] | null;
 		unreadPostCount: number;
 		lastRead: number;
+		avatarSrc?: string;
 	};
 }
 

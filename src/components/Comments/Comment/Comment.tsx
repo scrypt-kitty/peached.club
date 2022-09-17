@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import Linkify from 'linkify-react';
-import { Text, Avatar as MAvatar, Popover, Menu } from '@mantine/core';
+import { Text, Avatar as MAvatar, Menu } from '@mantine/core';
 
 import {
 	Comment as PostCommentProps,
@@ -21,8 +21,6 @@ import {
 	AvatarArea,
 	DeleteCommentContainer,
 } from './style';
-
-import { PrivateProfile } from '../../PrivateProfile/PrivateProfile';
 
 import { LINKIFY_OPTIONS } from '../../../constants';
 import { PeachContext } from '../../../PeachContext';
@@ -75,8 +73,6 @@ export const Comment: React.FC<CommentProps> = (props: CommentProps) => {
 	const { connections } = useContext(PeachContext);
 	const [deletePromptShowing, setDeletePromptShowing] =
 		useState<boolean>(false);
-	const [profilePreviewShowing, setProfilePreviewShowing] =
-		useState<boolean>(false);
 	const isRequester = props.requesterId === props.author.id;
 
 	const allFriends: (User | MutualFriend)[] = [
@@ -96,7 +92,7 @@ export const Comment: React.FC<CommentProps> = (props: CommentProps) => {
 					Are you sure you want to delete your comment?
 				</DeletePrompt>
 			) : null}
-			{(props.postAuthorId === props.requesterId || isRequester) && (
+			{(props.author.id === props.requesterId || isRequester) && (
 				<DeleteCommentContainer>
 					<Menu>
 						<Menu.Item
@@ -112,7 +108,7 @@ export const Comment: React.FC<CommentProps> = (props: CommentProps) => {
 				<AvatarArea>
 					<a href={`/friend/${props.author.id}`}>
 						<Avatar
-							src={props.avatarSrc}
+							src={props.author.avatarSrc ?? props.avatarSrc}
 							displayName={props.author.displayName}
 						/>
 					</a>
@@ -131,17 +127,6 @@ export const Comment: React.FC<CommentProps> = (props: CommentProps) => {
 						</Linkify>
 					</p>
 				</CommentText>
-				{profilePreviewShowing ? (
-					<PrivateProfile
-						onDismissPrivateProfile={() => setProfilePreviewShowing(false)}
-						avatarSrc={props.avatarSrc}
-						username={authorData ? authorData.name : props.author.name}
-						displayName={
-							authorData ? authorData.displayName : props.author.displayName
-						}
-						bio={authorData ? authorData.bio : props.author.bio}
-					/>
-				) : null}
 			</CommentContent>
 		</Container>
 	);

@@ -60,6 +60,7 @@ Primary.args = {
 				posts: [],
 				unreadPostCount: 0,
 				lastRead: 1,
+				avatarSrc: avatars[1],
 			},
 		},
 		{
@@ -74,6 +75,7 @@ Primary.args = {
 				posts: [],
 				unreadPostCount: 0,
 				lastRead: 1,
+				avatarSrc: avatars[0],
 			},
 		},
 	],

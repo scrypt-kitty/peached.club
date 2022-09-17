@@ -50,6 +50,8 @@ Primary.args = {
 		posts: [],
 		unreadPostCount: 0,
 		lastRead: 1,
+		avatarSrc:
+			'https://upload.wikimedia.org/wikipedia/commons/1/14/Karl-Marx.jpg',
 	},
 	isFriend: true,
 	mutualFriends: [],
