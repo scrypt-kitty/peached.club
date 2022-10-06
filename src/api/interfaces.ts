@@ -44,9 +44,9 @@ export type GifMessage = {
 
 export type LinkMessage = {
 	type: typeof POST_TYPE.LINK;
-	description: string;
+	description?: string;
 	imageURL?: string;
-	title: string;
+	title?: string;
 	url: string;
 };
 

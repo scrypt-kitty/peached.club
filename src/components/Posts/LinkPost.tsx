@@ -53,12 +53,10 @@ const LinkPost = (props: Props) => {
 	return (
 		<div>
 			<LinkText href={props.url}>
-				<LinkIcon /> {props.title}
+				<LinkIcon /> {props.title ?? props.url}
 				<LinkInfo>
-					<i>{props.description}</i>
-					{props.imageURL ? (
-						<Image src={props.imageURL} alt={`Link preview thumbnail`} />
-					) : null}
+					<i>{props.description ?? props.url}</i>
+					{props.imageURL && <Image src={props.imageURL} alt={`Thumbnail`} />}
 				</LinkInfo>
 			</LinkText>
 		</div>
