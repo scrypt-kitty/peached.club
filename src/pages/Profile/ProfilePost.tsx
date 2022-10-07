@@ -83,12 +83,7 @@ const DisplayedPost = ({ obj, id, index }: DisplayedPostProps) => {
 			return <LocationPost key={`${id}-loc-${index}`} {...obj} />;
 
 		case POST_TYPE.MUSIC:
-			return (
-				<MusicPost
-					trackId={obj.spotifyData.track.id}
-					key={`${id}-music-${index}`}
-				/>
-			);
+			return <MusicPost key={`${id}-music-${index}`} {...obj} />;
 
 		default:
 			return null;

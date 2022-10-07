@@ -63,7 +63,7 @@ export interface LocationMessage {
 export type MusicMessage = {
 	type: typeof POST_TYPE.MUSIC;
 	title: string;
-	spotifyData: {
+	spotifyData?: {
 		album: {
 			name: string;
 		};
