@@ -17,11 +17,10 @@ export const Image = styled.img`
 	}
 `;
 
-export const LinkText = styled.a`
+export const LinkText = styled.p`
 	text-decoration: none;
-	color: #fe4f72;
 
-	:visited {
+	a:visited {
 		text-decoration: none;
 		color: #fe4f72;
 	}
@@ -51,15 +50,15 @@ type Props = {
 
 const LinkPost = (props: Props) => {
 	return (
-		<div>
-			<LinkText href={props.url}>
+		<LinkText>
+			<a href={props.url}>
 				<LinkIcon /> {props.title ?? props.url}
-				<LinkInfo>
-					<i>{props.description ?? props.url}</i>
-					{props.imageURL && <Image src={props.imageURL} alt={`Thumbnail`} />}
-				</LinkInfo>
-			</LinkText>
-		</div>
+			</a>
+			<LinkInfo>
+				<i>{props.description ?? props.url}</i>
+				{props.imageURL && <Image src={props.imageURL} alt={`Thumbnail`} />}
+			</LinkInfo>
+		</LinkText>
 	);
 };
 

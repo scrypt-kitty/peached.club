@@ -14,5 +14,5 @@ export const Story = () => {
 
 export default {
 	component: Story,
-	title: 'Post/Post',
+	title: 'Post/PostPage',
 } as ComponentMeta<typeof Story>;

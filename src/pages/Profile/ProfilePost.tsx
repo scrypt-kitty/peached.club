@@ -102,7 +102,7 @@ export interface Props extends Post {
 	postAuthorAvatarSrc: string;
 }
 
-export const ProfilePosts = (props: Props) => {
+export const ProfilePost = (props: Props) => {
 	const [comments, setComments] = useState<Comment[]>(props.comments || []);
 	const [liked, toggleLiked] = useState<boolean>(props.likedByMe);
 	const [showComments, toggleComments] = useState<boolean>(false);

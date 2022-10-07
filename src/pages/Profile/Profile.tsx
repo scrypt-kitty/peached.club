@@ -16,7 +16,7 @@ import ACTIONS from '../../api/constants';
 
 import { FriendPostContent, EmptyStateWrapper } from './style';
 import { PeachContext } from '../../PeachContext';
-import { ProfilePosts } from './ProfilePosts';
+import { ProfilePost } from './ProfilePost';
 import NewPost from '../../components/NewPost';
 
 import { ProfileHeader } from '../../components/ProfileHeader/ProfileHeader';
@@ -155,7 +155,7 @@ export const ProfilePage = () => {
 						) : posts.length > 0 ? (
 							<div style={{ margin: '0' }}>
 								{posts.map(post => (
-									<ProfilePosts
+									<ProfilePost
 										{...post}
 										key={post.id}
 										deletePost={deletePost}
