@@ -25,6 +25,29 @@ import LinkPost from '../../components/Posts/LinkPost';
 import { MusicPost } from '../../components/Posts/MusicPost';
 import { VideoPost } from '../../components/Posts/VideoPost';
 
+const createComment = (
+	commentId: string,
+	commentBody: string,
+	authorId: string,
+	name: string,
+	displayName: string
+): Comment => {
+	return {
+		id: commentId,
+		body: commentBody,
+		author: {
+			id: authorId,
+			name,
+			displayName,
+			bio: '',
+			isPublic: false,
+			posts: [],
+			unreadPostCount: 0,
+			lastRead: 0,
+		},
+	};
+};
+
 const addNewlines = (txt: string, id: string) =>
 	txt.indexOf('\n') < 0
 		? txt
@@ -151,20 +174,14 @@ export const ProfilePost = (props: Props) => {
 		}).then((response: { data: CommentResponse }) => {
 			const resp = response.data;
 			if (resp) {
-				const newComment: Comment = {
-					id: resp.id,
-					body: txt,
-					author: {
-						id: resp.authorStreamID,
-						name: curUserData.name,
-						displayName: curUserData.displayName,
-						bio: '',
-						isPublic: false,
-						posts: [],
-						unreadPostCount: 0,
-						lastRead: 0,
-					},
-				};
+				const newComment = createComment(
+					resp.id,
+					txt,
+					resp.authorStreamID,
+					curUserData.name,
+					curUserData.displayName
+				);
+
 				setComments(comments => comments.concat([newComment]));
 				window.scrollTo(0, windowPositionY);
 			}
@@ -181,11 +198,16 @@ export const ProfilePost = (props: Props) => {
 		);
 	};
 
+	const onDeletePost = (id: string) => {
+		setDeletePromptShowing(false);
+		props.deletePost(props.id);
+	};
+
 	return (
 		<PostWrapper key={props.id}>
 			<>
 				<DeletePrompt
-					onDelete={() => props.deletePost(props.id)}
+					onDelete={() => onDeletePost(props.id)}
 					onCancel={() => setDeletePromptShowing(false)}
 					isShowing={deletePromptShowing}
 				>

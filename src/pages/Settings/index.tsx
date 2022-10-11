@@ -63,23 +63,27 @@ const ContactSection = () => (
 	<SettingsSection>
 		<SubTitle>Help or suggestions?</SubTitle>
 		<p>
-			Fill out this
-			<LinkText
-				href='https://forms.gle/uydFBf1fDCp5gSu97'
-				title='peached.club issues on github'
-			>
-				form
+			Fill out this{' '}
+			<LinkText>
+				<a
+					href='https://forms.gle/uydFBf1fDCp5gSu97'
+					title='peached.club issues on github'
+				>
+					form
+				</a>
 			</LinkText>
 			🥳
 		</p>
 		<SubTitle>Become an angel</SubTitle>
 		<p>
 			Support this project! Donate at{' '}
-			<LinkText
-				href='https://ko-fi.com/peachedclub'
-				title='donate at ko-fi to peachedclub'
-			>
-				ko-fi
+			<LinkText>
+				<a
+					href='https://ko-fi.com/peachedclub'
+					title='donate at ko-fi to peachedclub'
+				>
+					ko-fi
+				</a>
 			</LinkText>
 		</p>
 	</SettingsSection>

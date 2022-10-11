@@ -141,6 +141,8 @@ export const ProfilePage = () => {
 		);
 	};
 
+	const isNewPostButtonShowing = curUser !== null && curUser.id === id;
+
 	return (
 		<>
 			<Page>
@@ -168,7 +170,7 @@ export const ProfilePage = () => {
 						) : (
 							<EmptyState />
 						)}
-						{curUser !== null && curUser.id === id && <NewPost />}
+						{isNewPostButtonShowing && <NewPost />}
 					</>
 				) : (
 					<Loading />
