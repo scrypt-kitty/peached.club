@@ -26,7 +26,7 @@ interface ButtonStyleProps {
 	mode?: ButtonOptions;
 }
 
-type ButtonOptions = 'default' | 'bad' | 'success' | 'muted';
+export type ButtonOptions = 'default' | 'bad' | 'success' | 'muted';
 
 type BtnMappingType = {
 	[K in ButtonOptions]: {
@@ -133,6 +133,7 @@ const Button: React.FC<ButtonProps> = (props: ButtonProps) => (
 			lg={props.lg}
 			disabled={props.disabled}
 			colorHover={props.colorHover}
+			mode={props.mode}
 		>
 			{props.children}
 		</ButtonStyle>

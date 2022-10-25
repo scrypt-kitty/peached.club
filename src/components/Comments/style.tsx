@@ -113,19 +113,14 @@ export const Input = styled.textarea`
 
 export const TextArea = styled(MTextArea)`
 	margin-top: ${rem(16)};
+	margin-bottom: ${rem(8)};
 `;
 
-/*
- * aligned with ../Theme/Modal
- */
 export const ButtonWrapper = styled.span`
 	margin: 0;
 	z-index: 9999;
 `;
 
-/*
- * also aligned with ../Theme/Modal
- */
 export const DismissCommentsButtonContainer = styled.div`
 	cursor: pointer;
 	margin: 0;

@@ -10,7 +10,6 @@ import {
 	User,
 	FriendsOfFriendsResponse,
 	MutualFriend,
-	CurUser,
 } from '../../api/interfaces';
 import ACTIONS from '../../api/constants';
 
@@ -20,6 +19,7 @@ import { ProfilePost } from './ProfilePost';
 import NewPost from '../../components/NewPost';
 
 import { ProfileHeader } from '../../components/ProfileHeader/ProfileHeader';
+import { makeApiCall } from '../../api/api';
 const EmptyState = () => (
 	<EmptyStateWrapper>
 		<FriendPostContent>No posts yet!</FriendPostContent>
@@ -49,18 +49,26 @@ export const ProfilePage = () => {
 			return;
 		}
 
-		api(
-			ACTIONS.connectionStream,
-			jwt,
-			{},
-			curUser.id,
-			'',
-			'ProfilePage useeffect1'
-		).then((response: { data: CurUser }) => {
-			if (response.data) {
-				setCurUserData(response.data);
+		const getUserProfile = async () => {
+			const uri = `stream/id/${curUser.id}${
+				curUserData.cursor ? `?cursor=${curUserData.cursor}` : ''
+			}`;
+
+			try {
+				const response = await makeApiCall({
+					uri,
+					jwt,
+				});
+				if (response.data) {
+					setCurUserData(response.data);
+				}
+			} catch {
+				console.error(
+					`Error getting profile information for user @${curUserData.name}`
+				);
 			}
-		});
+		};
+		getUserProfile();
 		// eslint-disable-next-line
 	}, [curUserData.id, curUser, jwt]);
 
@@ -82,36 +90,47 @@ export const ProfilePage = () => {
 
 		const getUserProfile = async () => {
 			setPostsLoaded(false);
-			const resp: { data: User } = await api(
-				ACTIONS.connectionStream,
-				jwt,
-				{},
-				id,
-				'',
-				'ProfilePage getUserProfile useffect2'
-			);
 
-			// get posts by this user
-			if (resp.data.posts) {
-				resp.data.posts = resp.data.posts.reverse();
-				setCurUserProfile(resp.data);
-				setPosts(resp.data.posts);
-				setPostsLoaded(true);
+			try {
+				let uri = `stream/id/${id}${
+					curUserData.cursor ? `?cursor=${curUserData.cursor}` : ''
+				}`;
+				uri = `stream/id/${id}`;
 
-				// get this user's friends
-				const otherFriendsResponse: {
-					data: FriendsOfFriendsResponse;
-				} = await api(ACTIONS.getFriendsOfFriends, jwt, {}, resp.data.name);
-				if (
-					otherFriendsResponse.data &&
-					otherFriendsResponse.data.connections
-				) {
-					setOtherFriends(
-						otherFriendsResponse.data.connections.concat(peachFeed)
+				const response = await makeApiCall({
+					uri,
+					jwt,
+				});
+
+				if (response.data.posts) {
+					response.data.posts = response.data.posts.reverse();
+					setCurUserProfile(response.data);
+					setPosts(response.data.posts);
+					setPostsLoaded(true);
+
+					// get this user's friends
+					const otherFriendsResponse: {
+						data: FriendsOfFriendsResponse;
+					} = await api(
+						ACTIONS.getFriendsOfFriends,
+						jwt,
+						{},
+						response.data.name
 					);
+					if (
+						otherFriendsResponse.data &&
+						otherFriendsResponse.data.connections
+					) {
+						setOtherFriends(
+							otherFriendsResponse.data.connections.concat(peachFeed)
+						);
+					}
 				}
+			} catch (error) {
+				console.error(
+					`Error getting profile information for user @${curUserData.name} [${error}]`
+				);
 			}
-
 			// used to show prev/next arrows on nav to go through feeds
 			setCurFeedId(id);
 		};

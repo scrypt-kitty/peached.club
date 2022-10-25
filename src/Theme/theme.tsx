@@ -13,7 +13,7 @@ export const lightTheme = {
 		primary: '#ffffff',
 		secondary: '#E7E8EC',
 		hover: '#cacaca90',
-		accented: '#ffe8e5',
+		accented: '#FCF0E7',
 	},
 	accent: '#fe4f72',
 

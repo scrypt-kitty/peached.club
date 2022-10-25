@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import Dropdown, { DropdownUserItem } from '../../Theme/Dropdown';
-import Button from '../../Theme/Button';
+import { Button } from '@mantine/core';
 
 import { PeachContext } from '../../PeachContext';
 import { User } from '../../api/interfaces';
@@ -81,11 +81,14 @@ const AddComment: React.FC<AddCommentProps> = ({
 			<TextArea
 				value={newCommentText}
 				onChange={e => setNewCommentText(e.target.value)}
-				placeholder='Write a comment...'
+				placeholder='Say something nice'
 				autoFocus
 			/>
 			<ButtonWrapper>
 				<Button
+					radius='xl'
+					color='green'
+					size='xs'
 					disabled={newCommentText.length < 1}
 					onClick={() => {
 						if (newCommentText.length > 0) {
@@ -94,7 +97,7 @@ const AddComment: React.FC<AddCommentProps> = ({
 						}
 					}}
 				>
-					Post
+					Send
 				</Button>
 			</ButtonWrapper>
 		</AddCommentContainer>

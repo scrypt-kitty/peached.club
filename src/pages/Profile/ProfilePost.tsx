@@ -131,7 +131,12 @@ export const ProfilePost = (props: Props) => {
 	const [newCommentText, setNewCommentText] = useState('');
 
 	const msgs = props.message.map((obj, index) => (
-		<DisplayedPost obj={obj} index={index} id={props.id} />
+		<DisplayedPost
+			obj={obj}
+			index={index}
+			id={props.id}
+			key={props.id + index}
+		/>
 	));
 
 	const onClickLike = () => {

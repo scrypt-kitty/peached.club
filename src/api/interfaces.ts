@@ -218,6 +218,7 @@ export interface CurUser {
 	bio: string;
 	isPublic: boolean;
 	friendsSharing: boolean;
+	cursor?: number;
 }
 
 export const DummyCurUser: CurUser = {

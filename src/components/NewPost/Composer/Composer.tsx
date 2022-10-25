@@ -1,15 +1,14 @@
 import React, { useState, useRef, useContext } from 'react';
 
 import {
-	ImgurUploadResponse,
 	POST_TYPE,
 	GifMessage,
 	ImgBBUploadResponse,
 } from '../../../api/interfaces';
-import { UPLOAD_IMAGE, UPLOAD_TO_IMGBB } from '../../../api/constants';
+import { UPLOAD_TO_IMGBB } from '../../../api/constants';
 import { PeachContext } from '../../../PeachContext';
 
-import Button from '../../../Theme/Button';
+import { Button } from '@mantine/core';
 import { MTextArea as TextArea } from '../../../Theme/Mantine';
 import { DeletePrompt } from '../../Comments/style';
 
@@ -95,25 +94,6 @@ export const ComposerComponent = (
 					])
 				);
 			});
-		/*
-				await fetch(UPLOAD_IMAGE, req)
-			.then(resp => resp.json())
-			.then((resp: ImgurUploadResponse) => {
-				if (!resp.success) {
-					return;
-				}
-				setImages(images =>
-					images.concat([
-						{
-							type: POST_TYPE.IMAGE,
-							src: resp.data.link,
-							height: resp.data.height,
-							width: resp.data.width,
-						},
-					])
-				);
-			});
-		*/
 	};
 
 	const onSubmitPost = () => {
@@ -183,6 +163,8 @@ export const ComposerComponent = (
 				/>
 				<UploadedImages images={images} setImages={setImages} />
 				<Button
+					radius='md'
+					color='green'
 					disabled={images.length < 1 && postText.length < 1}
 					onClick={() => onSubmitPost()}
 				>

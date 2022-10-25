@@ -1,12 +1,11 @@
 import React, { useContext, useState } from 'react';
+
 import { Comment as CommentType, MutualFriend } from '../../api/interfaces';
 import { PeachContext } from '../../PeachContext';
-
 import AddComment from './AddComment';
-import { AllComments, DeletePrompt } from './style';
 import { Comment } from './Comment/Comment';
-// import Modal from '../../Theme/Modal';
 import { MModal as Modal, DisableBodyScroll } from '../../Theme/Mantine/Modal';
+import { AllComments, DeletePrompt } from './style';
 
 interface SharedCommentsProps {
 	deleteComment: (id: string) => void;
@@ -77,7 +76,6 @@ export const Comments = (props: CommentsProps) => {
 		if (id === postAuthorId) {
 			return postAuthorAvatarSrc;
 		}
-		//
 		const res = mutualFriends.filter(friend => friend.id === id);
 		if (res.length === 0 || !res[0].avatarSrc) {
 			return '/defaultavatar.jpg';
@@ -112,7 +110,7 @@ export const Comments = (props: CommentsProps) => {
 		<Modal
 			opened={isShowing}
 			onClose={() => onTryDismissComments(newCommentText)}
-			title='Comments'
+			title='Leave a comment'
 		>
 			<DisableBodyScroll />
 			<DeletePrompt
