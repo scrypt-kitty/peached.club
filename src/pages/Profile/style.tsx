@@ -64,12 +64,16 @@ export const PostWrapper = styled.div`
 		}
 	}
 
+	:last-of-type {
+		margin-bottom: ${rem(32)};
+	}
+
 	@media screen and (max-width: 800px) {
 		margin: 0;
 		padding: ${rem(24)} ${rem(16)} ${rem(16)};
 		:last-of-type {
 			padding-bottom: ${rem(24)};
-			margin-bottom: ${rem(64)};
+			margin-bottom: ${rem(32)};
 		}
 	}
 `;
@@ -132,4 +136,8 @@ export const PostTime = styled.div`
 	border-radius: ${rem(16)};
 	transition: 0.25s all ease;
 	height: ${rem(13)};
+`;
+
+export const EndText = styled.p`
+	color: ${props => props.theme.text.muted};
 `;

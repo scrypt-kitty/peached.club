@@ -3,6 +3,8 @@ import 'styled-components';
 declare module 'styled-components' {
 	export interface DefaultTheme {
 		name: string;
+		link: string;
+		accent: string;
 		text: {
 			primary: string;
 			muted: string;
@@ -14,7 +16,6 @@ declare module 'styled-components' {
 			hover: string;
 			accented: string;
 		};
-		accent: string;
 		border: {
 			primary: string;
 			secondary: string;

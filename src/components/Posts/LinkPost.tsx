@@ -19,10 +19,10 @@ export const Image = styled.img`
 
 export const LinkText = styled.p`
 	text-decoration: none;
-
+	a,
 	a:visited {
+		color: ${props => props.theme.link};
 		text-decoration: none;
-		color: #fe4f72;
 	}
 
 	> a:first-child {
@@ -30,7 +30,8 @@ export const LinkText = styled.p`
 	}
 `;
 
-const LinkInfo = styled.div`
+const LinkInfo = styled.span`
+	display: block;
 	margin: 0 0;
 	padding: 0 0;
 	padding-top: ${rem(8)};

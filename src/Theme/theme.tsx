@@ -2,7 +2,12 @@ import React from 'react';
 import { DefaultTheme, ThemeProvider } from 'styled-components';
 import { MantineProvider } from '@mantine/core';
 
-export const lightTheme = {
+const baseTheme = {
+	link: '#00A7FD',
+	accent: '#fe4f72',
+};
+
+export const LightThemeAdditions = {
 	name: 'light',
 	text: {
 		primary: '#333333',
@@ -15,17 +20,19 @@ export const lightTheme = {
 		hover: '#cacaca90',
 		accented: '#FCF0E7',
 	},
-	accent: '#fe4f72',
-
 	border: {
 		primary: '#555',
 		secondary: '#ddd',
 	},
 };
 
-export const darkTheme = {
+export const lightTheme = {
+	...LightThemeAdditions,
+	...baseTheme,
+};
+
+const darkThemeAdditions = {
 	name: 'dark',
-	accent: '#fe4f72',
 	text: {
 		primary: '#FFFFFF',
 		muted: '#cccc',
@@ -41,6 +48,11 @@ export const darkTheme = {
 		primary: '#999',
 		secondary: '#555',
 	},
+};
+
+export const darkTheme = {
+	...darkThemeAdditions,
+	...baseTheme,
 };
 
 export const PeachThemeProvider = (props: {

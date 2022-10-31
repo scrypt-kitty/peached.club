@@ -141,7 +141,7 @@ type MakeApiCallProps = {
 	method?: string;
 };
 
-export const makeApiCall = (props: MakeApiCallProps) => {
+export async function makeApiCall<T>(props: MakeApiCallProps): { data: T } {
 	const request = {
 		method: props.method ?? 'GET',
 		headers: {
@@ -162,6 +162,6 @@ export const makeApiCall = (props: MakeApiCallProps) => {
 			);
 		})
 		.then(response => response.json());
-};
+}
 
 export default api;

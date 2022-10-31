@@ -85,7 +85,7 @@ export const Link = styled.span`
 
 	> a {
 		text-decoration: none;
-		color: #fe4f72;
+		color: ${props => props.theme.link};
 		@media screen and (max-width: 700px) {
 			width: 100%;
 			display: inline-block;
@@ -93,7 +93,7 @@ export const Link = styled.span`
 	}
 
 	> a:visited {
-		color: #fe4f72;
+		color: ${props => props.theme.link};
 	}
 
 	:hover {
@@ -133,5 +133,3 @@ export const PageIconWrapper = styled.div<{ isActive: boolean }>`
 		stroke: #fff;
 	}
 `;
-
-export const FeedControls = styled.div``;

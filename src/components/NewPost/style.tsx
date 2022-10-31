@@ -45,8 +45,7 @@ export const NewPostButtonContainer = styled.div`
 
 	@media screen and (max-width: 700px) {
 		bottom: ${rem(64)};
-		right: 0;
-		left: ${rem(16)};
+		right: ${rem(16)};
 	}
 `;
 

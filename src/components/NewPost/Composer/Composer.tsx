@@ -1,4 +1,5 @@
 import React, { useState, useRef, useContext } from 'react';
+import { Button } from '@mantine/core';
 
 import {
 	POST_TYPE,
@@ -8,7 +9,6 @@ import {
 import { UPLOAD_TO_IMGBB } from '../../../api/constants';
 import { PeachContext } from '../../../PeachContext';
 
-import { Button } from '@mantine/core';
 import { MTextArea as TextArea } from '../../../Theme/Mantine';
 import { DeletePrompt } from '../../Comments/style';
 
@@ -55,15 +55,6 @@ export const ComposerComponent = (
 			return;
 		}
 
-		const req = {
-			method: 'POST',
-			headers: {
-				Authorization: 'Client-ID f3f088c23280375',
-				Accept: 'application/json',
-			},
-			body: createImageUploadRequest(files),
-		};
-
 		const req2 = {
 			method: 'POST',
 			headers: {
@@ -109,6 +100,8 @@ export const ComposerComponent = (
 				  ).concat(images)
 				: images
 		);
+		setPostText('');
+		setImages([]);
 	};
 
 	const onGifSelect = (selectedGif: GiphyImage) => {
@@ -126,15 +119,27 @@ export const ComposerComponent = (
 		if (postText || numImages) {
 			setIsDismissWarningShowing(true);
 		} else {
+			setPostText('');
+			setImages([]);
+			setIsDismissWarningShowing(false);
 			toggleComposer();
 		}
 	};
+
+	const onDeletePostDraft = () => {
+		setIsDismissWarningShowing(false);
+		setPostText('');
+		setImages([]);
+		toggleComposer();
+	};
+
+	const isPostButtonDisabled = images.length < 1 && postText.length < 1;
 
 	return (
 		<>
 			<DeletePrompt
 				isShowing={isDismissWarningShowing}
-				onDelete={toggleComposer}
+				onDelete={onDeletePostDraft}
 				onCancel={() => setIsDismissWarningShowing(false)}
 			>
 				Are you sure you want to abandon this post?
@@ -165,7 +170,7 @@ export const ComposerComponent = (
 				<Button
 					radius='md'
 					color='green'
-					disabled={images.length < 1 && postText.length < 1}
+					disabled={isPostButtonDisabled}
 					onClick={() => onSubmitPost()}
 				>
 					Post

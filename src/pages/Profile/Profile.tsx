@@ -1,129 +1,131 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import React, { useContext, useState, useEffect, useCallback } from 'react';
+import { Button, Center } from '@mantine/core';
+import { useParams } from 'react-router-dom';
 
 import api from '../../api';
 import Loading from '../../Theme/Loading';
 
 import { Page } from '../../Theme/Layout';
 import {
-	Post,
 	User,
 	FriendsOfFriendsResponse,
 	MutualFriend,
+	CurUser,
 } from '../../api/interfaces';
 import ACTIONS from '../../api/constants';
 
-import { FriendPostContent, EmptyStateWrapper } from './style';
+import { FriendPostContent, EmptyStateWrapper, EndText } from './style';
 import { PeachContext } from '../../PeachContext';
 import { ProfilePost } from './ProfilePost';
 import NewPost from '../../components/NewPost';
 
 import { ProfileHeader } from '../../components/ProfileHeader/ProfileHeader';
 import { makeApiCall } from '../../api/api';
+
 const EmptyState = () => (
 	<EmptyStateWrapper>
 		<FriendPostContent>No posts yet!</FriendPostContent>
 	</EmptyStateWrapper>
 );
 
+const ProfileBottom = (props: {
+	cursor: string | null;
+	loadMorePosts: () => void;
+	morePostsLoading: boolean;
+}) => {
+	return (
+		<Center>
+			{!props.morePostsLoading && props.cursor ? (
+				<Button radius='md' color='green' onClick={() => props.loadMorePosts()}>
+					See more posts 📖
+				</Button>
+			) : props.morePostsLoading ? (
+				<Loading />
+			) : (
+				<EndText>You've reached the end!</EndText>
+			)}
+		</Center>
+	);
+};
+
 export const ProfilePage = () => {
 	const { jwt, curUser, peachFeed, curUserData, setCurUserData } =
 		useContext(PeachContext);
-	const navigate = useNavigate();
-
-	const [posts, setPosts] = useState<Post[]>([]);
-	const [viewingUser, setCurUserProfile] = useState<User | null>(null);
-	const [curFeedId, setCurFeedId] = useState<string>('');
-	const [otherFriends, setOtherFriends] = useState<MutualFriend[]>([]);
-	const [postsLoaded, setPostsLoaded] = useState<boolean>(false);
-
 	const { id } = useParams();
 
-	useEffect(() => {
-		window.scroll({ top: 0, left: 0, behavior: 'smooth' });
-		if (!jwt || !curUser) {
-			navigate('/login', { replace: true });
-		}
+	const [viewingUser, setViewingUserProfile] = useState<User | null>(null);
+	const [otherFriends, setOtherFriends] = useState<MutualFriend[]>([]);
+	const [postsLoading, setPostsLoading] = useState<boolean>(false);
+	const [morePostsLoading, setMorePostsLoading] = useState<boolean>(false);
 
-		if (curUserData.id || !curUser) {
-			return;
-		}
+	const isNewPostButtonShowing = curUser !== null && curUser.id === id;
 
-		const getUserProfile = async () => {
-			const uri = `stream/id/${curUser.id}${
-				curUserData.cursor ? `?cursor=${curUserData.cursor}` : ''
-			}`;
+	const getUserProfile = useCallback(async () => {
+		const uri = `stream/id/${curUser?.id}${
+			curUserData.cursor ? `?cursor=${curUserData.cursor}` : ''
+		}`;
 
-			try {
-				const response = await makeApiCall({
-					uri,
-					jwt,
-				});
-				if (response.data) {
-					setCurUserData(response.data);
-				}
-			} catch {
-				console.error(
-					`Error getting profile information for user @${curUserData.name}`
-				);
+		try {
+			const response = await makeApiCall<CurUser>({
+				uri,
+				jwt,
+			});
+			if (response.data) {
+				setCurUserData(response.data);
 			}
-		};
-		getUserProfile();
-		// eslint-disable-next-line
-	}, [curUserData.id, curUser, jwt]);
-
-	useEffect(() => {
-		window.scroll({ top: 0, left: 0, behavior: 'smooth' });
-		// eslint-disable-next-line
-	}, [id]);
-
-	useEffect(() => {
-		if (!viewingUser && peachFeed) {
-			setCurUserProfile(peachFeed.filter(user => user.id === id)[0]);
+		} catch {
+			console.error(
+				`Error getting profile information for user @${curUserData.name}. Please contact peached.app@gmail.com.`
+			);
 		}
-	}, [peachFeed, viewingUser]);
+	}, [curUserData, setCurUserData, jwt, curUser]);
 
-	useEffect(() => {
-		if (!id || !jwt) {
+	const getViewingUserFriends = useCallback(async () => {
+		if (!jwt || !id || !viewingUser) {
 			return;
 		}
 
-		const getUserProfile = async () => {
-			setPostsLoaded(false);
+		const uri = `stream/n/${viewingUser.name}/connections`;
+		const response = await makeApiCall<FriendsOfFriendsResponse>({
+			uri,
+			jwt,
+		});
+
+		if (response.data && response.data.connections) {
+			setOtherFriends(response.data.connections.concat(peachFeed));
+		}
+	}, [viewingUser, jwt, id, peachFeed]);
+
+	const getViewingUserProfile = useCallback(
+		async (useCursor = false) => {
+			if (!jwt || !id) {
+				return;
+			}
 
 			try {
-				let uri = `stream/id/${id}${
-					curUserData.cursor ? `?cursor=${curUserData.cursor}` : ''
-				}`;
-				uri = `stream/id/${id}`;
+				let uri = `stream/id/${id}`;
+				if (useCursor && viewingUser?.cursor) {
+					uri += `?cursor=${viewingUser.cursor}`;
+				}
 
-				const response = await makeApiCall({
+				const response = await makeApiCall<User>({
 					uri,
 					jwt,
 				});
 
 				if (response.data.posts) {
-					response.data.posts = response.data.posts.reverse();
-					setCurUserProfile(response.data);
-					setPosts(response.data.posts);
-					setPostsLoaded(true);
+					const postsResult = response.data.posts.reverse();
 
-					// get this user's friends
-					const otherFriendsResponse: {
-						data: FriendsOfFriendsResponse;
-					} = await api(
-						ACTIONS.getFriendsOfFriends,
-						jwt,
-						{},
-						response.data.name
-					);
-					if (
-						otherFriendsResponse.data &&
-						otherFriendsResponse.data.connections
-					) {
-						setOtherFriends(
-							otherFriendsResponse.data.connections.concat(peachFeed)
-						);
+					if (useCursor && viewingUser && viewingUser.id === id) {
+						setViewingUserProfile({
+							...viewingUser,
+							cursor: response.data.cursor,
+							posts: [...viewingUser.posts, ...postsResult],
+						});
+						console.log('okay we do this');
+					} else {
+						setViewingUserProfile({ ...response.data, posts: postsResult });
+						console.log('now this');
 					}
 				}
 			} catch (error) {
@@ -131,36 +133,74 @@ export const ProfilePage = () => {
 					`Error getting profile information for user @${curUserData.name} [${error}]`
 				);
 			}
-			// used to show prev/next arrows on nav to go through feeds
-			setCurFeedId(id);
-		};
-		getUserProfile();
-	}, [id, jwt, peachFeed]);
+		},
+		[id, jwt, curUserData.name, viewingUser]
+	);
 
-	useEffect(() => {
+	const markFeedRead = useCallback(async () => {
 		try {
 			if (curUser !== null && curUser.id !== id) {
-				const markRead = async () => {
-					api(ACTIONS.markFeedRead, jwt, {}, id);
-				};
-				markRead();
+				makeApiCall<object>({
+					uri: `stream/id/${id}/read`,
+					jwt,
+					method: 'PUT',
+				});
 			}
 		} catch (_error) {}
-	}, [curUser, jwt, peachFeed, id]);
+	}, [jwt, id, curUser]);
 
 	const deletePost = (id: string) => {
 		const windowPositionY = window.scrollY;
+		if (!viewingUser) {
+			return;
+		}
 		api(ACTIONS.deletePost, jwt, {}, id).then(
 			(response: { success: number }) => {
 				if (response.success === 1) {
-					setPosts(posts.filter(p => p.id !== id));
+					const posts = viewingUser.posts.filter(p => p.id !== id);
+
+					setViewingUserProfile({
+						...viewingUser,
+						posts,
+					});
+
 					window.scrollTo(0, windowPositionY);
 				}
 			}
 		);
 	};
 
-	const isNewPostButtonShowing = curUser !== null && curUser.id === id;
+	const loadMorePosts = () => {
+		setMorePostsLoading(true);
+		getViewingUserProfile(true);
+		setMorePostsLoading(false);
+	};
+
+	useEffect(() => {
+		if (!viewingUser && peachFeed) {
+			setViewingUserProfile(peachFeed.filter(user => user.id === id)[0]);
+		}
+	}, [peachFeed, viewingUser]);
+
+	useEffect(() => {
+		window.scroll({ top: 0, left: 0, behavior: 'smooth' });
+		setViewingUserProfile(null);
+		markFeedRead();
+		setPostsLoading(true);
+		getUserProfile();
+		getViewingUserProfile();
+		getViewingUserFriends();
+		setPostsLoading(false);
+		// eslint-disable-next-line
+	}, [id]);
+
+	useEffect(() => {
+		return () => {
+			setViewingUserProfile(null);
+			setPostsLoading(true);
+			setMorePostsLoading(false);
+		};
+	}, []);
 
 	return (
 		<>
@@ -169,23 +209,30 @@ export const ProfilePage = () => {
 					<>
 						<ProfileHeader
 							viewingUser={viewingUser}
-							postsLoaded={postsLoaded}
+							postsLoading={!postsLoading}
 						/>
-						{!postsLoaded ? (
+						{postsLoading ? (
 							<Loading />
-						) : posts.length > 0 ? (
-							<div style={{ margin: '0' }}>
-								{posts.map(post => (
-									<ProfilePost
-										{...post}
-										key={post.id}
-										deletePost={deletePost}
-										author={viewingUser.id}
-										otherFriends={otherFriends}
-										postAuthorAvatarSrc={viewingUser.avatarSrc}
-									/>
-								))}
-							</div>
+						) : viewingUser.posts.length > 0 ? (
+							<>
+								<div style={{ margin: '0' }}>
+									{viewingUser.posts.map(post => (
+										<ProfilePost
+											{...post}
+											key={post.id}
+											deletePost={deletePost}
+											author={viewingUser.id}
+											otherFriends={otherFriends}
+											postAuthorAvatarSrc={viewingUser.avatarSrc}
+										/>
+									))}
+								</div>
+								<ProfileBottom
+									morePostsLoading={morePostsLoading}
+									cursor={viewingUser.cursor || null}
+									loadMorePosts={loadMorePosts}
+								/>
+							</>
 						) : (
 							<EmptyState />
 						)}

@@ -77,7 +77,7 @@ export const ProfileHeaderText = styled.div`
 
 	a,
 	a:visited {
-		color: ${props => props.theme.accent};
+		color: ${props => props.theme.link};
 		text-decoration: none;
 	}
 

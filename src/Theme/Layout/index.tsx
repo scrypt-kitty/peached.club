@@ -15,8 +15,8 @@ export const PageContainer = styled.main`
 		margin: ${rem(48)} ${rem(32)};
 	}
 
-	@media screen and (max-width: 700px) {
-		margin: 0 0;
+	@media screen and (max-width: 830px) {
+		margin: 0 0 ${rem(64)};
 	}
 `;
 

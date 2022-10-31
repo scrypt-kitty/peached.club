@@ -8,11 +8,17 @@ export const createPostPreview = (post: PostContent) => {
 				? post.text.slice(0, 240) + '...'
 				: post.text;
 		case POST_TYPE.IMAGE:
-			return 'Image post';
+			return 'Image';
 		case POST_TYPE.LINK:
-			return 'Link post';
+			return 'Link';
 		case POST_TYPE.LOCATION:
 			return 'Location post';
+		case POST_TYPE.GIF:
+			return 'Gif';
+		case POST_TYPE.MUSIC:
+			return 'Music post';
+		case POST_TYPE.VIDEO:
+			return 'Video';
 		default:
 			return '';
 	}
