@@ -122,10 +122,11 @@ export const ProfilePage = () => {
 							cursor: response.data.cursor,
 							posts: [...viewingUser.posts, ...postsResult],
 						});
-						console.log('okay we do this');
+						// console.log('okay we do this');
 					} else {
+						// console.log(postsResult);
 						setViewingUserProfile({ ...response.data, posts: postsResult });
-						console.log('now this');
+						// console.log('now this');
 					}
 				}
 			} catch (error) {
@@ -176,11 +177,11 @@ export const ProfilePage = () => {
 		setMorePostsLoading(false);
 	};
 
-	useEffect(() => {
-		if (!viewingUser && peachFeed) {
-			setViewingUserProfile(peachFeed.filter(user => user.id === id)[0]);
-		}
-	}, [peachFeed, viewingUser]);
+	// useEffect(() => {
+	// 	if (!viewingUser && peachFeed) {
+	// 		setViewingUserProfile(peachFeed.filter(user => user.id === id)[0]);
+	// 	}
+	// }, [peachFeed, viewingUser]);
 
 	useEffect(() => {
 		window.scroll({ top: 0, left: 0, behavior: 'smooth' });
@@ -205,13 +206,13 @@ export const ProfilePage = () => {
 	return (
 		<>
 			<Page>
-				{viewingUser && curUserData ? (
+				{curUserData ? (
 					<>
 						<ProfileHeader
 							viewingUser={viewingUser}
-							postsLoading={!postsLoading}
+							postsLoading={postsLoading}
 						/>
-						{postsLoading ? (
+						{postsLoading || !viewingUser ? (
 							<Loading />
 						) : viewingUser.posts.length > 0 ? (
 							<>

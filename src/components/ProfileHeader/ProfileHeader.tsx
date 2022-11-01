@@ -2,7 +2,7 @@ import React from 'react';
 import Linkify from 'linkify-react';
 
 import { User } from '../../api/interfaces';
-import { LINKIFY_OPTIONS } from '../../constants';
+import { LINKIFY_OPTIONS, DEFAULT_AVATAR_SRC } from '../../constants';
 
 import {
 	Avatar,
@@ -13,7 +13,7 @@ import {
 } from './style';
 
 export type ProfileHeaderProps = {
-	viewingUser: User;
+	viewingUser: User | null;
 	postsLoading: boolean;
 };
 
@@ -21,32 +21,33 @@ export const ProfileHeader = ({
 	viewingUser,
 	postsLoading,
 }: ProfileHeaderProps) => {
+	const avatarSrc =
+		postsLoading || !viewingUser ? DEFAULT_AVATAR_SRC : viewingUser.avatarSrc;
+	const avatarAlt = `${viewingUser?.name}'s avatar`;
+	const displayName =
+		postsLoading || !viewingUser ? '...' : viewingUser.displayName;
+	const username = postsLoading || !viewingUser ? '...' : viewingUser.name;
+
 	return (
 		<ProfileHeaderContainer>
 			<ProfileHeaderContent>
 				<Avatar>
 					<img
-						src={
-							postsLoading
-								? viewingUser.avatarSrc || '/defaultavatar.jpg'
-								: '/defaultavatar.jpg'
-						}
+						src={avatarSrc}
 						style={{ opacity: postsLoading ? '1' : '0.5' }}
-						alt={`${viewingUser.name}'s avatar`}
+						alt={avatarAlt}
 					/>
 				</Avatar>
 				<ProfileHeaderText>
-					<h2>{postsLoading ? viewingUser.displayName : '...'}</h2>
-					<ProfileHeaderHandle>
-						@{postsLoading ? viewingUser.name : '...'}
-					</ProfileHeaderHandle>
+					<h2>{displayName}</h2>
+					<ProfileHeaderHandle>@{username}</ProfileHeaderHandle>
 					<p>
-						{postsLoading ? (
+						{postsLoading || !viewingUser ? (
+							'...'
+						) : (
 							<Linkify tagName='span' options={LINKIFY_OPTIONS}>
 								{viewingUser.bio}
 							</Linkify>
-						) : (
-							'...'
 						)}
 					</p>
 				</ProfileHeaderText>

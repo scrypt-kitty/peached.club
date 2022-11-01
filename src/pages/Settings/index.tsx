@@ -68,10 +68,9 @@ const ContactSection = () => (
 					href='https://forms.gle/uydFBf1fDCp5gSu97'
 					title='peached.club issues on github'
 				>
-					Fill out this form!
+					Fill out this form! 🥳
 				</a>
 			</LinkText>
-			🥳
 		</p>
 		<SubTitle>Become an angel</SubTitle>
 		<p>
@@ -80,7 +79,7 @@ const ContactSection = () => (
 					href='https://ko-fi.com/peachedclub'
 					title='donate at ko-fi to peachedclub'
 				>
-					Donate at ko-fi
+					Donate at ko-fi 😇
 				</a>
 			</LinkText>
 		</p>

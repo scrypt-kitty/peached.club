@@ -7,3 +7,5 @@ export const LINKIFY_OPTIONS = {
 	defaultProtocol: 'http',
 	target: '_blank',
 };
+
+export const DEFAULT_AVATAR_SRC = '/defaultavatar.jpg';
