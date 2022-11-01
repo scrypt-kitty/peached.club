@@ -177,12 +177,6 @@ export const ProfilePage = () => {
 		setMorePostsLoading(false);
 	};
 
-	// useEffect(() => {
-	// 	if (!viewingUser && peachFeed) {
-	// 		setViewingUserProfile(peachFeed.filter(user => user.id === id)[0]);
-	// 	}
-	// }, [peachFeed, viewingUser]);
-
 	useEffect(() => {
 		window.scroll({ top: 0, left: 0, behavior: 'smooth' });
 		setViewingUserProfile(null);
@@ -214,7 +208,7 @@ export const ProfilePage = () => {
 						/>
 						{postsLoading || !viewingUser ? (
 							<Loading />
-						) : viewingUser.posts.length > 0 ? (
+						) : viewingUser && viewingUser.posts.length > 0 ? (
 							<>
 								<div style={{ margin: '0' }}>
 									{viewingUser.posts.map(post => (
