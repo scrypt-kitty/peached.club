@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, Navigate } from 'react-router-dom';
 
 import { LoginPage } from './pages/Login';
 import { Logout } from './pages/Login/Logout';
@@ -7,6 +7,13 @@ import { FeedPage } from './pages/Feed';
 import { ProfilePage } from './pages/Profile/Profile';
 import { ActivityPage } from './pages/Activity';
 import { SettingsPage } from './pages/Settings';
+
+const RedirectToDownloadGuide = () => {
+	window.location.replace(
+		'https://www.notion.so/Download-Peach-Posts-Manually-a2e5ad1dbd644d05a9defc6a8fbfed22'
+	);
+	return null;
+};
 
 export const PeachRoutes = () => (
 	<Routes>
@@ -19,5 +26,9 @@ export const PeachRoutes = () => (
 		<Route path='/activity' element={<ActivityPage />} />
 		<Route path='/settings' element={<SettingsPage />} />
 		<Route path='/logout' element={<Logout />} />
+		<Route
+			path='/peach-posts-download-guide'
+			element={<RedirectToDownloadGuide />}
+		/>
 	</Routes>
 );
