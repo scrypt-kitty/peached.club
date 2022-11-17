@@ -180,7 +180,7 @@ export const ProfilePage = () => {
 	useEffect(() => {
 		window.scroll({ top: 0, left: 0, behavior: 'smooth' });
 		setViewingUserProfile(null);
-		// markFeedRead();
+		markFeedRead();
 		setPostsLoading(true);
 		getUserProfile();
 		getViewingUserProfile();
