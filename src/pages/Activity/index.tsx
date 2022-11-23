@@ -163,6 +163,11 @@ export const ActivityPage = () => {
 						</Tabs.Panel>
 					</Tabs>
 				</TabsWrapper>
+				{inboundFriendRequests.length < 1 && (
+					<Center>
+						<Link to='/activity/friend-requests'>See friend requests</Link>
+					</Center>
+				)}
 			</RiseAndFadeAnimationContainer>
 		</Page>
 	);
