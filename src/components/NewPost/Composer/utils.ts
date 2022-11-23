@@ -56,7 +56,11 @@ export const parseHTMLForUpload = (
 		.replace(/&gt;/g, '>')
 		.replace(/&quot;/g, '"')
 		.replace(/&#39;/g, "'")
-		.replace(/&amp;/g, '&');
+		.replace(/&amp;/g, '&')
+		.replace(/<(\/)?(strong|em|ul|i)>/g, '')
+		.replace(/<(\/)?(u)>/g, '')
+		.replace(/<li>/g, '<p>• ')
+		.replace(/<\/li>/g, '</p>');
 
 	while (curText.length > 0) {
 		const startTextIndex = curText.indexOf(HTML_P_START);

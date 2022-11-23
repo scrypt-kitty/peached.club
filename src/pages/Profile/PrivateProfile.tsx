@@ -32,11 +32,6 @@ const PrivateProfileComponent = (props: PrivateProfileProps) => {
 };
 
 export const PrivateProfile = (props: PrivateProfileProps) => {
-	const { jwt } = useContext(PeachContext);
-
-	const onClickAddFriend = () => {
-		const x = `/stream/n/${props.viewingUser.name}/connection`;
-	};
 	return (
 		<>
 			<PrivateProfileComponent viewingUser={props.viewingUser} />

@@ -2,26 +2,22 @@ import React, { useState } from 'react';
 import { useSpring, animated, config } from 'react-spring';
 import dayjs from 'dayjs';
 
-import {
-	ActionButton,
-	PictureInputStyled,
-	MagicPostActionsGroup,
-} from './style';
-import ImageIcon from '../../Theme/Icons/ImageIcon';
+import { EMPTY_COMPOSER_CONTENT } from './Composer/Composer';
+
+import { ActionButton, MagicPostActionsGroup } from './style';
 import ClockIcon from '../../Theme/Icons/ClockIcon';
 import CalendarIcon from '../../Theme/Icons/CalendarIcon';
-import GiftIcon from '../../Theme/Icons/GiftIcon';
 import { GifPicker } from './GifPicker/GifPicker';
 import { GiphyImage } from '../../api/interfaces';
 
-export const getCurrentTime = (currentPostLen: number) => {
+export const getCurrentTime = () => {
 	const now = dayjs().format('h:mm A');
-	return `${currentPostLen ? '\n' : ''}🕓 ${now}\n`;
+	return `🕓 ${now}\n`;
 };
 
-export const getCurrentDate = (currentPostLen: number) => {
+export const getCurrentDate = () => {
 	const now = dayjs().format('dddd, MMMM D, YYYY');
-	return `${currentPostLen ? '\n' : ''}📰 ${now} \n`;
+	return `📰 ${now}\n`;
 };
 
 type DisplayedActionInteraction = 'Oracle' | 'Gif';
@@ -73,55 +69,50 @@ export const MagicPostActions = (props: MagicPostActionsProps) => {
 		});
 	};
 
+	const addToPost = (content: string) => {
+		props.setPostText(postText => {
+			if (postText === EMPTY_COMPOSER_CONTENT) {
+				return content;
+			}
+			return postText + '\n' + content;
+		});
+	};
+
+	const showCurrentDate = () => {
+		const date = getCurrentDate();
+		props.setPostText(postText => {
+			if (postText === EMPTY_COMPOSER_CONTENT) {
+				return date;
+			}
+			return postText + '\n' + date;
+		});
+	};
+
+	const showCurrentTime = () => {
+		const date = getCurrentDate();
+		props.setPostText(postText => {
+			if (postText === EMPTY_COMPOSER_CONTENT) {
+				return date;
+			}
+			return postText + '\n' + date;
+		});
+	};
+
 	return (
 		<div>
 			<MagicPostActionsGroup spacing={'xs'}>
-				{/*
-				<ActionButton>
-					<ImageIcon accented title='Add an image to your post' />
-					<PictureInputStyled
-						type='file'
-						accept='image*'
-						onChange={e =>
-							props.curUserId
-								? props.uploadImage(e.target.files, props.curUserId)
-								: null
-						}
-					/>
-				</ActionButton>
-					*/}
 				<ActionButton>
 					<ClockIcon
-						onClick={() =>
-							props.setPostText(
-								postText => postText + getCurrentTime(postText.length)
-							)
-						}
+						onClick={() => addToPost(getCurrentTime())}
 						title='Add the current time to post'
 					/>
 				</ActionButton>
 				<ActionButton>
 					<CalendarIcon
-						onClick={() =>
-							props.setPostText(
-								postText => postText + getCurrentDate(postText.length)
-							)
-						}
+						onClick={() => addToPost(getCurrentDate())}
 						title="Add today's date to post"
 					/>
 				</ActionButton>
-				<ActionButton>
-					<GiftIcon
-						onClick={() => switchDisplayedInteraction('Gif')}
-						title='Add GIF to post'
-					/>
-				</ActionButton>
-				{/* <ActionButton>
-					<GiftIcon
-						onClick={() => switchDisplayedInteraction('Oracle')}
-						title='Ask the oracle'
-					/>
-				</ActionButton> */}
 			</MagicPostActionsGroup>
 			{curDisplayedInteraction === 'Gif' && (
 				<GifPickerComponent onGifSelect={props.onGifSelect} />

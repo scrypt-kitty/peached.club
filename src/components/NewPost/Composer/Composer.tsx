@@ -1,27 +1,25 @@
 import React, { useState, useCallback, useContext } from 'react';
 import { RichTextEditor } from '@mantine/rte';
+import { Button, Modal, Center, Stack, Flex, Space } from '@mantine/core';
 
 import {
 	POST_TYPE,
 	GifMessage,
 	ImgBBUploadResponse,
 	ImageMessage,
+	UploadableMessageTypes,
+	GiphyImage,
 } from '../../../api/interfaces';
 import { UPLOAD_TO_IMGBB } from '../../../api/constants';
-import { makeApiCall } from '../../../api/api';
 import { PeachContext } from '../../../PeachContext';
 
-import Button from '../../../Theme/Button';
-import { DeletePrompt } from '../../Comments/style';
-
-import { Modal } from './style';
+import { Text } from '../../../Theme/Type';
 import { MagicPostActions } from '../MagicPostActions';
-import { GiphyImage, UploadableMessageTypes } from '../../../api/interfaces';
 import { parseHTMLForUpload } from './utils';
 
 const IMG_API_KEY =
 	process.env.REACT_APP_IBB_API_KEY || process.env.IBB_API_KEY || '';
-const EMPTY_COMPOSER_CONTENT = `<p><br></p>`;
+export const EMPTY_COMPOSER_CONTENT = `<p><br></p>`;
 
 function createImageUploadRequest(files: FileList) {
 	const file = files[0];
@@ -93,25 +91,6 @@ export const ComposerComponent = (
 					])
 				);
 			});
-		/*
-				await fetch(UPLOAD_IMAGE, req)
-			.then(resp => resp.json())
-			.then((resp: ImgurUploadResponse) => {
-				if (!resp.success) {
-					return;
-				}
-				setImages(images =>
-					images.concat([
-						{
-							type: POST_TYPE.IMAGE,
-							src: resp.data.link,
-							height: resp.data.height,
-							width: resp.data.width,
-						},
-					])
-				);
-			});
-		*/
 	};
 
 	const onSubmitPost = useCallback(() => {
@@ -119,6 +98,7 @@ export const ComposerComponent = (
 
 		if (parsedComposerText[0]) {
 			onSubmit(parsedComposerText);
+			setPostText('<p><br></p>');
 		}
 	}, [postText, uploadedImages, onSubmit]);
 
@@ -186,20 +166,41 @@ export const ComposerComponent = (
 
 	return (
 		<>
-			{isDismissWarningShowing && (
-				<DeletePrompt
-					isShowing
-					onDelete={onDeleteDraft}
-					onCancel={() => setIsDismissWarningShowing(false)}
-				>
-					Are you sure you want to abandon this post? 😳
-				</DeletePrompt>
-			)}
 			<Modal
-				opened={props.isOpen}
+				opened={isOpen}
 				onClose={() => onTryDismissComposer()}
 				centered
+				withCloseButton={false}
 			>
+				<Modal
+					opened={isDismissWarningShowing}
+					onClose={() => setIsDismissWarningShowing(false)}
+					withCloseButton={false}
+					centered
+					size={350}
+				>
+					<Center>
+						<Stack>
+							<Text centered>
+								Are you sure you want to abandon this post? 😳
+							</Text>
+							<Center>
+								<Flex>
+									<Button color='pink' onClick={onDeleteDraft}>
+										Yep
+									</Button>
+									<Space w='md' />
+									<Button
+										color='gray'
+										onClick={() => setIsDismissWarningShowing(false)}
+									>
+										Nope
+									</Button>
+								</Flex>
+							</Center>
+						</Stack>
+					</Center>
+				</Modal>
 				<RichTextEditor
 					value={postText}
 					onChange={onChangeComposerText}
@@ -214,7 +215,12 @@ export const ComposerComponent = (
 					uploadImage={uploadImage}
 					onGifSelect={onGifSelect}
 				/>
-				<Button disabled={isComposerEmpty} onClick={() => onSubmitPost()}>
+				<Button
+					disabled={isComposerEmpty}
+					onClick={() => onSubmitPost()}
+					color='pink'
+					radius='lg'
+				>
 					Post
 				</Button>
 			</Modal>
