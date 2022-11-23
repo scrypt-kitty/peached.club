@@ -1,7 +1,14 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Notification, TextInput } from '@mantine/core';
-import { IconCheck } from '@tabler/icons';
+import {
+	Notification,
+	TextInput,
+	Avatar,
+	Button,
+	Space,
+	FileButton,
+} from '@mantine/core';
+import { IconCheck, IconMoonStars } from '@tabler/icons';
 
 import {
 	STORAGE_IS_DARK_MODE,
@@ -11,12 +18,11 @@ import {
 import { MiniLoader } from '../../Theme/Loading';
 import { PeachContext } from '../../PeachContext';
 import ACTIONS from '../../api/constants';
-import { NameChangeResponse } from '../../api/interfaces';
+import { ImgBBUploadResponse, NameChangeResponse } from '../../api/interfaces';
 import api from '../../api';
 
 import { Page } from '../../Theme/Layout';
 import { Title, SubTitle } from '../../Theme/Type';
-import Button from '../../Theme/Button';
 import { Label, Fieldset } from '../../Theme/Form';
 import NightModeIcon from '../../Theme/Icons/NightModeIcon';
 import {
@@ -28,6 +34,11 @@ import {
 import { ERROR } from '../../api/error';
 import { LinkText } from '../../components/Posts/LinkPost';
 import { RiseAndFadeAnimationContainer } from '../../Theme/Animations';
+import { DEFAULT_AVATAR_SRC } from '../../constants';
+import { makeApiCall } from '../../api/api';
+
+const IMG_API_KEY =
+	process.env.REACT_APP_IBB_API_KEY || process.env.IBB_API_KEY || '';
 
 export const SettingsPage = () => {
 	const navigate = useNavigate();
@@ -94,8 +105,11 @@ const ContactSection = () => (
 const CustomizationSection = (props: { toggleDarkMode: Function }) => (
 	<SettingsSection>
 		<SubTitle>Customize app appearance</SubTitle>
-		<Button onClick={() => props.toggleDarkMode()}>
-			<NightModeIcon />
+		<Button
+			onClick={() => props.toggleDarkMode()}
+			color='pink'
+			leftIcon={<IconMoonStars size={16} />}
+		>
 			Toggle dark mode
 		</Button>
 	</SettingsSection>
@@ -106,7 +120,7 @@ export type PeachAccountSectionProps = {
 };
 
 export const PeachAccountSection = (props: PeachAccountSectionProps) => {
-	const { jwt, curUserData } = useContext(PeachContext);
+	const { jwt, curUserData, setCurUserData } = useContext(PeachContext);
 	const [isButtonDisabled, setButtonDisabled] = useState<boolean>(true);
 	const [newUserName, setNewUserName] = useState<string>('');
 	const [newDisplayName, setNewDisplayName] = useState<string>('');
@@ -188,10 +202,75 @@ export const PeachAccountSection = (props: PeachAccountSectionProps) => {
 		} else setButtonDisabled(true);
 	}, [newUserName, newDisplayName, newBio]);
 
+	const onClickUploadAvatar = useCallback(
+		async (file: File | null) => {
+			if (!file || !jwt) {
+				return;
+			}
+
+			try {
+				const formData = new FormData();
+				formData.append('image', file);
+
+				const uploadResp = await makeApiCall<ImgBBUploadResponse>({
+					uri: `https://api.imgbb.com/1/upload?key=${IMG_API_KEY}`,
+					body: formData,
+					method: 'POST',
+					stringify: false,
+				});
+
+				const success = uploadResp.success;
+
+				if (!success) {
+					throw Error();
+				}
+
+				const { url } = uploadResp.data;
+				const uploadAvatarResp = await makeApiCall<{
+					data: { avatarSrc: string };
+					success: number;
+				}>({
+					uri: `stream/avatarSrc`,
+					body: {
+						avatarSrc: url,
+					},
+					method: 'PUT',
+					jwt,
+				});
+
+				if (!uploadAvatarResp.data.avatarSrc) {
+					throw Error('Couldnt upload new pfp to peach!');
+				}
+
+				setCurUserData({
+					...curUserData,
+					avatarSrc: uploadAvatarResp.data.avatarSrc,
+				});
+			} catch (e) {
+				console.error(e);
+			}
+		},
+		[jwt, curUserData]
+	);
+
 	return (
 		<SettingsSection>
 			<SubTitle>Peach account settings</SubTitle>
 			<Fieldset>
+				<Label htmlFor='displayName'>Avatar</Label>
+				<Avatar
+					src={curUserData.avatarSrc ?? DEFAULT_AVATAR_SRC}
+					size='xl'
+					radius='xl'
+				/>
+				<Space h='sm' />
+				<FileButton
+					onChange={onClickUploadAvatar}
+					accept='image/png,image/jpeg'
+				>
+					{props => <Button {...props}>Upload new avatar</Button>}
+				</FileButton>
+				<Space h='lg' />
 				<Label htmlFor='displayName'>Display name</Label>
 				<TextInput
 					id='displayName'
@@ -267,7 +346,7 @@ export const PeachAccountSection = (props: PeachAccountSectionProps) => {
 				Submit
 			</Button>
 			<LogoutButtonWrapper>
-				<Button isSmall onClick={() => props.logout()}>
+				<Button onClick={() => props.logout()} color='red'>
 					Log out
 				</Button>
 			</LogoutButtonWrapper>
