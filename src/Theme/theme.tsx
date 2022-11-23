@@ -64,6 +64,7 @@ export const PeachThemeProvider = (props: {
 		<>
 			<MantineProvider
 				theme={{
+					colorScheme: props.theme.name === 'light' ? 'light' : 'dark',
 					colors: {
 						pink: [
 							'#ffe3ea',

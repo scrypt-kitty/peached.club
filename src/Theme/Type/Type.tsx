@@ -19,12 +19,14 @@ export const Handle = styled.p`
 
 type TextProps = {
 	muted?: boolean;
+	centered?: boolean;
 };
 
 export const Text = styled.p<TextProps>`
 	font-family: 'Lato', sans-serif;
 	color: ${props =>
 		props.muted ? props.theme.text.muted : props.theme.text.primary};
+	${props => (props.centered ? 'text-align: center;' : '')}
 `;
 
 export const Header3 = styled.h3<TextProps>`
