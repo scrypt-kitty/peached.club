@@ -1,11 +1,12 @@
 import React, { useContext } from 'react';
-import { Button, Center, Space } from '@mantine/core';
-import { IconHeartHandshake } from '@tabler/icons';
+import { Center, Space } from '@mantine/core';
+import { IconLock } from '@tabler/icons';
+import { useTheme } from 'styled-components';
 
 import { PeachContext } from '../../PeachContext';
 import { User } from '../../api/interfaces';
-import { makeApiCall } from '../../api/api';
 
+import { Text } from '../../Theme/Type';
 import { ProfileHeader } from '../../components/ProfileHeader/ProfileHeader';
 
 type PrivateProfileProps = {
@@ -13,18 +14,18 @@ type PrivateProfileProps = {
 };
 
 const PrivateProfileComponent = (props: PrivateProfileProps) => {
+	const theme = useTheme();
 	return (
 		<>
-			<ProfileHeader viewingUser={props.viewingUser} loading={false} />
+			<ProfileHeader
+				viewingUser={props.viewingUser}
+				loading={false}
+				setViewingUser={(user: User | null) => null}
+			/>
 			<Space h='md' />
 			<Center>
-				<Button
-					variant='gradient'
-					gradient={{ from: '#ed6ea0', to: '#ec8c69', deg: 35 }}
-					leftIcon={<IconHeartHandshake />}
-				>
-					Add friend
-				</Button>
+				<IconLock size={32} color={theme.accent} />
+				<Text>You'll have to send a friend request to this peach's posts</Text>
 			</Center>
 		</>
 	);

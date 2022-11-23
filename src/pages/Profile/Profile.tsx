@@ -237,7 +237,11 @@ export const ProfilePage = () => {
 				<RiseAndFadeAnimationContainer>
 					{curUserData ? (
 						<>
-							<ProfileHeader viewingUser={viewingUser} loading={postsLoading} />
+							<ProfileHeader
+								viewingUser={viewingUser}
+								loading={postsLoading}
+								setViewingUser={setViewingUserProfile}
+							/>
 							{postsLoading || !viewingUser ? (
 								<Loading />
 							) : viewingUser &&

@@ -2,17 +2,21 @@ import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 import styled from 'styled-components';
 
-import { ProfileHeader, ProfileHeaderProps } from './ProfileHeader';
+import {
+	ProfileHeaderComponent,
+	ProfileHeaderComponentProps,
+} from './ProfileHeader';
+import { DEFAULT_AVATAR_SRC } from '../../constants';
 
 import { darkTheme, lightTheme } from '../../Theme/theme';
 import { ThemeProvider } from 'styled-components';
 
-const Story = (props: ProfileHeaderProps & { variant: string }) => {
+const Story = (props: ProfileHeaderComponentProps & { variant: string }) => {
 	const { variant, ...rest } = props;
 	return (
 		<ThemeProvider theme={variant === 'dark' ? darkTheme : lightTheme}>
 			<Page>
-				<ProfileHeader {...rest} />
+				<ProfileHeaderComponent {...rest} />
 			</Page>
 		</ThemeProvider>
 	);
@@ -41,13 +45,13 @@ const Page = styled.div`
 
 export const Primary = Template.bind({});
 Primary.args = {
-	loading: true,
+	loading: false,
 	variant: 'dark',
 	viewingUser: {
 		id: '1235',
 		name: 'futuresounds',
 		displayName: 'Hatsune Miku',
-		avatarSrc: 'http://peach.cool/images/icon-peach-header-big@2x.png',
+		avatarSrc: DEFAULT_AVATAR_SRC,
 		bio: 'Hey there shdf sdjhf https://news.ycombinator.com/ sjdkfh sdjf sdjf d k',
 		isPublic: false,
 		friendsSharing: false,
@@ -59,4 +63,5 @@ Primary.args = {
 		lastOnline: 0,
 		isFavorite: true,
 	},
+	onClickFollowingButton: () => null,
 };

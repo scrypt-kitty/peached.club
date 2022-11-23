@@ -1,9 +1,26 @@
-import React from 'react';
+import React, { useCallback, useContext, useState } from 'react';
 import Linkify from 'linkify-react';
+import {
+	ActionIcon,
+	Modal,
+	Center,
+	Button,
+	Stack,
+	Flex,
+	Space,
+} from '@mantine/core';
+import { IconMoodSmileBeam } from '@tabler/icons';
 
-import { User } from '../../api/interfaces';
+import { PeachContext } from '../../PeachContext';
+import {
+	DefaultResponse,
+	NewFriendRequestResponse,
+	User,
+} from '../../api/interfaces';
 import { LINKIFY_OPTIONS, DEFAULT_AVATAR_SRC } from '../../constants';
+import { makeApiCall } from '../../api/api';
 
+import { Text } from '../../Theme/Type';
 import {
 	Avatar,
 	ProfileHeaderContainer,
@@ -12,12 +29,21 @@ import {
 	ProfileHeaderContent,
 } from './style';
 
-export type ProfileHeaderProps = {
+type BaseProfileHeaderProps = {
 	viewingUser: User | null;
 	loading: boolean;
 };
+interface ProfileHeaderProps extends BaseProfileHeaderProps {
+	setViewingUser: (user: User | null) => void;
+}
+export interface ProfileHeaderComponentProps extends BaseProfileHeaderProps {
+	onClickFollowingButton: () => void;
+	isLoggedInUser: boolean;
+}
 
-export const ProfileHeader = ({ viewingUser, loading }: ProfileHeaderProps) => {
+export const ProfileHeaderComponent = (props: ProfileHeaderComponentProps) => {
+	const { loading, viewingUser, onClickFollowingButton, isLoggedInUser } =
+		props;
 	const avatarSrc =
 		loading || !viewingUser || !viewingUser.avatarSrc
 			? DEFAULT_AVATAR_SRC
@@ -25,6 +51,11 @@ export const ProfileHeader = ({ viewingUser, loading }: ProfileHeaderProps) => {
 	const avatarAlt = `${viewingUser?.name}'s avatar`;
 	const displayName = loading || !viewingUser ? '...' : viewingUser.displayName;
 	const username = loading || !viewingUser ? '...' : viewingUser.name;
+	const followingIconVariant = viewingUser
+		? viewingUser.youFollow
+			? 'filled'
+			: 'outline'
+		: 'filled';
 
 	return (
 		<ProfileHeaderContainer>
@@ -49,7 +80,197 @@ export const ProfileHeader = ({ viewingUser, loading }: ProfileHeaderProps) => {
 						)}
 					</p>
 				</ProfileHeaderText>
+				{!isLoggedInUser && viewingUser && !loading && (
+					<ActionIcon
+						variant={followingIconVariant}
+						color='pink'
+						onClick={onClickFollowingButton}
+					>
+						<IconMoodSmileBeam size={16} />
+					</ActionIcon>
+				)}
 			</ProfileHeaderContent>
 		</ProfileHeaderContainer>
+	);
+};
+
+type FRIEND_STATUS =
+	| 'SELF'
+	| 'LOADING'
+	| 'FOLLOWING'
+	| 'OUTBOUND_REQUEST'
+	| 'INBOUND_REQUEST'
+	| 'NOT_FOLLOWING';
+
+function getConfirmationModalMessage(friendStatus: FRIEND_STATUS) {
+	switch (friendStatus) {
+		case 'FOLLOWING':
+			return `Unfriend this peach?`;
+		case 'OUTBOUND_REQUEST':
+			return `Cancel friend request to this peach?`;
+		case 'INBOUND_REQUEST':
+			return `Accept friend request from this peach?`;
+		case 'NOT_FOLLOWING':
+			return `Send friend request to this peach?`;
+		default:
+			return `You shouldn't be seeing this message 🫣 Contact peached.app@gmail.com!`;
+	}
+}
+
+export const ProfileHeader = (props: ProfileHeaderProps) => {
+	const {
+		jwt,
+		connections,
+		setConnections,
+		outboundFriendRequests,
+		setOutboundFriendRequests,
+		inboundFriendRequests,
+		curUser,
+	} = useContext(PeachContext);
+
+	const [isConfirmationModalShowing, setIsConfirmationModalShowing] =
+		useState<boolean>(false);
+
+	const { viewingUser, loading, setViewingUser } = props;
+	let friendStatus: FRIEND_STATUS = 'LOADING';
+
+	if (viewingUser && curUser) {
+		if (viewingUser.id === curUser.id) {
+			friendStatus = 'SELF';
+		} else if (viewingUser.youFollow) {
+			friendStatus = 'FOLLOWING';
+		} else {
+			const existingOutboundRequest = outboundFriendRequests.filter(
+				req => req.stream.id === viewingUser.id
+			)[0];
+			if (existingOutboundRequest) {
+				friendStatus = 'OUTBOUND_REQUEST';
+			} else {
+				const existingInboundRequest = inboundFriendRequests.filter(
+					req => req.stream.id === viewingUser.id
+				)[0];
+				if (existingInboundRequest) {
+					friendStatus = 'INBOUND_REQUEST';
+				} else {
+					friendStatus = 'NOT_FOLLOWING';
+				}
+			}
+		}
+	}
+
+	const handleFriendRequests = useCallback(async () => {
+		if (!jwt || !viewingUser) {
+			return;
+		}
+
+		try {
+			if (viewingUser.youFollow) {
+				const uri = `stream/id/${viewingUser.id}/connection`;
+				const resp = await makeApiCall<DefaultResponse>({
+					uri,
+					method: 'DELETE',
+					jwt,
+				});
+
+				if (!resp.success) {
+					throw Error(
+						`Couldn't unfriend user ${viewingUser.id}. Please contact peached.app@gmail.com.`
+					);
+				}
+
+				setViewingUser({
+					...viewingUser,
+					youFollow: false,
+					followsYou: false, // change this for public profiles?
+					posts: [],
+				});
+				setConnections(connections.filter(user => user.id !== viewingUser.id));
+			} else {
+				const existingRequest = outboundFriendRequests.filter(
+					req => req.stream.id === viewingUser.id
+				)[0];
+
+				if (existingRequest) {
+					// remove friend request; friend request has already been sent
+					const uri = `friend-request/${existingRequest.id}`;
+					const response = await makeApiCall<DefaultResponse>({
+						uri,
+						jwt,
+						method: 'DELETE',
+					});
+
+					if (!response || !response.success) {
+						throw Error(
+							`Couldn't delete friend request (id: ${existingRequest.id}) to user ${viewingUser.id}`
+						);
+					} else {
+						setOutboundFriendRequests(
+							outboundFriendRequests.filter(r => r.id !== viewingUser.id)
+						);
+					}
+				} else {
+					// send a friend request
+					const resp = await makeApiCall<NewFriendRequestResponse>({
+						uri: `stream/n/${viewingUser.name}/connection`,
+						method: 'POST',
+						jwt,
+					});
+
+					if (!resp.success) {
+						throw Error(
+							`Couldn't send a friend request to user ${viewingUser.name}. Please contact peached.app@gmail.com`
+						);
+					}
+
+					setOutboundFriendRequests(
+						outboundFriendRequests.concat({ ...resp.data })
+					);
+				}
+			}
+		} catch (e) {
+			console.error(e);
+		}
+		setIsConfirmationModalShowing(false);
+	}, [jwt, connections, outboundFriendRequests, viewingUser]);
+
+	const onClickFollowingButton = () => {
+		setIsConfirmationModalShowing(true);
+	};
+
+	return (
+		<>
+			<Modal
+				opened={isConfirmationModalShowing}
+				onClose={() => setIsConfirmationModalShowing(false)}
+				withCloseButton={false}
+				centered
+			>
+				<Center>
+					<Stack>
+						<Text centered>{getConfirmationModalMessage(friendStatus)}</Text>
+						<Center>
+							<Flex>
+								<Button color='pink' onClick={handleFriendRequests}>
+									Confirm
+								</Button>
+								<Space w='md' />
+								<Button
+									color='gray'
+									onClick={() => setIsConfirmationModalShowing(false)}
+								>
+									Cancel
+								</Button>
+							</Flex>
+						</Center>
+					</Stack>
+				</Center>
+			</Modal>
+			<ProfileHeaderComponent
+				viewingUser={viewingUser}
+				loading={loading}
+				onClickFollowingButton={onClickFollowingButton}
+				isLoggedInUser={friendStatus === 'SELF'}
+			/>
+		</>
 	);
 };

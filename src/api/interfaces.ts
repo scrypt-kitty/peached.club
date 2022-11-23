@@ -243,6 +243,7 @@ export interface User extends CurUser {
 
 export interface PendingFriendRequest {
 	id: string;
+	status?: string;
 	stream: {
 		id: string;
 		name: string;
@@ -252,9 +253,12 @@ export interface PendingFriendRequest {
 		unreadPostCount: number;
 		lastRead: number;
 		avatarSrc: string;
+		friendsSharing?: boolean;
+		followsYou?: boolean;
+		youFollow?: boolean;
 	};
 
-	createdTime: number;
+	// createdTime: number;
 }
 
 export interface Connections {
@@ -485,4 +489,26 @@ export type ImgBBUploadResponse = {
 	};
 	success: boolean;
 	status: number;
+};
+
+export type NewFriendRequestResponse = {
+	data: {
+		id: string;
+		status: string;
+		stream: {
+			avatarSrc: string;
+			bio: string;
+			displayName: string;
+			friendsSharing: boolean;
+			id: string;
+			isPublic: boolean;
+			lastRead: number;
+			name: string;
+			posts: Post[] | null;
+			unreadPostCount: 0;
+			youFollow: boolean;
+		};
+	};
+
+	success: boolean;
 };
