@@ -19,7 +19,6 @@ const getImageMessagesFromHTML = (
 	while (curText.length > 0) {
 		const startImgIndex = curText.indexOf(HTML_IMG_START);
 
-		console.log('lol');
 		if (startImgIndex < 0) {
 			break;
 		}
