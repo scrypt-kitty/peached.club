@@ -88,11 +88,9 @@ export const ActivityPage = () => {
 		<Page>
 			<RiseAndFadeAnimationContainer>
 				<Title>Activity</Title>
-				{outboundFriendRequests.length > 0 && (
+				{inboundFriendRequests.length > 0 && (
 					<Link to='/activity/friend-requests'>
-						<FriendRequestsPreview
-							numRequests={outboundFriendRequests.length}
-						/>
+						<FriendRequestsPreview numRequests={inboundFriendRequests.length} />
 					</Link>
 				)}
 				<TabsWrapper>
