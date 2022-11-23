@@ -145,7 +145,7 @@ export const FriendRequestsPage = () => {
 		async (id: string) => {
 			const uri = `friend-request/${id}/decline`;
 			try {
-				const response = await makeApiCall<DefaultResponse>({
+				const response = await makeApiCall<{ data: DefaultResponse }>({
 					uri,
 					jwt,
 					method: 'POST',
@@ -153,7 +153,6 @@ export const FriendRequestsPage = () => {
 				if (!response || !response.data.success) {
 					throw Error('No');
 				} else {
-					console.log('wat');
 					setInboundFriendRequests(
 						inboundFriendRequests.filter(r => r.id !== id)
 					);

@@ -69,7 +69,7 @@ export const ProfilePage = () => {
 		}`;
 
 		try {
-			const response = await makeApiCall<CurUser>({
+			const response = await makeApiCall<{ data: CurUser }>({
 				uri,
 				jwt,
 			});
@@ -89,12 +89,12 @@ export const ProfilePage = () => {
 		}
 
 		const uri = `stream/n/${viewingUser.name}/connections`;
-		const response = await makeApiCall<FriendsOfFriendsResponse>({
+		const response = await makeApiCall<{ data: FriendsOfFriendsResponse }>({
 			uri,
 			jwt,
 		});
 
-		if (response.data && response.data.connections) {
+		if (response && response.data.connections) {
 			setOtherFriends(response.data.connections.concat(peachFeed));
 		}
 	}, [viewingUser, jwt, id, peachFeed]);
@@ -111,7 +111,7 @@ export const ProfilePage = () => {
 					uri += `?cursor=${viewingUser.cursor}`;
 				}
 
-				const response = await makeApiCall<User>({
+				const response = await makeApiCall<{ data: User }>({
 					uri,
 					jwt,
 				});

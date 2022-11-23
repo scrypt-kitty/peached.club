@@ -137,24 +137,31 @@ type MakeApiCallProps = {
 	uri: string;
 	body?: object;
 	userId?: string;
-	jwt: string;
+	jwt?: string;
 	method?: string;
+	headers?: object;
+	stringify?: boolean;
 };
 
-export async function makeApiCall<T>(props: MakeApiCallProps): { data: T } {
+export async function makeApiCall<T>(props: MakeApiCallProps): T {
+	const { stringify = true } = props;
 	const request = {
 		method: props.method ?? 'GET',
 		headers: {
-			'Content-Type': 'application/json',
-			Authorization: `Bearer ${props.jwt}`,
+			...props.headers,
 		},
 	};
 
-	if (props.body) {
-		request.body = JSON.stringify(props.body);
+	if (props.jwt) {
+		request.headers.Authorization = `Bearer ${props.jwt}`;
+		request.headers['Content-Type'] = 'application/json';
 	}
 
-	return fetch(URL_PREFIX + props.uri, request)
+	if (props.body) {
+		request.body = stringify ? JSON.stringify(props.body) : props.body;
+	}
+
+	return fetch(props.jwt ? URL_PREFIX + props.uri : props.uri, request)
 		.catch(err => {
 			console.error(err);
 			throw new Error(
