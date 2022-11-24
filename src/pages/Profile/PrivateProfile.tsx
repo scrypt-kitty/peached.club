@@ -25,7 +25,9 @@ const PrivateProfileComponent = (props: PrivateProfileProps) => {
 			<Space h='md' />
 			<Center>
 				<IconLock size={32} color={theme.accent} />
-				<Text>You'll have to send a friend request to this peach's posts</Text>
+				<Text>
+					You'll have to send a friend request to see this peach's posts
+				</Text>
 			</Center>
 		</>
 	);
