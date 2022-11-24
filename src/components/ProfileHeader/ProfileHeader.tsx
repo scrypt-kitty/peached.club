@@ -9,7 +9,7 @@ import {
 	Flex,
 	Space,
 } from '@mantine/core';
-import { IconMoodSmileBeam } from '@tabler/icons';
+import { IconMoodSmileBeam, IconStar } from '@tabler/icons';
 
 import { PeachContext } from '../../PeachContext';
 import {
@@ -38,12 +38,18 @@ interface ProfileHeaderProps extends BaseProfileHeaderProps {
 }
 export interface ProfileHeaderComponentProps extends BaseProfileHeaderProps {
 	onClickFollowingButton: () => void;
+	onClickFavoriteButton: () => void;
 	isLoggedInUser: boolean;
 }
 
 export const ProfileHeaderComponent = (props: ProfileHeaderComponentProps) => {
-	const { loading, viewingUser, onClickFollowingButton, isLoggedInUser } =
-		props;
+	const {
+		loading,
+		viewingUser,
+		onClickFollowingButton,
+		isLoggedInUser,
+		onClickFavoriteButton,
+	} = props;
 	const avatarSrc =
 		loading || !viewingUser || !viewingUser.avatarSrc
 			? DEFAULT_AVATAR_SRC
@@ -53,6 +59,11 @@ export const ProfileHeaderComponent = (props: ProfileHeaderComponentProps) => {
 	const username = loading || !viewingUser ? '...' : viewingUser.name;
 	const followingIconVariant = viewingUser
 		? viewingUser.youFollow
+			? 'filled'
+			: 'outline'
+		: 'filled';
+	const favoriteIconVariant = viewingUser
+		? viewingUser.isFavorite
 			? 'filled'
 			: 'outline'
 		: 'filled';
@@ -81,13 +92,29 @@ export const ProfileHeaderComponent = (props: ProfileHeaderComponentProps) => {
 					</p>
 				</ProfileHeaderText>
 				{!isLoggedInUser && viewingUser && !loading && (
-					<ActionIcon
-						variant={followingIconVariant}
-						color='pink'
-						onClick={onClickFollowingButton}
-					>
-						<IconMoodSmileBeam size={16} />
-					</ActionIcon>
+					<>
+						<Flex>
+							<ActionIcon
+								variant={followingIconVariant}
+								color='pink'
+								onClick={onClickFollowingButton}
+							>
+								<IconMoodSmileBeam size={16} />
+							</ActionIcon>
+							{viewingUser.youFollow && (
+								<>
+									<Space w='sm' />
+									<ActionIcon
+										variant={favoriteIconVariant}
+										color='yellow'
+										onClick={onClickFavoriteButton}
+									>
+										<IconStar size={16} />
+									</ActionIcon>
+								</>
+							)}
+						</Flex>
+					</>
 				)}
 			</ProfileHeaderContent>
 		</ProfileHeaderContainer>
@@ -237,6 +264,51 @@ export const ProfileHeader = (props: ProfileHeaderProps) => {
 		setIsConfirmationModalShowing(true);
 	};
 
+	const onClickFavoriteButton = useCallback(async () => {
+		if (!jwt || !viewingUser || !viewingUser.youFollow) {
+			return;
+		}
+
+		try {
+			const isFavorite = viewingUser.isFavorite;
+			let method = 'POST';
+			if (isFavorite) {
+				method = 'DELETE';
+			}
+
+			const resp = await makeApiCall<DefaultResponse>({
+				uri: `stream/id/${viewingUser.id}/favorite`,
+				method,
+				jwt,
+			});
+
+			if (!resp.success) {
+				throw Error(
+					`Couldnt add or remove user ${viewingUser.id} from favorites!`
+				);
+			}
+
+			setViewingUser({
+				...viewingUser,
+				isFavorite: !isFavorite,
+			});
+
+			setConnections(
+				connections.map(c => {
+					if (c.id === viewingUser.id) {
+						return {
+							...c,
+							isFavorite: !isFavorite,
+						};
+					}
+					return c;
+				})
+			);
+		} catch (e) {
+			console.error(e);
+		}
+	}, [jwt, viewingUser, connections]);
+
 	return (
 		<>
 			<Modal
@@ -269,6 +341,7 @@ export const ProfileHeader = (props: ProfileHeaderProps) => {
 				viewingUser={viewingUser}
 				loading={loading}
 				onClickFollowingButton={onClickFollowingButton}
+				onClickFavoriteButton={onClickFavoriteButton}
 				isLoggedInUser={friendStatus === 'SELF'}
 			/>
 		</>
