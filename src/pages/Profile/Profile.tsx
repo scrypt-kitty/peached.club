@@ -12,6 +12,7 @@ import {
 	MutualFriend,
 	CurUser,
 	Post,
+	DefaultResponse,
 } from '../../api/interfaces';
 import ACTIONS from '../../api/constants';
 
@@ -52,8 +53,15 @@ const ProfileBottom = (props: {
 };
 
 export const ProfilePage = () => {
-	const { jwt, curUser, peachFeed, curUserData, setCurUserData } =
-		useContext(PeachContext);
+	const {
+		jwt,
+		curUser,
+		peachFeed,
+		curUserData,
+		setCurUserData,
+		connections,
+		setConnections,
+	} = useContext(PeachContext);
 	const { id } = useParams();
 
 	const [viewingUser, setViewingUserProfile] = useState<User | null>(null);
@@ -143,14 +151,30 @@ export const ProfilePage = () => {
 	const markFeedRead = useCallback(async () => {
 		try {
 			if (curUser !== null && curUser.id !== id) {
-				makeApiCall<object>({
+				const resp = await makeApiCall<DefaultResponse>({
 					uri: `stream/id/${id}/read`,
 					jwt,
 					method: 'PUT',
 				});
+				if (!resp.success) {
+					throw Error(`Couldn't mark feed read for user ${id}`);
+				}
+				setConnections(
+					connections.map(c => {
+						if (c.id === id) {
+							return {
+								...c,
+								unreadPostCount: 0,
+							};
+						}
+						return c;
+					})
+				);
 			}
-		} catch (_error) {}
-	}, [jwt, id, curUser]);
+		} catch (e) {
+			console.error(e);
+		}
+	}, [jwt, id, curUser, connections]);
 
 	const deletePost = (id: string) => {
 		const windowPositionY = window.scrollY;
