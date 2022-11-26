@@ -164,7 +164,7 @@ const App: React.FC = () => {
 						{bigErrorMessage && (
 							<Notification color='red' onClose={() => setBigErrorMessage('')}>
 								{bigErrorMessage}
-								Contact the official peach account at{' '}
+								Contact the official peach twitter account at{' '}
 								<a href='https://twitter.com/peachdotcool/'>@peachdotcool</a> on
 								twitter, and check out the{' '}
 								<a href='https://discord.gg/qqdv3A4xQY'>unofficial discord</a>.
