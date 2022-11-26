@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { useLocalStorage } from '@mantine/hooks';
-import { MantineProvider } from '@mantine/core';
+import { MantineProvider, Notification } from '@mantine/core';
 import './Theme/fonts.css';
 
 import { PeachContext } from './PeachContext';
@@ -50,6 +50,7 @@ const App: React.FC = () => {
 		defaultValue: DummyCurUser,
 	});
 	const [isPeachLoading, setIsPeachLoading] = useState(false);
+	const [bigErrorMessage, setBigErrorMessage] = useState('');
 
 	const updateCurFeedIndex = (newIndex: number) => {
 		if (!peachFeed) {
@@ -92,8 +93,9 @@ const App: React.FC = () => {
 
 		setIsPeachLoading(true);
 
-		api(ACTIONS.getConnections, jwt, {}, '', '', 'App').then(
-			(response: { data: Connections; success: number }) => {
+		setBigErrorMessage('');
+		api(ACTIONS.getConnections, jwt, {}, '', '', 'App')
+			.then((response: { data: Connections; success: number }) => {
 				if (response.success === 1) {
 					const connectionsUnread = response.data.connections.filter(
 						user => user.unreadPostCount
@@ -110,11 +112,12 @@ const App: React.FC = () => {
 							return user;
 						})
 					);
-				} else {
-					console.error('😫 Error: Could not get peach feed!');
 				}
-			}
-		);
+			})
+			.catch(e => {
+				console.error(e);
+				setBigErrorMessage('Peach might be down right now 😵‍💫\n\n');
+			});
 
 		const storedDarkMode = localStorage.getItem(STORAGE_IS_DARK_MODE);
 		if (!storedDarkMode || storedDarkMode === 'true') {
@@ -158,6 +161,15 @@ const App: React.FC = () => {
 						theme={{ colorScheme: darkMode ? 'dark' : 'light' }}
 					>
 						<MainPeachApp />
+						{bigErrorMessage && (
+							<Notification color='red' onClose={() => setBigErrorMessage('')}>
+								{bigErrorMessage}
+								Contact the official peach account at{' '}
+								<a href='https://twitter.com/peachdotcool/'>@peachdotcool</a> on
+								twitter, and check out the{' '}
+								<a href='https://discord.gg/qqdv3A4xQY'>unofficial discord</a>.
+							</Notification>
+						)}
 					</MantineProvider>
 				</PeachThemeProvider>
 			</PeachContext.Provider>
