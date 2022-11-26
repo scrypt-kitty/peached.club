@@ -6,7 +6,14 @@ import React, {
 	SetStateAction,
 } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Notification, TextInput, Center, Button, Space } from '@mantine/core';
+import {
+	Notification,
+	TextInput,
+	Center,
+	Button,
+	Space,
+	Text,
+} from '@mantine/core';
 
 import { PeachContext } from '../../PeachContext';
 import { LoginResponse } from '../../api/interfaces';
@@ -153,6 +160,12 @@ export const LoginComponent = ({
 					Enter
 				</Button>
 			</Center>
+			<Space h='md' />
+			<Text c='dimmed' ta='center' size='xs'>
+				<a href='https://twitter.com/peachdotcool'>official peach twitter</a>
+				{` | `}
+				<a href='https://discord.gg/qqdv3A4xQY'>unofficial peach discord</a>
+			</Text>
 		</>
 	);
 };
