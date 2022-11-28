@@ -64,7 +64,6 @@ export const SettingsPage = () => {
 							setPeachFeed([]);
 							localStorage.removeItem(STORAGE_TOKEN_KEY);
 							localStorage.removeItem(STORAGE_USER_KEY);
-							localStorage.removeItem(STORAGE_IS_DARK_MODE);
 							navigate('/logout', { replace: true });
 						}}
 					/>
@@ -173,7 +172,7 @@ export const PeachAccountSection = (props: PeachAccountSectionProps) => {
 				});
 			}
 
-			if (newBio) {
+			if (newBio && newBio !== curUserData.bio) {
 				setLoaderShowing(true);
 				api(ACTIONS.changeBio, jwt, {
 					bio: newBio,
@@ -225,7 +224,7 @@ export const PeachAccountSection = (props: PeachAccountSectionProps) => {
 					throw Error();
 				}
 
-				const { url } = uploadResp.data;
+				const { url } = uploadResp.data.image;
 				const uploadAvatarResp = await makeApiCall<{
 					data: { avatarSrc: string };
 					success: number;

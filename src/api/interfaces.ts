@@ -486,6 +486,9 @@ export type ImgBBUploadResponse = {
 		display_url: string;
 		width: number;
 		height: number;
+		image: {
+			url: string;
+		};
 	};
 	success: boolean;
 	status: number;
