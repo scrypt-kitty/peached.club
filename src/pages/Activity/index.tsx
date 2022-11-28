@@ -16,7 +16,7 @@ import { getActivityPreviewMessage, getTextPreview } from './utils';
 
 import { Page } from '../../Theme/Layout';
 import { Title, Text } from '../../Theme/Type';
-import { Preview } from '../Feed/Preview';
+import { Preview } from '../../components/Feed/Preview';
 import { TabsWrapper, Link } from './style';
 import { MTabs as Tabs } from '../../Theme/Mantine';
 import Loading from '../../Theme/Loading';

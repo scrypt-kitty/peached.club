@@ -1,13 +1,8 @@
 import React from 'react';
-import { ActionIcon, Flex, Avatar, Center, Space } from '@mantine/core';
+import { ActionIcon, Flex, Avatar } from '@mantine/core';
 import { IconCheck, IconX } from '@tabler/icons';
 
-import {
-	DisplayName,
-	FeedPostWrapper as Wrapper,
-	InfoContainer,
-} from '../../pages/Feed/style';
-import { ItemContainer } from '../../Theme/Layout';
+import { FeedPostWrapper as Wrapper, InfoContainer } from '../Feed/style';
 import { Header3, Text } from '../../Theme/Type';
 import { FriendRequestContainer } from './style';
 

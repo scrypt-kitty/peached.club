@@ -22,7 +22,7 @@ export interface PreviewProps {
 	message?: PostContent | string | null;
 	children?: React.ReactNode;
 	unread?: boolean;
-	createdTime: number | null;
+	createdTime?: number | null;
 	textPreview?: string | null;
 	isFavorite?: boolean;
 }

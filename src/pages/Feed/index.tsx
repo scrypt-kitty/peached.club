@@ -7,7 +7,7 @@ import { User, CurUser } from '../../api/interfaces';
 import ACTIONS from '../../api/constants';
 import api from '../../api';
 import { LinkStyled } from './style';
-import { Preview } from './Preview';
+import { Preview } from '../../components/Feed/Preview';
 import { Page } from '../../Theme/Layout';
 import { Title } from '../../Theme/Type';
 import { RiseAndFadeAnimationContainer } from '../../Theme/Animations';
