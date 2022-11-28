@@ -1,8 +1,25 @@
 import { User } from '../api/interfaces';
 
 export function sortMainFeedPosts(a: User, b: User) {
-	const aLatestPostTime = a.posts[a.posts.length - 1].createdTime;
-	const bLatestPostTime = b.posts[b.posts.length - 1].createdTime;
+	const aLatestPost = a.posts[a.posts.length - 1];
+	const bLatestPost = b.posts[b.posts.length - 1];
+
+	if (!aLatestPost && !bLatestPost) {
+		if (a.isFavorite && b.isFavorite) {
+			return 0;
+		} else if (a.isFavorite && !b.isFavorite) {
+			return -1;
+		} else {
+			return 1;
+		}
+	} else if (aLatestPost && !bLatestPost) {
+		return -1;
+	} else if (!aLatestPost && bLatestPost) {
+		return 1;
+	}
+
+	const aLatestPostTime = aLatestPost.createdTime;
+	const bLatestPostTime = bLatestPost.createdTime;
 
 	// are there unread posts for both users?
 	if (a.unreadPostCount && b.unreadPostCount) {
