@@ -181,7 +181,7 @@ export const ComposerComponent = (
 				>
 					<Center>
 						<Stack>
-							<Text centered>
+							<Text style={{ marginBottom: '0' }} centered>
 								Are you sure you want to abandon this post? 😳
 							</Text>
 							<Center>

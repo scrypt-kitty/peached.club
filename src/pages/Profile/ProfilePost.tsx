@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react';
 import Linkify from 'linkify-react';
+import { Modal, Center, Space, Button, Stack, Flex } from '@mantine/core';
 
 import api from '../../api';
 import {
@@ -17,8 +18,8 @@ import { LINKIFY_OPTIONS } from '../../constants';
 
 import { PostInteractions } from '../../components/Posts/PostInteractions';
 import Comments from '../../components/Comments';
-import { DeletePrompt } from '../../components/Comments/style';
 import { PostWrapper, FriendPostContent, Image } from './style';
+import { Text } from '../../Theme/Type';
 
 import LocationPost from '../../components/Posts/LocationPost';
 import LinkPost from '../../components/Posts/LinkPost';
@@ -211,13 +212,35 @@ export const ProfilePost = (props: Props) => {
 	return (
 		<PostWrapper key={props.id}>
 			<>
-				<DeletePrompt
-					onDelete={() => onDeletePost(props.id)}
-					onCancel={() => setDeletePromptShowing(false)}
-					isShowing={deletePromptShowing}
+				<Modal
+					opened={deletePromptShowing}
+					onClose={() => setDeletePromptShowing(false)}
+					withCloseButton={false}
+					centered
+					size={350}
 				>
-					Are you sure you want to delete your post?
-				</DeletePrompt>
+					<Center>
+						<Stack>
+							<Text style={{ marginBottom: '0' }} centered>
+								Are you sure you want to delete this post?
+							</Text>
+							<Center>
+								<Flex>
+									<Button color='pink' onClick={() => onDeletePost(props.id)}>
+										Yep
+									</Button>
+									<Space w='md' />
+									<Button
+										color='gray'
+										onClick={() => setDeletePromptShowing(false)}
+									>
+										Nope
+									</Button>
+								</Flex>
+							</Center>
+						</Stack>
+					</Center>
+				</Modal>
 				<FriendPostContent>{msgs}</FriendPostContent>
 			</>
 			<PostInteractions
