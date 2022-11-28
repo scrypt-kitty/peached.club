@@ -19,6 +19,7 @@ import {
 	STORAGE_CUR_USER_DATA_KEY,
 } from './constants';
 import { getUserFromStorage } from './utils';
+import { sortMainFeedPosts } from './utils/sortMainFeedPosts';
 import api from './api';
 
 import { PeachRoutes } from './PeachRoutes';
@@ -105,7 +106,9 @@ const App: React.FC = () => {
 					);
 					setInboundFriendRequests(response.data.inboundFriendRequests);
 					setOutboundFriendRequests(response.data.outboundFriendRequests);
-					setConnections(connectionsUnread.concat(connectionsRead));
+					setConnections(
+						connectionsUnread.concat(connectionsRead).sort(sortMainFeedPosts)
+					);
 					setPeachFeed(
 						response.data.connections.map(user => {
 							user.posts = user.posts.reverse();

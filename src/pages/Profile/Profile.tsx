@@ -25,6 +25,7 @@ import { RiseAndFadeAnimationContainer } from '../../Theme/Animations';
 import { ProfileHeader } from '../../components/ProfileHeader/ProfileHeader';
 import { makeApiCall } from '../../api/api';
 import { PrivateProfile } from './PrivateProfile';
+import { sortMainFeedPosts } from '../../utils/sortMainFeedPosts';
 
 const EmptyState = () => (
 	<EmptyStateWrapper>
@@ -160,15 +161,17 @@ export const ProfilePage = () => {
 					throw Error(`Couldn't mark feed read for user ${id}`);
 				}
 				setConnections(
-					connections.map(c => {
-						if (c.id === id) {
-							return {
-								...c,
-								unreadPostCount: 0,
-							};
-						}
-						return c;
-					})
+					connections
+						.map(c => {
+							if (c.id === id) {
+								return {
+									...c,
+									unreadPostCount: 0,
+								};
+							}
+							return c;
+						})
+						.sort(sortMainFeedPosts)
 				);
 			}
 		} catch (e) {
