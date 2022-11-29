@@ -1,5 +1,4 @@
 import React, { useContext, useState } from 'react';
-import Linkify from 'linkify-react';
 import { Modal, Center, Space, Button, Stack, Flex } from '@mantine/core';
 
 import api from '../../api';
@@ -7,112 +6,18 @@ import {
 	LikePostResponse,
 	Comment,
 	CommentResponse,
-	PostContent,
 	MutualFriend,
-	POST_TYPE,
 	Post,
 } from '../../api/interfaces';
 import ACTIONS from '../../api/constants';
 import { PeachContext } from '../../PeachContext';
-import { LINKIFY_OPTIONS } from '../../constants';
 
 import { PostInteractions } from '../../components/Posts/PostInteractions';
 import Comments from '../../components/Comments';
-import { PostWrapper, FriendPostContent, Image } from './style';
+import { PostWrapper, FriendPostContent } from './style';
 import { Text } from '../../Theme/Type';
-
-import LocationPost from '../../components/Posts/LocationPost';
-import LinkPost from '../../components/Posts/LinkPost';
-import { MusicPost } from '../../components/Posts/MusicPost';
-import { VideoPost } from '../../components/Posts/VideoPost';
-
-const createComment = (
-	commentId: string,
-	commentBody: string,
-	authorId: string,
-	name: string,
-	displayName: string
-): Comment => {
-	return {
-		id: commentId,
-		body: commentBody,
-		author: {
-			id: authorId,
-			name,
-			displayName,
-			bio: '',
-			isPublic: false,
-			posts: [],
-			unreadPostCount: 0,
-			lastRead: 0,
-		},
-	};
-};
-
-const addNewlines = (txt: string, id: string) =>
-	txt.indexOf('\n') < 0
-		? txt
-		: txt.split('\n').map((item, index) => (
-				<span key={`${id}-${index}`}>
-					{item}
-					<br />
-				</span>
-		  ));
-
-type DisplayedPostProps = {
-	obj: PostContent;
-	id: string;
-	index: number;
-};
-
-const DisplayedPost = ({ obj, id, index }: DisplayedPostProps) => {
-	switch (obj.type) {
-		case POST_TYPE.TEXT:
-			return (
-				<p key={`${id}-txt-${index}`}>
-					<Linkify tagName='span' options={LINKIFY_OPTIONS}>
-						{addNewlines(obj.text, id)}
-					</Linkify>
-				</p>
-			);
-		case POST_TYPE.IMAGE:
-			return (
-				<Image
-					key={`${id}-img-${index}`}
-					src={obj.src}
-					alt={`image for post ${id}`}
-					loading='lazy'
-				/>
-			);
-		case POST_TYPE.GIF:
-			return (
-				<Image
-					key={`${id}-gif-${index}`}
-					src={obj.src}
-					alt={`GIF`}
-					loading='lazy'
-				/>
-			);
-		case POST_TYPE.LINK:
-			// @ts-ignore
-			return <LinkPost key={`${id}-link-${index}`} {...obj} />;
-
-		case POST_TYPE.VIDEO:
-			return (
-				<VideoPost key={`${id}-vid-${index}`} src={obj.src} width={obj.width} />
-			);
-
-		case POST_TYPE.LOCATION:
-			// @ts-ignore
-			return <LocationPost key={`${id}-loc-${index}`} {...obj} />;
-
-		case POST_TYPE.MUSIC:
-			return <MusicPost key={`${id}-music-${index}`} {...obj} />;
-
-		default:
-			return null;
-	}
-};
+import { DisplayedPostMessage } from './DisplayedPostMessage';
+import { createComment } from './utils';
 
 export interface Props extends Post {
 	deletePost: (id: string) => void;
@@ -132,7 +37,7 @@ export const ProfilePost = (props: Props) => {
 	const [newCommentText, setNewCommentText] = useState('');
 
 	const msgs = props.message.map((obj, index) => (
-		<DisplayedPost
+		<DisplayedPostMessage
 			obj={obj}
 			index={index}
 			id={props.id}
