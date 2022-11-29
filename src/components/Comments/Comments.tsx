@@ -36,7 +36,7 @@ export interface CommentsComponentProps extends SharedCommentsProps {
 
 export const CommentsComponent = (props: CommentsComponentProps) => {
 	return (
-		<AllComments>
+		<>
 			{props.comments.map(c => (
 				<Comment
 					isFriend={
@@ -52,7 +52,7 @@ export const CommentsComponent = (props: CommentsComponentProps) => {
 					postAuthorId={props.postAuthorId}
 				/>
 			))}
-		</AllComments>
+		</>
 	);
 };
 
@@ -130,18 +130,20 @@ export const Comments = (props: CommentsProps) => {
 				Are you sure you want to abandon this comment?
 			</DeletePrompt>
 			{props.children}
-			<CommentsComponent
-				getAvatar={getAvatar}
-				peachFeedIds={peachFeedIds}
-				requesterId={requesterId}
-				comments={filterBlockedUsersFromComments(blockedUsersMap, comments)}
-				mutualFriends={mutualFriends}
-				deleteComment={props.deleteComment}
-				addReplyHandle={addReplyHandle}
-				newCommentText={newCommentText}
-				setNewCommentText={setNewCommentText}
-				postAuthorId={props.postAuthorId}
-			/>
+			<AllComments>
+				<CommentsComponent
+					getAvatar={getAvatar}
+					peachFeedIds={peachFeedIds}
+					requesterId={requesterId}
+					comments={filterBlockedUsersFromComments(blockedUsersMap, comments)}
+					mutualFriends={mutualFriends}
+					deleteComment={props.deleteComment}
+					addReplyHandle={addReplyHandle}
+					newCommentText={newCommentText}
+					setNewCommentText={setNewCommentText}
+					postAuthorId={props.postAuthorId}
+				/>
+			</AllComments>
 			<AddComment
 				onSubmit={props.updateComments}
 				newCommentText={newCommentText}
