@@ -2,21 +2,10 @@ import React from 'react';
 import { ComponentMeta } from '@storybook/react';
 import { Preview } from './Preview';
 import { DEFAULT_AVATAR_SRC } from '../../constants';
-import { POST_TYPE, TextMessage, User } from '../../api/interfaces';
+import { POST_TYPE, TextMessage } from '../../api/interfaces';
 
 import { darkTheme, PeachThemeProvider } from '../../Theme/theme';
 import { sortMainFeedPosts } from '../../utils/sortMainFeedPosts';
-
-const DEFAULT_USER_PROPS = {
-	youFollow: true,
-	followsYou: true,
-	lastRead: 1,
-	lastOnline: 1,
-	bio: '',
-	friendsSharing: false,
-	isPublic: false,
-	avatarSrc: DEFAULT_AVATAR_SRC,
-};
 
 const DEFAULT_TEXT_POST: TextMessage = {
 	type: POST_TYPE.TEXT,
@@ -30,7 +19,19 @@ const DEFAULT_POST_PROPS = {
 	likedByMe: false,
 };
 
-const CONNECTIONS: User[] = [
+const DEFAULT_USER_PROPS = {
+	youFollow: true,
+	followsYou: true,
+	lastRead: 1,
+	lastOnline: 1,
+	bio: '',
+	friendsSharing: false,
+	isPublic: false,
+	avatarSrc: DEFAULT_AVATAR_SRC,
+	textPreview: DEFAULT_TEXT_POST.text,
+};
+
+const CONNECTIONS = [
 	{
 		...DEFAULT_USER_PROPS,
 		id: '1',
@@ -65,6 +66,7 @@ const CONNECTIONS: User[] = [
 				updatedTime: -5,
 			},
 		],
+		createdTime: -5,
 	},
 	{
 		...DEFAULT_USER_PROPS,
@@ -82,6 +84,7 @@ const CONNECTIONS: User[] = [
 				updatedTime: -5,
 			},
 		],
+		createdTime: -5,
 	},
 	{
 		...DEFAULT_USER_PROPS,
@@ -99,6 +102,7 @@ const CONNECTIONS: User[] = [
 				updatedTime: 5,
 			},
 		],
+		createdTime: 5,
 	},
 	{
 		...DEFAULT_USER_PROPS,
@@ -123,6 +127,7 @@ const CONNECTIONS: User[] = [
 				updatedTime: 10,
 			},
 		],
+		createdTime: 10,
 	},
 	{
 		...DEFAULT_USER_PROPS,
@@ -147,6 +152,7 @@ const CONNECTIONS: User[] = [
 				updatedTime: 10,
 			},
 		],
+		createdTime: 10,
 	},
 	{
 		...DEFAULT_USER_PROPS,
@@ -171,6 +177,7 @@ const CONNECTIONS: User[] = [
 				updatedTime: 15,
 			},
 		],
+		createdTime: 15,
 	},
 ];
 
@@ -188,8 +195,8 @@ const Story = () => {
 
 export default {
 	component: Story,
-	title: 'Feedsssss/Previewssss',
+	title: 'Feed/Previews',
 } as ComponentMeta<typeof Story>;
 
 export const Primary = () => <Story />;
-Primary.storyName = 'I am the primary';
+Primary.storyName = 'Sorted previews';

@@ -1,8 +1,8 @@
 import React from 'react';
 import { ActionIcon, Flex, Avatar } from '@mantine/core';
-import { IconCheck, IconX } from '@tabler/icons';
+import { IconCheck, IconX, IconBan } from '@tabler/icons';
 
-import { FeedPostWrapper as Wrapper, InfoContainer } from '../Feed/style';
+import { InfoContainer } from '../Feed/style';
 import { Header3, Text } from '../../Theme/Type';
 import { FriendRequestContainer } from './style';
 
@@ -12,11 +12,12 @@ export type FriendRequestItemProps = {
 	name: string;
 	bio: string;
 	onClickAccept?: (name: string) => void | null;
+	onClickBlock?: (name: string) => void | null;
 	onClickDecline: (name: string) => void;
 };
 
 export const FriendRequestItem = (props: FriendRequestItemProps) => {
-	const { onClickAccept = null } = props;
+	const { onClickAccept = null, onClickBlock = null } = props;
 	return (
 		<FriendRequestContainer>
 			<Avatar src={props.avatarSrc} radius='xl' />
@@ -42,6 +43,15 @@ export const FriendRequestItem = (props: FriendRequestItemProps) => {
 				>
 					<IconX size={16} />
 				</ActionIcon>
+				{onClickBlock && (
+					<ActionIcon
+						variant='filled'
+						color='gray'
+						onClick={() => onClickBlock(props.name)}
+					>
+						<IconBan size={16} />
+					</ActionIcon>
+				)}
 			</Flex>
 		</FriendRequestContainer>
 	);

@@ -4,15 +4,15 @@ import { useLocalStorage } from '@mantine/hooks';
 import { MantineProvider, Notification } from '@mantine/core';
 import './Theme/fonts.css';
 
-import { PeachContext } from './PeachContext';
+import { PeachContext, BlockedUsersMap } from './PeachContext';
 import {
 	LoginStream,
 	User,
 	DummyCurUser,
 	Connections,
 	PendingFriendRequest,
+	BlockListResponse,
 } from './api/interfaces';
-import ACTIONS from './api/constants';
 import {
 	STORAGE_IS_DARK_MODE,
 	STORAGE_TOKEN_KEY,
@@ -20,11 +20,11 @@ import {
 } from './constants';
 import { getUserFromStorage } from './utils';
 import { sortMainFeedPosts } from './utils/sortMainFeedPosts';
-import api from './api';
 
 import { PeachRoutes } from './PeachRoutes';
 import { darkTheme, lightTheme, PeachThemeProvider } from './Theme/theme';
 import { GlobalStyle } from './Theme/GlobalStyle';
+import { makeApiCall } from './api/api';
 
 const App: React.FC = () => {
 	const [jwt, setJwt] = useState<string>(
@@ -52,6 +52,7 @@ const App: React.FC = () => {
 	});
 	const [isPeachLoading, setIsPeachLoading] = useState(false);
 	const [bigErrorMessage, setBigErrorMessage] = useState('');
+	const [blockedUsersMap, setBlockedUsersMap] = useState<BlockedUsersMap>({});
 
 	const updateCurFeedIndex = (newIndex: number) => {
 		if (!peachFeed) {
@@ -93,34 +94,60 @@ const App: React.FC = () => {
 		}
 
 		setIsPeachLoading(true);
-
 		setBigErrorMessage('');
-		api(ACTIONS.getConnections, jwt, {}, '', '', 'App')
-			.then((response: { data: Connections; success: number }) => {
-				if (response.success === 1) {
-					const connectionsUnread = response.data.connections.filter(
-						user => user.unreadPostCount
-					);
-					const connectionsRead = response.data.connections.filter(
-						user => !user.unreadPostCount
-					);
-					setInboundFriendRequests(response.data.inboundFriendRequests);
-					setOutboundFriendRequests(response.data.outboundFriendRequests);
-					setConnections(
-						connectionsUnread.concat(connectionsRead).sort(sortMainFeedPosts)
-					);
-					setPeachFeed(
-						response.data.connections.map(user => {
-							user.posts = user.posts.reverse();
-							return user;
-						})
-					);
+
+		const fetchPeachInfo = async () => {
+			try {
+				const connectionsResp = await makeApiCall<{
+					data: Connections;
+					success: number;
+				}>({
+					uri: `connections`,
+					jwt,
+				});
+
+				if (!connectionsResp.success) {
+					setBigErrorMessage('Peach might be down right now 😵‍💫\n\n');
+					throw Error(`Couldn't fetch connections.`);
 				}
-			})
-			.catch(e => {
+
+				setInboundFriendRequests(connectionsResp.data.inboundFriendRequests);
+				setOutboundFriendRequests(connectionsResp.data.outboundFriendRequests);
+				setConnections(
+					connectionsResp.data.connections.sort(sortMainFeedPosts)
+				);
+				setPeachFeed(
+					connectionsResp.data.connections.map(user => {
+						user.posts = user.posts.reverse();
+						return user;
+					})
+				);
+
+				setIsPeachLoading(false);
+
+				const blockListResp = await makeApiCall<BlockListResponse>({
+					uri: `stream/block-list`,
+					jwt,
+				});
+				if (!blockListResp.success) {
+					throw Error(`Couldn't fetch block list.`);
+				}
+				const { blockList } = blockListResp.data;
+				if (blockList) {
+					const blockedUsersMap: BlockedUsersMap = {};
+					blockList.map(user => {
+						blockedUsersMap[user.id] = user;
+					});
+					setBlockedUsersMap(blockedUsersMap);
+				}
+			} catch (e) {
 				console.error(e);
-				setBigErrorMessage('Peach might be down right now 😵‍💫\n\n');
-			});
+			} finally {
+				setIsPeachLoading(false);
+			}
+		};
+
+		fetchPeachInfo();
 
 		const storedDarkMode = localStorage.getItem(STORAGE_IS_DARK_MODE);
 		if (!storedDarkMode || storedDarkMode === 'true') {
@@ -128,8 +155,6 @@ const App: React.FC = () => {
 		} else {
 			setDarkMode(false);
 		}
-
-		setIsPeachLoading(false);
 	}, [jwt, curUser, darkMode]);
 
 	return (
@@ -155,6 +180,8 @@ const App: React.FC = () => {
 					inboundFriendRequests,
 					setInboundFriendRequests,
 					setOutboundFriendRequests,
+					blockedUsersMap,
+					setBlockedUsersMap,
 				}}
 			>
 				<PeachThemeProvider theme={darkMode ? darkTheme : lightTheme}>

@@ -515,3 +515,10 @@ export type NewFriendRequestResponse = {
 
 	success: boolean;
 };
+
+export type BlockListResponse = {
+	data: {
+		blockList?: CurUser[];
+	};
+	success?: number;
+};

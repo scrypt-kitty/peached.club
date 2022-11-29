@@ -39,6 +39,7 @@ type FriendRequestsProps = {
 	outboundFriendRequests: PendingFriendRequest[];
 	onClickAccept: (id: string) => void;
 	onClickDecline: (id: string) => void;
+	onClickBlock: (name: string) => void;
 	onClickCancel: (id: string) => void;
 };
 
@@ -67,6 +68,7 @@ export const FriendRequests = (props: FriendRequestsProps) => {
 								avatarSrc={req.stream.avatarSrc}
 								onClickAccept={() => props.onClickAccept(req.id)}
 								onClickDecline={() => props.onClickDecline(req.id)}
+								onClickBlock={() => props.onClickBlock(req.id)}
 								bio={req.stream.bio}
 							/>
 						))}
@@ -118,7 +120,6 @@ export const FriendRequestsPage = () => {
 					jwt,
 					method: 'POST',
 				});
-				//@ts-ignore
 				if (!response || !response.success) {
 					throw Error('No');
 				} else {
@@ -207,6 +208,8 @@ export const FriendRequestsPage = () => {
 		setIsModalShowing(false);
 	};
 
+	const onClickBlock = (id: string) => {};
+
 	return (
 		<>
 			<Modal
@@ -235,6 +238,7 @@ export const FriendRequestsPage = () => {
 						onClickAccept={onClickAccept}
 						onClickDecline={onClickDecline}
 						onClickCancel={onClickCancelOutboundRequest}
+						onClickBlock={onClickBlock}
 						inboundFriendRequests={inboundFriendRequests}
 						outboundFriendRequests={outboundFriendRequests}
 					/>

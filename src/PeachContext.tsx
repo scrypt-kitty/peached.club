@@ -7,6 +7,10 @@ import {
 	PendingFriendRequest,
 } from './api/interfaces';
 
+export type BlockedUsersMap = {
+	[id: string]: CurUser;
+};
+
 interface PeachContextTypes {
 	jwt: string;
 	setJwt: (newJwt: string) => void;
@@ -27,29 +31,32 @@ interface PeachContextTypes {
 	outboundFriendRequests: PendingFriendRequest[];
 	setInboundFriendRequests: (reqs: PendingFriendRequest[]) => void;
 	setOutboundFriendRequests: (reqs: PendingFriendRequest[]) => void;
+	blockedUsersMap: BlockedUsersMap;
+	setBlockedUsersMap: (users: BlockedUsersMap) => void;
 }
 
 const defaults = {
 	jwt: '',
-	setJwt: (newJwt: string) => {},
+	setJwt: (_newJwt: string) => {},
 	peachFeed: [],
-	setPeachFeed: (newPeachFeed: User[]) => {},
+	setPeachFeed: (_newPeachFeed: User[]) => {},
 	curUser: null,
-	setCurUser: (newUser: LoginStream) => {},
+	setCurUser: (_newUser: LoginStream) => {},
 	curFeedIndex: 0,
-	setCurFeedIndex: (newIndex: number) => {},
+	setCurFeedIndex: (_newIndex: number) => {},
 	darkMode: true,
 	toggleDarkMode: () => {},
 	curUserData: DummyCurUser,
-	setCurUserData: (newCurUser: CurUser) => {},
+	setCurUserData: (_newCurUser: CurUser) => {},
 	connections: [],
-	setConnections: (newConnections: User[]) => {},
+	setConnections: (_newConnections: User[]) => {},
 	isPeachLoading: false,
 	inboundFriendRequests: [],
 	outboundFriendRequests: [],
-
-	setInboundFriendRequests: (req: PendingFriendRequest[]) => {},
-	setOutboundFriendRequests: (req: PendingFriendRequest[]) => {},
+	setInboundFriendRequests: (_req: PendingFriendRequest[]) => {},
+	setOutboundFriendRequests: (_req: PendingFriendRequest[]) => {},
+	blockedUsersMap: {},
+	setBlockedUsersMap: (_u: BlockedUsersMap) => {},
 };
 
 export const PeachContext = React.createContext<PeachContextTypes>(defaults);

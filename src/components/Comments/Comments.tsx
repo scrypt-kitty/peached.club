@@ -1,7 +1,8 @@
 import React, { useContext, useState } from 'react';
 
 import { Comment as CommentType, MutualFriend } from '../../api/interfaces';
-import { PeachContext } from '../../PeachContext';
+import { BlockedUsersMap, PeachContext } from '../../PeachContext';
+
 import AddComment from './AddComment';
 import { Comment } from './Comment/Comment';
 import { MModal as Modal, DisableBodyScroll } from '../../Theme/Mantine/Modal';
@@ -55,6 +56,14 @@ export const CommentsComponent = (props: CommentsComponentProps) => {
 	);
 };
 
+function filterBlockedUsersFromComments(
+	blockedUsers: BlockedUsersMap,
+	comments: CommentType[]
+) {
+	console.log(blockedUsers);
+	return comments.filter(c => !blockedUsers[c.author.id]);
+}
+
 export const Comments = (props: CommentsProps) => {
 	const {
 		postAuthorId,
@@ -67,7 +76,7 @@ export const Comments = (props: CommentsProps) => {
 		newCommentText,
 		isShowing,
 	} = props;
-	const { peachFeed } = useContext(PeachContext);
+	const { peachFeed, blockedUsersMap } = useContext(PeachContext);
 	const [isDismissWarningShowing, setIsDismissWarningShowing] = useState(false);
 	const peachFeedIds = peachFeed.map(user => user.id);
 
@@ -125,7 +134,7 @@ export const Comments = (props: CommentsProps) => {
 				getAvatar={getAvatar}
 				peachFeedIds={peachFeedIds}
 				requesterId={requesterId}
-				comments={comments}
+				comments={filterBlockedUsersFromComments(blockedUsersMap, comments)}
 				mutualFriends={mutualFriends}
 				deleteComment={props.deleteComment}
 				addReplyHandle={addReplyHandle}
