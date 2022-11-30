@@ -186,11 +186,12 @@ export const ComposerComponent = (
 							</Text>
 							<Center>
 								<Flex>
-									<Button color='pink' onClick={onDeleteDraft}>
+									<Button radius='md' color='pink' onClick={onDeleteDraft}>
 										Yep
 									</Button>
 									<Space w='md' />
 									<Button
+										radius='md'
 										color='gray'
 										onClick={() => setIsDismissWarningShowing(false)}
 									>

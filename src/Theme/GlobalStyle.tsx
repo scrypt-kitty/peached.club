@@ -35,4 +35,9 @@ export const GlobalStyle = createGlobalStyle`
 		}
 	}
 
+    // mantine global styles
+    // for some reason these fonts won't work with the mantine theme object
+   .mantine-Button-label, .mantine-Input-input, .ql-editor {
+        font-family: Lato;
+   }
 `;

@@ -91,10 +91,12 @@ const ContactSection = () => (
 const CustomizationSection = (props: { toggleDarkMode: Function }) => (
 	<SettingsSection>
 		<SubTitle>Customize app appearance</SubTitle>
+		<Space h='sm' />
 		<Button
 			onClick={() => props.toggleDarkMode()}
 			color='pink'
 			leftIcon={<IconMoonStars size={16} />}
+			radius='md'
 		>
 			Toggle dark mode
 		</Button>
@@ -254,7 +256,11 @@ export const PeachAccountSection = (props: PeachAccountSectionProps) => {
 					onChange={onClickUploadAvatar}
 					accept='image/png,image/jpeg'
 				>
-					{props => <Button {...props}>Upload new avatar</Button>}
+					{props => (
+						<Button radius='md' {...props}>
+							Upload new avatar
+						</Button>
+					)}
 				</FileButton>
 				<Space h='lg' />
 				<Label htmlFor='displayName'>Display name</Label>
@@ -328,11 +334,15 @@ export const PeachAccountSection = (props: PeachAccountSectionProps) => {
 				)}
 			</Fieldset>
 			<br />
-			<Button disabled={isButtonDisabled} onClick={() => onSubmit()}>
+			<Button
+				disabled={isButtonDisabled}
+				onClick={() => onSubmit()}
+				radius='md'
+			>
 				Submit
 			</Button>
 			<LogoutButtonWrapper>
-				<Button onClick={() => props.logout()} color='red'>
+				<Button onClick={() => props.logout()} color='red' radius='md'>
 					Log out
 				</Button>
 			</LogoutButtonWrapper>

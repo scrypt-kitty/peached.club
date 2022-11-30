@@ -37,7 +37,7 @@ export const FeedsNav = styled.div<{ right?: boolean }>`
 	top: 0.5rem;
 	${props => (props.right ? 'right: 1rem;' : 'left: 1rem;')};
 	z-index: 100;
-	padding: 0.25rem 0.5rem;
+	padding: ${rem(4)} ${rem(8)};
 	border-radius: 1rem;
 	box-shadow: 3px 3px 5px #00000050;
 	transition: all ease 0.25s;
@@ -48,6 +48,10 @@ export const FeedsNav = styled.div<{ right?: boolean }>`
 	-webkit-backdrop-filter: blur(50px);
 	-o-backdrop-filter: blur(50px);
 	-moz-backdrop-filter: blur(50px);
+
+	svg {
+		stroke: ${props => props.theme.text.muted};
+	}
 
 	:hover {
 		cursor: pointer;

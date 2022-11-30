@@ -1,18 +1,26 @@
 import React, { useContext, useEffect } from 'react';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import {
+	IconSettings,
+	IconBell,
+	IconUser,
+	IconHome,
+	IconArrowRight,
+	IconArrowLeft,
+} from '@tabler/icons';
 
 import { PeachContext } from '../../PeachContext';
 import { getUserFromStorage } from '../../utils';
 import { STORAGE_TOKEN_KEY } from '../../constants';
 
 import { NavWrap, Link, Nav, FeedsNav, PageIconWrapper } from './style';
-import ArrowLeftIcon from '../Icons/ArrowLeftIcon';
-import ArrowRightIcon from '../Icons/ArrowRightIcon';
-import HomeIcon from '../Icons/HomeIcon';
-import UserIcon from '../Icons/UserIcon';
-import ActivityIcon from '../Icons/PulseIcon';
-import GearIcon from '../Icons/GearIcon';
+import { Center } from '@mantine/core';
+
+const NavIconProps = {
+	stroke: 1.75,
+	size: 25,
+};
 
 const Navigation = () => {
 	const { curUser, curUserData, peachFeed, jwt } = useContext(PeachContext);
@@ -68,16 +76,20 @@ const Navigation = () => {
 			{curFeed && !onCurUsersProfile ? (
 				<>
 					{showLeftArrow ? (
-						<RouterLink to={`/friend/${prevUser}`}>
+						<RouterLink to={`/friend/${prevUser}`} title='Previous feed'>
 							<FeedsNav>
-								<ArrowLeftIcon />
+								<Center>
+									<IconArrowLeft {...NavIconProps} />
+								</Center>
 							</FeedsNav>
 						</RouterLink>
 					) : null}
 					{showRightArrow ? (
-						<RouterLink to={`/friend/${nextUser}`}>
+						<RouterLink to={`/friend/${nextUser}`} title='Next feed'>
 							<FeedsNav right>
-								<ArrowRightIcon />
+								<Center>
+									<IconArrowRight {...NavIconProps} />
+								</Center>
 							</FeedsNav>
 						</RouterLink>
 					) : null}
@@ -87,34 +99,37 @@ const Navigation = () => {
 			<NavWrap>
 				<Nav>
 					<Link>
-						<RouterLink to='/feed'>
+						<RouterLink to='/feed' title='Home'>
 							<PageIconWrapper isActive={pathname.includes('feed') ?? false}>
-								<HomeIcon />
+								<IconHome {...NavIconProps} />
 							</PageIconWrapper>
 						</RouterLink>
 					</Link>
 					<Link>
-						<RouterLink to={`/friend/${curUser ? curUser.id : ''}`}>
+						<RouterLink
+							to={`/friend/${curUser ? curUser.id : ''}`}
+							title='Your feed'
+						>
 							<PageIconWrapper isActive={onCurUsersProfile}>
-								<UserIcon />
+								<IconUser {...NavIconProps} />
 							</PageIconWrapper>
 						</RouterLink>
 					</Link>
 					<Link>
-						<RouterLink to='/activity'>
+						<RouterLink to='/activity' title='Activity'>
 							<PageIconWrapper
 								isActive={pathname.includes('activity') ?? false}
 							>
-								<ActivityIcon />
+								<IconBell {...NavIconProps} />
 							</PageIconWrapper>
 						</RouterLink>
 					</Link>
 					<Link>
-						<RouterLink to='/settings'>
+						<RouterLink to='/settings' title='Settings'>
 							<PageIconWrapper
 								isActive={pathname.includes('settings') ?? false}
 							>
-								<GearIcon />
+								<IconSettings {...NavIconProps} />
 							</PageIconWrapper>
 						</RouterLink>
 					</Link>

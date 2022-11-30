@@ -140,11 +140,12 @@ export const Comments = (props: CommentsProps) => {
 						</Text>
 						<Center>
 							<Flex>
-								<Button color='pink' onClick={dismissComments}>
+								<Button radius='md' color='pink' onClick={dismissComments}>
 									Yep
 								</Button>
 								<Space w='md' />
 								<Button
+									radius='md'
 									color='gray'
 									onClick={() => setIsDismissWarningShowing(false)}
 								>

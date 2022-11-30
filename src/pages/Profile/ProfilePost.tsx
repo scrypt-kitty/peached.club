@@ -132,11 +132,16 @@ export const ProfilePost = (props: Props) => {
 							</Text>
 							<Center>
 								<Flex>
-									<Button color='pink' onClick={() => onDeletePost(props.id)}>
+									<Button
+										radius='md'
+										color='pink'
+										onClick={() => onDeletePost(props.id)}
+									>
 										Yep
 									</Button>
 									<Space w='md' />
 									<Button
+										radius='md'
 										color='gray'
 										onClick={() => setDeletePromptShowing(false)}
 									>
