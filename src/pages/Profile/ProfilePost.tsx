@@ -90,7 +90,8 @@ export const ProfilePost = (props: Props) => {
 					txt,
 					resp.authorStreamID,
 					curUserData.name,
-					curUserData.displayName
+					curUserData.displayName,
+					curUserData.avatarSrc
 				);
 
 				setComments(comments => comments.concat([newComment]));

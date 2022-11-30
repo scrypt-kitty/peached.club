@@ -86,6 +86,13 @@ const App: React.FC = () => {
 
 		setJwt(storedJwt);
 		setCurUser(storedUser);
+
+		const storedDarkMode = localStorage.getItem(STORAGE_IS_DARK_MODE);
+		if (!storedDarkMode || storedDarkMode === 'true') {
+			setDarkMode(true);
+		} else {
+			setDarkMode(false);
+		}
 	}, []);
 
 	useEffect(() => {
@@ -148,14 +155,7 @@ const App: React.FC = () => {
 		};
 
 		fetchPeachInfo();
-
-		const storedDarkMode = localStorage.getItem(STORAGE_IS_DARK_MODE);
-		if (!storedDarkMode || storedDarkMode === 'true') {
-			setDarkMode(true);
-		} else {
-			setDarkMode(false);
-		}
-	}, [jwt, curUser, darkMode]);
+	}, [jwt, curUser]);
 
 	return (
 		<BrowserRouter>

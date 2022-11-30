@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Comment } from '../../api/interfaces';
+import { DEFAULT_AVATAR_SRC } from '../../constants';
 
 export const addNewlines = (txt: string, id: string) =>
 	txt.indexOf('\n') < 0
@@ -17,13 +18,15 @@ export const createComment = (
 	commentBody: string,
 	authorId: string,
 	name: string,
-	displayName: string
+	displayName: string,
+	avatarSrc?: string
 ): Comment => {
 	return {
 		id: commentId,
 		body: commentBody,
 		author: {
 			id: authorId,
+			avatarSrc: avatarSrc ?? DEFAULT_AVATAR_SRC,
 			name,
 			displayName,
 			bio: '',
