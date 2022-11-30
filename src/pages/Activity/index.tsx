@@ -131,7 +131,7 @@ export const ActivityPage = () => {
 								mentionNotifications.map(item => (
 									<LinkStyled
 										key={`link-${item.createdTime}${item.body.postID}${item.body.authorStream.id}`}
-										to={`/post/${item.body.authorStream}`}
+										to={`/post/${item.body.postID}`}
 									>
 										<Preview
 											key={`${item.createdTime}${item.body.authorStream.id}`}
