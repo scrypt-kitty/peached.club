@@ -96,6 +96,7 @@ const AddComment: React.FC<AddCommentProps> = ({
 							setNewCommentText('');
 						}
 					}}
+					sx={{ fontFamily: 'Lato' }}
 				>
 					Send
 				</Button>

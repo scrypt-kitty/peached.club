@@ -50,9 +50,11 @@ const DeleteOptions = styled.div`
 `;
 
 export const AllComments = styled.div`
-	overflow: scroll;
-	margin-top: 1.5rem;
-	max-height: ${rem(500)};
+	margin-top: ${rem(8)};
+	@media screen and (min-width: 600px) {
+		max-height: ${rem(500)};
+		overflow: scroll;
+	}
 `;
 
 interface DeletePromptProps {
@@ -114,6 +116,10 @@ export const Input = styled.textarea`
 export const TextArea = styled(MTextArea)`
 	margin-top: ${rem(16)};
 	margin-bottom: ${rem(8)};
+
+	.mantine-Textarea-input {
+		font-family: Lato;
+	}
 `;
 
 export const ButtonWrapper = styled.span`

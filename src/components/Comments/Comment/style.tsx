@@ -4,7 +4,8 @@ import { rem } from 'polished';
 import { MiniMenu } from '../../../pages/Profile/style';
 import { Avatar } from '../../ProfileHeader/style';
 import { ModalContainer } from '../../../Theme/Modal';
-import { MContainer } from '../../../Theme/Mantine';
+import { Container } from '../../../Theme/Layout';
+import { LinkStyled } from '../../../pages/Feed/style';
 
 export const DeleteCommentContainer = styled.div`
 	display: flex;
@@ -17,17 +18,6 @@ export const DeleteCommentContainer = styled.div`
 
 	svg {
 		stroke: ${props => props.theme.text.muted};
-	}
-`;
-
-export const Container = styled(MContainer)`
-	padding: ${rem(8)} ${rem(16)};
-	:hover {
-		background: #cacaca30;
-	}
-
-	@media screen and (max-width: 600px) {
-		padding: ${rem(4)} ${rem(8)};
 	}
 `;
 
@@ -171,6 +161,11 @@ export const HandleStyled = styled.span`
 	margin-bottom: ${rem(5)};
 	font-size: ${rem(12)};
 	color: ${props => props.theme.text.muted};
+
+	:hover {
+		color: ${props => props.theme.accent};
+	}
+
 	@media screen and (max-width: ${rem(700)}) {
 		margin-bottom: ${rem(8)};
 	}
@@ -243,5 +238,36 @@ export const DeleteCommentButton = styled.button`
 
 	:hover {
 		background-color: ${props => props.theme.accent};
+	}
+`;
+
+export const ContainerStyled = styled(Container)`
+	max-width: 100%;
+	display: block;
+	font-family: Lato;
+	margin-top: 0;
+	margin-bottom: 0;
+	padding-bottom: 0;
+	padding: ${rem(8)} ${rem(2)} 0;
+	padding-left: ${rem(8)};
+	padding-right: 0;
+	padding: 0;
+	margin: 0;
+	font- :last-of-type {
+		padding-bottom: ${rem(32)};
+		margin-bottom: ${rem(16)};
+	}
+
+	@media screen and (max-width: 700px) {
+		:last-of-type {
+			padding-bottom: ${rem(8)};
+			margin-bottom: ${rem(8)};
+		}
+	}
+`;
+
+export const ProfileLinkStyled = styled(LinkStyled)`
+	:hover > span {
+		color: ${props => props.theme.accent};
 	}
 `;

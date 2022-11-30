@@ -1,12 +1,15 @@
 import React, { useContext, useState } from 'react';
+import { Center, Stack, Flex, Button, Space } from '@mantine/core';
 
 import { Comment as CommentType, MutualFriend } from '../../api/interfaces';
 import { BlockedUsersMap, PeachContext } from '../../PeachContext';
+import { useMediaQuery } from '@mantine/hooks';
 
 import AddComment from './AddComment';
 import { Comment } from './Comment/Comment';
-import { MModal as Modal, DisableBodyScroll } from '../../Theme/Mantine/Modal';
+import { MModal as Modal } from '../../Theme/Mantine/Modal';
 import { AllComments, DeletePrompt } from './style';
+import { Text } from '../../Theme/Type';
 
 interface SharedCommentsProps {
 	deleteComment: (id: string) => void;
@@ -60,7 +63,6 @@ function filterBlockedUsersFromComments(
 	blockedUsers: BlockedUsersMap,
 	comments: CommentType[]
 ) {
-	console.log(blockedUsers);
 	return comments.filter(c => !blockedUsers[c.author.id]);
 }
 
@@ -79,6 +81,8 @@ export const Comments = (props: CommentsProps) => {
 	const { peachFeed, blockedUsersMap } = useContext(PeachContext);
 	const [isDismissWarningShowing, setIsDismissWarningShowing] = useState(false);
 	const peachFeedIds = peachFeed.map(user => user.id);
+
+	const mobileComments = useMediaQuery('(max-width: 600px)');
 
 	const getAvatar = (id: string) => {
 		// commenter is author
@@ -120,15 +124,37 @@ export const Comments = (props: CommentsProps) => {
 			opened={isShowing}
 			onClose={() => onTryDismissComments(newCommentText)}
 			title='Leave a comment'
+			fullScreen={mobileComments}
 		>
-			<DisableBodyScroll />
-			<DeletePrompt
-				isShowing={isDismissWarningShowing}
-				onDelete={dismissComments}
-				onCancel={() => setIsDismissWarningShowing(false)}
+			<Modal
+				opened={isDismissWarningShowing}
+				onClose={() => setIsDismissWarningShowing(false)}
+				withCloseButton={false}
+				centered
+				size={350}
 			>
-				Are you sure you want to abandon this comment?
-			</DeletePrompt>
+				<Center>
+					<Stack>
+						<Text style={{ marginBottom: '0' }} centered>
+							Are you sure you want to abandon this comment?
+						</Text>
+						<Center>
+							<Flex>
+								<Button color='pink' onClick={dismissComments}>
+									Yep
+								</Button>
+								<Space w='md' />
+								<Button
+									color='gray'
+									onClick={() => setIsDismissWarningShowing(false)}
+								>
+									Nope
+								</Button>
+							</Flex>
+						</Center>
+					</Stack>
+				</Center>
+			</Modal>
 			{props.children}
 			<AllComments>
 				<CommentsComponent

@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import Linkify from 'linkify-react';
-import { Text, Avatar as MAvatar, Menu } from '@mantine/core';
+import { Avatar as MAvatar, Menu } from '@mantine/core';
 
 import {
 	Comment as PostCommentProps,
@@ -17,10 +17,11 @@ import {
 	HandleStyled,
 	CommentText,
 	CommentContent,
-	Container,
 	AvatarArea,
 	DeleteCommentContainer,
 	DeleteCommentButton,
+	ContainerStyled,
+	ProfileLinkStyled,
 } from './style';
 
 import { LINKIFY_OPTIONS } from '../../../constants';
@@ -85,7 +86,7 @@ export const Comment: React.FC<CommentProps> = (props: CommentProps) => {
 		props.author.id === props.requesterId;
 
 	return (
-		<Container>
+		<ContainerStyled>
 			{deletePromptShowing ? (
 				<DeletePrompt
 					onDelete={() => props.deleteComment(props.id)}
@@ -101,7 +102,10 @@ export const Comment: React.FC<CommentProps> = (props: CommentProps) => {
 							<DeleteCommentButton>...</DeleteCommentButton>
 						</Menu.Target>
 						<Menu.Dropdown>
-							<Menu.Item onClick={() => setDeletePromptShowing(p => !p)}>
+							<Menu.Item
+								sx={{ fontFamily: 'Lato' }}
+								onClick={() => setDeletePromptShowing(p => !p)}
+							>
 								Delete comment
 							</Menu.Item>
 						</Menu.Dropdown>
@@ -118,12 +122,10 @@ export const Comment: React.FC<CommentProps> = (props: CommentProps) => {
 					</a>
 				</AvatarArea>
 				<CommentText>
-					<Text size='sm'>
-						<a href={`/friend/${props.author.id}`}>
-							<AuthorName>{props.author.displayName}</AuthorName>
-							<HandleStyled> @{props.author.name}</HandleStyled>
-						</a>
-					</Text>
+					<ProfileLinkStyled to={`/friend/${props.author.id}`}>
+						<AuthorName>{props.author.displayName}</AuthorName>
+						<HandleStyled> @{props.author.name}</HandleStyled>
+					</ProfileLinkStyled>
 
 					<p onClick={() => props.addReplyHandle(props.author.name)}>
 						<Linkify tagName='span' options={LINKIFY_OPTIONS}>
@@ -132,6 +134,6 @@ export const Comment: React.FC<CommentProps> = (props: CommentProps) => {
 					</p>
 				</CommentText>
 			</CommentContent>
-		</Container>
+		</ContainerStyled>
 	);
 };

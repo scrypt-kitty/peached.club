@@ -8,8 +8,10 @@ export const DisableBodyScroll = createGlobalStyle`
 `;
 
 export const MModal = styled(Modal)`
+	font-family: Lato;
 	.mantine-Modal-title {
 		color: ${props => props.theme.text.muted};
+		font-family: Montserrat;
 	}
 
 	.mantine-Modal-header {
