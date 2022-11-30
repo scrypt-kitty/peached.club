@@ -9,8 +9,6 @@ import {
 	isImage,
 	LikeNotification,
 	isText,
-	WaveNotification,
-	isWaveNotification,
 } from '../../api/interfaces';
 
 function shortenPost(text: string): string {
@@ -40,8 +38,6 @@ export function getActivityPreviewMessage(item: ActivityItem): string {
 			return item.body.commentBody;
 		case NOTIFICATION_TYPE.LIKE:
 			return getPostPreviewMessage(item.body.postMessage);
-		case NOTIFICATION_TYPE.WAVE:
-			return item.body.message;
 		default:
 			return '';
 	}
@@ -61,16 +57,8 @@ export function getActivityDescription(item: ActivityItem): string {
 }
 
 export function getTextPreview(
-	notif:
-		| CommentNotification
-		| MentionNotification
-		| LikeNotification
-		| WaveNotification
+	notif: CommentNotification | MentionNotification | LikeNotification
 ): string | null {
-	if (isWaveNotification(notif)) {
-		return null;
-	}
-
 	const message = notif.body.postMessage[0];
 	if (isImage(message)) {
 		return 'Image post';

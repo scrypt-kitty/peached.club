@@ -53,7 +53,71 @@ const ProfileBottom = (props: {
 	);
 };
 
-export const ProfilePage = () => {
+type ProfileContentProps = {
+	viewingUser: User | null;
+	postsLoading: boolean;
+	setViewingUserProfile: (user: User | null) => void;
+	deletePost: (id: string) => void;
+	otherFriends: MutualFriend[];
+	morePostsLoading: boolean;
+	loadMorePosts: () => void;
+	hideProfileBottom?: boolean;
+};
+
+const ProfileContent = (props: ProfileContentProps) => {
+	const {
+		viewingUser,
+		postsLoading,
+		loadMorePosts,
+		setViewingUserProfile,
+		morePostsLoading,
+		otherFriends,
+		deletePost,
+		hideProfileBottom = false,
+	} = props;
+	return (
+		<>
+			<ProfileHeader
+				viewingUser={viewingUser}
+				loading={postsLoading}
+				setViewingUser={setViewingUserProfile}
+			/>
+			{postsLoading || !viewingUser ? (
+				<Loading />
+			) : viewingUser && viewingUser.posts && viewingUser.posts.length > 0 ? (
+				<>
+					<div style={{ margin: '0' }}>
+						{viewingUser.posts.map(post => (
+							<ProfilePost
+								{...post}
+								key={post.id}
+								deletePost={deletePost}
+								author={viewingUser.id}
+								otherFriends={otherFriends}
+								postAuthorAvatarSrc={viewingUser.avatarSrc}
+							/>
+						))}
+					</div>
+					{!hideProfileBottom && (
+						<ProfileBottom
+							morePostsLoading={morePostsLoading}
+							cursor={viewingUser.cursor || null}
+							loadMorePosts={loadMorePosts}
+						/>
+					)}
+				</>
+			) : (
+				<EmptyState />
+			)}
+		</>
+	);
+};
+
+type ProfilePageProps = {
+	isIndividualPostProfilePage?: boolean;
+};
+
+export const ProfilePage = (props: ProfilePageProps) => {
 	const {
 		jwt,
 		curUser,
@@ -64,6 +128,7 @@ export const ProfilePage = () => {
 		setConnections,
 	} = useContext(PeachContext);
 	const { id } = useParams();
+	const { isIndividualPostProfilePage = false } = props;
 
 	const [viewingUser, setViewingUserProfile] = useState<User | null>(null);
 	const [otherFriends, setOtherFriends] = useState<MutualFriend[]>([]);
@@ -110,17 +175,18 @@ export const ProfilePage = () => {
 
 	const getViewingUserProfile = useCallback(
 		async (useCursor = false) => {
-			if (!jwt || !id) {
+			if (!jwt || !id || id === undefined) {
 				return;
 			}
-
 			try {
-				let uri = `stream/id/${id}`;
-				if (useCursor && viewingUser?.cursor) {
+				let uri = isIndividualPostProfilePage
+					? `post/${id}`
+					: `stream/id/${id}`;
+				if (useCursor && viewingUser?.cursor && !isIndividualPostProfilePage) {
 					uri += `?cursor=${viewingUser.cursor}`;
 				}
 
-				const response = await makeApiCall<{ data: User }>({
+				const response = await makeApiCall<{ data: User & DefaultResponse }>({
 					uri,
 					jwt,
 				});
@@ -146,7 +212,7 @@ export const ProfilePage = () => {
 				);
 			}
 		},
-		[id, jwt, curUserData.name, viewingUser]
+		[id, jwt, curUserData.name, viewingUser, isIndividualPostProfilePage]
 	);
 
 	const markFeedRead = useCallback(async () => {
@@ -264,38 +330,16 @@ export const ProfilePage = () => {
 				<RiseAndFadeAnimationContainer>
 					{curUserData ? (
 						<>
-							<ProfileHeader
+							<ProfileContent
+								loadMorePosts={loadMorePosts}
+								morePostsLoading={morePostsLoading}
+								deletePost={deletePost}
 								viewingUser={viewingUser}
-								loading={postsLoading}
-								setViewingUser={setViewingUserProfile}
+								setViewingUserProfile={setViewingUserProfile}
+								postsLoading={postsLoading}
+								otherFriends={otherFriends}
+								hideProfileBottom={isIndividualPostProfilePage}
 							/>
-							{postsLoading || !viewingUser ? (
-								<Loading />
-							) : viewingUser &&
-							  viewingUser.posts &&
-							  viewingUser.posts.length > 0 ? (
-								<>
-									<div style={{ margin: '0' }}>
-										{viewingUser.posts.map(post => (
-											<ProfilePost
-												{...post}
-												key={post.id}
-												deletePost={deletePost}
-												author={viewingUser.id}
-												otherFriends={otherFriends}
-												postAuthorAvatarSrc={viewingUser.avatarSrc}
-											/>
-										))}
-									</div>
-									<ProfileBottom
-										morePostsLoading={morePostsLoading}
-										cursor={viewingUser.cursor || null}
-										loadMorePosts={loadMorePosts}
-									/>
-								</>
-							) : (
-								<EmptyState />
-							)}
 						</>
 					) : (
 						<Loading />

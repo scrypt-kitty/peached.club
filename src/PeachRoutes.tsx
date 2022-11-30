@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Routes, Navigate } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 
 import { LoginPage } from './pages/Login';
 import { Logout } from './pages/Login/Logout';
@@ -23,6 +23,9 @@ export const PeachRoutes = () => (
 		<Route path='/feed' element={<FeedPage />} />
 		<Route path='/friend'>
 			<Route path=':id' element={<ProfilePage />} />
+		</Route>
+		<Route path='/post'>
+			<Route path=':id' element={<ProfilePage isIndividualPostProfilePage />} />
 		</Route>
 		<Route path='/activity' element={<ActivityPage />} />
 		<Route path='/activity/friend-requests' element={<FriendRequestsPage />} />

@@ -1,5 +1,5 @@
 import React, { useEffect, useContext, useState, useCallback } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { Center } from '@mantine/core';
 
 import { PeachContext } from '../../PeachContext';
@@ -22,6 +22,7 @@ import { MTabs as Tabs } from '../../Theme/Mantine';
 import Loading from '../../Theme/Loading';
 import { FriendRequestsPreview } from '../../components/FriendRequest/FriendRequestsPreview';
 import { RiseAndFadeAnimationContainer } from '../../Theme/Animations';
+import { LinkStyled } from '../Feed/style';
 
 const EmptyTab = () => (
 	<Center>
@@ -35,6 +36,7 @@ export const ActivityPage = () => {
 	const [activityFeed, setActivityFeed] = useState<ActivityItem[] | null>(null);
 	const [cursor, setCursor] = useState(0);
 	const [isLoading, setIsLoading] = useState(true);
+	const navigate = useNavigate();
 
 	const getActivityFeed = useCallback(() => {
 		setIsLoading(true);
@@ -65,19 +67,13 @@ export const ActivityPage = () => {
 	}, []);
 
 	const commentNotifications = activityFeed?.filter(item => {
-		if (isCommentNotification(item)) {
-			return item;
-		}
+		return isCommentNotification(item);
 	});
 	const likeNotifications = activityFeed?.filter(item => {
-		if (isLikeNotification(item)) {
-			return item;
-		}
+		return isLikeNotification(item);
 	});
 	const mentionNotifications = activityFeed?.filter(item => {
-		if (isMentionNotification(item)) {
-			return item;
-		}
+		return isMentionNotification(item);
 	});
 
 	if (!peachFeed || !jwt) {
@@ -106,8 +102,11 @@ export const ActivityPage = () => {
 							{!isLoading &&
 								commentNotifications &&
 								commentNotifications.length < 1 && <EmptyTab />}
-							{commentNotifications &&
-								commentNotifications.map(item => (
+							{commentNotifications?.map(item => (
+								<LinkStyled
+									to={`/post/${item.body.postID}`}
+									key={`link-${item.createdTime}${item.body.postID}${item.body.authorStream.id}`}
+								>
 									<Preview
 										key={`${item.createdTime}${item.body.authorStream.id}`}
 										avatarSrc={item.body.authorStream.avatarSrc}
@@ -119,7 +118,8 @@ export const ActivityPage = () => {
 									>
 										<p>{getActivityPreviewMessage(item)}</p>
 									</Preview>
-								))}
+								</LinkStyled>
+							))}
 						</Tabs.Panel>
 
 						<Tabs.Panel value='mentions'>
@@ -129,17 +129,22 @@ export const ActivityPage = () => {
 								mentionNotifications.length < 1 && <EmptyTab />}
 							{mentionNotifications &&
 								mentionNotifications.map(item => (
-									<Preview
-										key={`${item.createdTime}${item.body.authorStream.id}`}
-										avatarSrc={item.body.authorStream.avatarSrc}
-										displayName={item.body.authorStream.displayName}
-										name={item.body.authorStream.name}
-										id={item.body.authorStream.id}
-										createdTime={item.createdTime}
-										message={getTextPreview(item)}
+									<LinkStyled
+										key={`link-${item.createdTime}${item.body.postID}${item.body.authorStream.id}`}
+										to={`/post/${item.body.authorStream}`}
 									>
-										<p>{getActivityPreviewMessage(item)}</p>
-									</Preview>
+										<Preview
+											key={`${item.createdTime}${item.body.authorStream.id}`}
+											avatarSrc={item.body.authorStream.avatarSrc}
+											displayName={item.body.authorStream.displayName}
+											name={item.body.authorStream.name}
+											id={item.body.authorStream.id}
+											createdTime={item.createdTime}
+											message={getTextPreview(item)}
+										>
+											<p>{getActivityPreviewMessage(item)}</p>
+										</Preview>
+									</LinkStyled>
 								))}
 						</Tabs.Panel>
 
@@ -150,15 +155,20 @@ export const ActivityPage = () => {
 								likeNotifications.length < 1 && <EmptyTab />}
 							{likeNotifications &&
 								likeNotifications.map(item => (
-									<Preview
-										key={`${item.createdTime}${item.body.authorStream.id}`}
-										avatarSrc={item.body.authorStream.avatarSrc}
-										displayName={item.body.authorStream.displayName}
-										name={item.body.authorStream.name}
-										id={item.body.authorStream.id}
-										createdTime={item.createdTime}
-										message={getTextPreview(item)}
-									></Preview>
+									<LinkStyled
+										key={`link-${item.createdTime}${item.body.postID}${item.body.authorStream.id}`}
+										to={`/post/${item.body.postID}`}
+									>
+										<Preview
+											key={`${item.createdTime}${item.body.authorStream.id}`}
+											avatarSrc={item.body.authorStream.avatarSrc}
+											displayName={item.body.authorStream.displayName}
+											name={item.body.authorStream.name}
+											id={item.body.authorStream.id}
+											createdTime={item.createdTime}
+											message={getTextPreview(item)}
+										/>
+									</LinkStyled>
 								))}
 						</Tabs.Panel>
 					</Tabs>

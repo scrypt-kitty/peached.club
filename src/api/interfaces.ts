@@ -308,18 +308,19 @@ export interface MentionNotification {
 	type: typeof NOTIFICATION_TYPE.MENTION;
 	body: {
 		authorStream: AuthorStream;
-		postId: string;
+		postID: string;
 		postMessage: Post['message'];
 		commentBody: string;
 	};
 	isUnread: boolean;
 	createdTime: number;
 }
+
 export interface LikeNotification {
 	type: typeof NOTIFICATION_TYPE.LIKE;
 	body: {
 		authorStream: AuthorStream;
-		postId: string;
+		postID: string;
 		postMessage: Post['message'];
 	};
 	isUnread: boolean;
@@ -330,7 +331,7 @@ export interface CommentNotification {
 	type: typeof NOTIFICATION_TYPE.COMMENT;
 	body: {
 		authorStream: AuthorStream;
-		postId: string;
+		postID: string;
 		postMessage: Post['message'];
 		commentBody: string;
 	};
@@ -350,7 +351,6 @@ export interface WaveNotification {
 
 export type ActivityItem =
 	| CommentNotification
-	| WaveNotification
 	| LikeNotification
 	| MentionNotification;
 
