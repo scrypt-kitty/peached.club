@@ -304,6 +304,7 @@ export enum NOTIFICATION_TYPE {
 	WAVE = 'wave',
 	MENTION = 'mention',
 }
+
 export interface MentionNotification {
 	type: typeof NOTIFICATION_TYPE.MENTION;
 	body: {
@@ -521,4 +522,17 @@ export type BlockListResponse = {
 		blockList?: CurUser[];
 	};
 	success?: number;
+};
+
+export type Weather = {
+	id: number;
+	main: string;
+};
+
+export type OpenWeatherResponse = {
+	main: {
+		temp: number;
+	};
+	weather: Weather[];
+	cod: number;
 };
