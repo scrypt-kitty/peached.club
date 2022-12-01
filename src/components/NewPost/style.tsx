@@ -68,7 +68,9 @@ export const ActionButton = styled.div`
 	align-self: start;
 	cursor: pointer;
 	margin: 0 ${rem(8)} ${rem(16)};
-	display: inline;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 
 	> input {
 		position: absolute;

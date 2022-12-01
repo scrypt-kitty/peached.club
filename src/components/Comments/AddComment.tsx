@@ -83,6 +83,7 @@ const AddComment: React.FC<AddCommentProps> = ({
 				onChange={e => setNewCommentText(e.target.value)}
 				placeholder='Say something nice'
 				autoFocus
+				data-autofocus
 			/>
 			<ButtonWrapper>
 				<Button
