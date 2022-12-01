@@ -164,21 +164,19 @@ export const ProfilePost = (props: Props) => {
 				onClickDelete={() => setDeletePromptShowing(true)}
 				isCurUsersPost={curUserData.id === props.author}
 			/>
-			{showComments ? (
-				<Comments
-					postAuthorAvatarSrc={props.postAuthorAvatarSrc}
-					postAuthorId={props.author}
-					onDismissComments={onClickComments}
-					comments={comments}
-					updateComments={updateComments}
-					requesterId={curUserData.id}
-					deleteComment={deleteComment}
-					mutualFriends={props.otherFriends}
-					newCommentText={newCommentText}
-					setNewCommentText={setNewCommentText}
-					isShowing={showComments}
-				/>
-			) : null}
+			<Comments
+				postAuthorAvatarSrc={props.postAuthorAvatarSrc}
+				postAuthorId={props.author}
+				onDismissComments={onClickComments}
+				comments={comments}
+				updateComments={updateComments}
+				requesterId={curUserData.id}
+				deleteComment={deleteComment}
+				mutualFriends={props.otherFriends}
+				newCommentText={newCommentText}
+				setNewCommentText={setNewCommentText}
+				isShowing={showComments}
+			/>
 		</PostWrapper>
 	);
 };
