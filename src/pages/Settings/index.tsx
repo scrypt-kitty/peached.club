@@ -244,7 +244,11 @@ export const PeachAccountSection = (props: PeachAccountSectionProps) => {
 			<Fieldset>
 				<Label htmlFor='displayName'>Avatar</Label>
 				<Avatar
-					src={httpTize(curUserData.avatarSrc) ?? DEFAULT_AVATAR_SRC}
+					src={
+						curUserData.avatarSrc
+							? httpTize(curUserData.avatarSrc)
+							: DEFAULT_AVATAR_SRC
+					}
 					size='xl'
 					radius='xl'
 				/>
