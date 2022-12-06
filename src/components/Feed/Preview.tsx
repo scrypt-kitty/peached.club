@@ -13,6 +13,7 @@ import {
 	Avatar,
 	FavoriteIndicator,
 } from './style';
+import { LinkStyled } from '../../pages/Feed/style';
 
 export interface PreviewProps {
 	id: string;
@@ -35,15 +36,21 @@ export const Preview: React.FC<PreviewProps> = props => {
 	return (
 		<FeedPostWrapper isUnread={false}>
 			<>
-				{props.isFavorite ? (
-					<FavoriteIndicator label='⭐️' inline size={16}>
+				<LinkStyled to={`/friend/${props.id}`}>
+					{props.isFavorite ? (
+						<FavoriteIndicator label='⭐️' inline size={16}>
+							<Avatar src={avatar} size='lg' radius='xl' isUnread={isUnread} />
+						</FavoriteIndicator>
+					) : (
 						<Avatar src={avatar} size='lg' radius='xl' isUnread={isUnread} />
-					</FavoriteIndicator>
-				) : (
-					<Avatar src={avatar} size='lg' radius='xl' isUnread={isUnread} />
-				)}
+					)}
+				</LinkStyled>
 				<InfoContainer>
-					<DisplayName>{props.displayName}</DisplayName>
+					<DisplayName>
+						<LinkStyled to={`/friend/${props.id}`}>
+							{props.displayName}
+						</LinkStyled>
+					</DisplayName>
 					{props.children}
 					<PostPreview>
 						<p>
