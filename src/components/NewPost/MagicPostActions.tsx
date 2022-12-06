@@ -77,7 +77,7 @@ function getWeatherEmoji(weather: Weather, time: number) {
 		return `🌤`;
 	} else if (id === 802) {
 		return `☁️`;
-	} else if (id === 803) {
+	} else if (id > 802) {
 		if (night) {
 			return `☁️`;
 		}

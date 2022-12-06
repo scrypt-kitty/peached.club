@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { rem } from 'polished';
 
+import { httpTize } from '../../utils/httpTize';
 import { LinkMessage } from '../../api/interfaces';
 
 import LinkIcon from '../../Theme/Icons/LinkIcon';
@@ -57,7 +58,9 @@ const LinkPost = (props: Props) => {
 			</a>
 			<LinkInfo>
 				<i>{props.description ?? props.url}</i>
-				{props.imageURL && <Image src={props.imageURL} alt={`Thumbnail`} />}
+				{props.imageURL && (
+					<Image src={httpTize(props.imageURL)} alt={`Thumbnail`} />
+				)}
 			</LinkInfo>
 		</LinkText>
 	);

@@ -19,6 +19,7 @@ import {
 } from '../../api/interfaces';
 import { LINKIFY_OPTIONS, DEFAULT_AVATAR_SRC } from '../../constants';
 import { makeApiCall } from '../../api/api';
+import { httpTize } from '../../utils/httpTize';
 
 import { Text } from '../../Theme/Type';
 import {
@@ -73,7 +74,7 @@ export const ProfileHeaderComponent = (props: ProfileHeaderComponentProps) => {
 			<ProfileHeaderContent>
 				<Avatar>
 					<img
-						src={avatarSrc}
+						src={httpTize(avatarSrc)}
 						style={{ opacity: loading ? '0.5' : '1' }}
 						alt={avatarAlt}
 					/>

@@ -4,6 +4,7 @@ import Linkify from 'linkify-react';
 import { PostContent, POST_TYPE } from '../../api/interfaces';
 import { LINKIFY_OPTIONS } from '../../constants';
 import { addNewlines } from './utils';
+import { httpTize } from '../../utils/httpTize';
 
 import { Image } from './style';
 
@@ -36,7 +37,7 @@ export const DisplayedPostMessage = ({
 			return (
 				<Image
 					key={`${id}-img-${index}`}
-					src={obj.src}
+					src={httpTize(obj.src)}
 					alt={`image for post ${id}`}
 					loading='lazy'
 				/>
@@ -45,7 +46,7 @@ export const DisplayedPostMessage = ({
 			return (
 				<Image
 					key={`${id}-gif-${index}`}
-					src={obj.src}
+					src={httpTize(obj.src)}
 					alt={`GIF`}
 					loading='lazy'
 				/>
@@ -56,7 +57,11 @@ export const DisplayedPostMessage = ({
 
 		case POST_TYPE.VIDEO:
 			return (
-				<VideoPost key={`${id}-vid-${index}`} src={obj.src} width={obj.width} />
+				<VideoPost
+					key={`${id}-vid-${index}`}
+					src={httpTize(obj.src)}
+					width={obj.width}
+				/>
 			);
 
 		case POST_TYPE.LOCATION:

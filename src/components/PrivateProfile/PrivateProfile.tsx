@@ -5,6 +5,7 @@ import api from '../../api/api';
 import { AddFriendResponse } from '../../api/interfaces';
 import ACTIONS from '../../api/constants';
 import { PeachContext } from '../../PeachContext';
+import { httpTize } from '../../utils/httpTize';
 
 import Modal from '../../Theme/Modal';
 import { Title } from '../../Theme/Type';
@@ -47,7 +48,11 @@ export const PrivateProfile: React.FC<PrivateProfileProps> = ({
 	return (
 		<Modal onKeyDown={onDismissPrivateProfile} isMini noSpaceBetween>
 			<PrivateProfileContainer>
-				<AvatarPreview src={avatarSrc} alt='a profile pic' loading='lazy' />
+				<AvatarPreview
+					src={httpTize(avatarSrc)}
+					alt='a profile pic'
+					loading='lazy'
+				/>
 				<Title>{displayName}</Title>
 				<ProfileHeaderHandle>@{username}</ProfileHeaderHandle>
 				<Bio>{bio}</Bio>

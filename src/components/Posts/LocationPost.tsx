@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
+
 import { LocationMessage } from '../../api/interfaces';
+import { httpTize } from '../../utils/httpTize';
 
 const LocationWrapper = styled.div`
 	display: flex;
@@ -35,7 +37,7 @@ const LocationPost = (props: LocationMessage) => {
 	return (
 		<LocationWrapper>
 			<LocationIcon>
-				<img src={props.iconSrc} alt={props.name} />
+				<img src={httpTize(props.iconSrc)} alt={props.name} />
 			</LocationIcon>
 			<LocationInfo>
 				<p>{props.name}</p>

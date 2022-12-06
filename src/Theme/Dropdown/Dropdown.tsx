@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import { httpTize } from '../../utils/httpTize';
+
 const Dropdown = styled.div`
 	margin: 0;
 	width: 100%;
@@ -65,7 +67,11 @@ export const DropdownUserItem: React.FC<DropdownUserItemProps> = ({
 	onClick,
 }) => (
 	<DropdownUserItemContainer onClick={() => onClick()}>
-		<img src={avatarSrc} alt={`${username}'s avatar'`} loading='lazy' />
+		<img
+			src={httpTize(avatarSrc)}
+			alt={`${username}'s avatar'`}
+			loading='lazy'
+		/>
 		<div>
 			<p>{truncate(displayName, 25)}</p>
 			<p>@{truncate(username, 25)}</p>

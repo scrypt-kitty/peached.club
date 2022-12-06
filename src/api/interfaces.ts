@@ -252,7 +252,7 @@ export interface PendingFriendRequest {
 		isPublic: boolean;
 		unreadPostCount: number;
 		lastRead: number;
-		avatarSrc: string;
+		avatarSrc?: string;
 		friendsSharing?: boolean;
 		followsYou?: boolean;
 		youFollow?: boolean;

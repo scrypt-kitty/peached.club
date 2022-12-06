@@ -10,16 +10,13 @@ import {
 } from '@mantine/core';
 import { IconCheck, IconMoonStars } from '@tabler/icons';
 
-import {
-	STORAGE_IS_DARK_MODE,
-	STORAGE_TOKEN_KEY,
-	STORAGE_USER_KEY,
-} from '../../constants';
+import { STORAGE_TOKEN_KEY, STORAGE_USER_KEY } from '../../constants';
 import { MiniLoader } from '../../Theme/Loading';
 import { PeachContext } from '../../PeachContext';
 import ACTIONS from '../../api/constants';
 import { ImgBBUploadResponse, NameChangeResponse } from '../../api/interfaces';
 import api from '../../api';
+import { httpTize } from '../../utils/httpTize';
 
 import { Page } from '../../Theme/Layout';
 import { Title, SubTitle } from '../../Theme/Type';
@@ -247,7 +244,7 @@ export const PeachAccountSection = (props: PeachAccountSectionProps) => {
 			<Fieldset>
 				<Label htmlFor='displayName'>Avatar</Label>
 				<Avatar
-					src={curUserData.avatarSrc ?? DEFAULT_AVATAR_SRC}
+					src={httpTize(curUserData.avatarSrc) ?? DEFAULT_AVATAR_SRC}
 					size='xl'
 					radius='xl'
 				/>

@@ -5,9 +5,11 @@ import { IconCheck, IconX, IconBan } from '@tabler/icons';
 import { InfoContainer } from '../Feed/style';
 import { Header3, Text } from '../../Theme/Type';
 import { FriendRequestContainer } from './style';
+import { httpTize } from '../../utils/httpTize';
+import { DEFAULT_AVATAR_SRC } from '../../constants';
 
 export type FriendRequestItemProps = {
-	avatarSrc: string;
+	avatarSrc?: string;
 	displayName: string;
 	name: string;
 	bio: string;
@@ -17,10 +19,13 @@ export type FriendRequestItemProps = {
 };
 
 export const FriendRequestItem = (props: FriendRequestItemProps) => {
-	const { onClickAccept = null, onClickBlock = null } = props;
+	const { onClickAccept = null, onClickBlock = null, avatarSrc } = props;
 	return (
 		<FriendRequestContainer>
-			<Avatar src={props.avatarSrc} radius='xl' />
+			<Avatar
+				src={avatarSrc ? httpTize(avatarSrc) : DEFAULT_AVATAR_SRC}
+				radius='xl'
+			/>
 			<InfoContainer>
 				<Header3>{props.displayName}</Header3>
 				<Text muted>@{props.name}</Text>
@@ -43,7 +48,7 @@ export const FriendRequestItem = (props: FriendRequestItemProps) => {
 				>
 					<IconX size={16} />
 				</ActionIcon>
-				{onClickBlock && (
+				{/* {onClickBlock && (
 					<ActionIcon
 						variant='filled'
 						color='gray'
@@ -51,7 +56,7 @@ export const FriendRequestItem = (props: FriendRequestItemProps) => {
 					>
 						<IconBan size={16} />
 					</ActionIcon>
-				)}
+				)} */}
 			</Flex>
 		</FriendRequestContainer>
 	);
