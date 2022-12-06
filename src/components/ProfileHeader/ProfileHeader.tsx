@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import Linkify from 'linkify-react';
 import {
 	ActionIcon,
@@ -8,6 +8,7 @@ import {
 	Stack,
 	Flex,
 	Space,
+	Skeleton,
 } from '@mantine/core';
 import { IconMoodSmileBeam, IconStar } from '@tabler/icons';
 
@@ -20,6 +21,7 @@ import {
 import { LINKIFY_OPTIONS, DEFAULT_AVATAR_SRC } from '../../constants';
 import { makeApiCall } from '../../api/api';
 import { httpTize } from '../../utils/httpTize';
+import { getRandomBackgroundUrl } from './utils';
 
 import { Text } from '../../Theme/Type';
 import {
@@ -69,54 +71,87 @@ export const ProfileHeaderComponent = (props: ProfileHeaderComponentProps) => {
 			: 'outline'
 		: 'filled';
 
+	const friendInteractionsShowing = !isLoggedInUser && viewingUser && !loading;
+
 	return (
 		<ProfileHeaderContainer>
 			<ProfileHeaderContent>
-				<Avatar>
-					<img
-						src={httpTize(avatarSrc)}
-						style={{ opacity: loading ? '0.5' : '1' }}
-						alt={avatarAlt}
-					/>
-				</Avatar>
+				{loading || !viewingUser ? (
+					<Skeleton height={100} circle mb='xl' />
+				) : (
+					<Avatar>
+						<img
+							src={httpTize(avatarSrc)}
+							style={{ opacity: loading ? '0.5' : '1' }}
+							alt={avatarAlt}
+						/>
+					</Avatar>
+				)}
+
 				<ProfileHeaderText>
-					<h2>{displayName}</h2>
-					<ProfileHeaderHandle>@{username}</ProfileHeaderHandle>
-					<p>
-						{loading || !viewingUser ? (
-							'...'
-						) : (
-							<Linkify tagName='span' options={LINKIFY_OPTIONS}>
-								{viewingUser.bio}
-							</Linkify>
-						)}
-					</p>
+					{loading || !viewingUser ? (
+						<Skeleton height={28} width='60%' />
+					) : (
+						<h2>{displayName}</h2>
+					)}
+
+					{loading || !viewingUser ? (
+						<Skeleton height={16} mt={6} width='20%' />
+					) : (
+						<ProfileHeaderHandle>@{username}</ProfileHeaderHandle>
+					)}
+
+					{loading || !viewingUser ? (
+						<Skeleton height={16} mt={6} />
+					) : (
+						<p>
+							{loading || !viewingUser ? (
+								'...'
+							) : (
+								<Linkify tagName='span' options={LINKIFY_OPTIONS}>
+									{viewingUser.bio}
+								</Linkify>
+							)}
+						</p>
+					)}
 				</ProfileHeaderText>
-				{!isLoggedInUser && viewingUser && !loading && (
-					<>
-						<Flex>
+				<>
+					<Flex>
+						{friendInteractionsShowing && (
 							<ActionIcon
 								variant={followingIconVariant}
-								color='pink'
-								onClick={onClickFollowingButton}
+								color={friendInteractionsShowing ? 'pink' : 'gray'}
+								onClick={
+									friendInteractionsShowing
+										? onClickFollowingButton
+										: () => null
+								}
 							>
-								<IconMoodSmileBeam size={16} />
+								<IconMoodSmileBeam
+									size={16}
+									color={friendInteractionsShowing ? 'white' : 'gray'}
+								/>
 							</ActionIcon>
-							{viewingUser.youFollow && (
-								<>
-									<Space w='sm' />
-									<ActionIcon
-										variant={favoriteIconVariant}
-										color='yellow'
-										onClick={onClickFavoriteButton}
-									>
-										<IconStar size={16} />
-									</ActionIcon>
-								</>
-							)}
-						</Flex>
-					</>
-				)}
+						)}
+
+						{friendInteractionsShowing && viewingUser.youFollow && (
+							<>
+								<Space w='sm' />
+								<ActionIcon
+									variant={favoriteIconVariant}
+									color='yellow'
+									onClick={
+										friendInteractionsShowing
+											? onClickFavoriteButton
+											: () => null
+									}
+								>
+									<IconStar size={16} />
+								</ActionIcon>
+							</>
+						)}
+					</Flex>
+				</>
 			</ProfileHeaderContent>
 		</ProfileHeaderContainer>
 	);

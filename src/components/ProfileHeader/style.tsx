@@ -1,18 +1,7 @@
 import styled from 'styled-components';
 import { rem } from 'polished';
 
-const backgrounds = [
-	'https://imgur.com/upR9smx.jpg',
-	'https://imgur.com/FYvdKAb.jpg',
-	'https://imgur.com/GRyoWfj.jpg',
-	'https://imgur.com/aqfkgt5.jpg',
-	'https://imgur.com/xyAcBRG.jpg',
-];
-
-const numBackgrounds = backgrounds.length;
-
-const getRandomBackgroundUrl = () =>
-	`${backgrounds[Math.floor(Math.random() * numBackgrounds)]}`;
+import { getRandomBackgroundUrl } from './utils';
 
 export const ProfileHeaderContainer = styled.div`
 	padding-top: ${rem(50)};

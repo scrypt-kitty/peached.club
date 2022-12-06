@@ -1,6 +1,7 @@
 import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 import styled from 'styled-components';
+import { MantineProvider } from '@mantine/core';
 
 import {
 	ProfileHeaderComponent,
@@ -15,9 +16,15 @@ const Story = (props: ProfileHeaderComponentProps & { variant: string }) => {
 	const { variant, ...rest } = props;
 	return (
 		<ThemeProvider theme={variant === 'dark' ? darkTheme : lightTheme}>
-			<Page>
-				<ProfileHeaderComponent {...rest} />
-			</Page>
+			<MantineProvider
+				withGlobalStyles
+				withNormalizeCSS
+				theme={{ colorScheme: variant === 'dark' ? 'dark' : 'light' }}
+			>
+				<Page>
+					<ProfileHeaderComponent {...rest} />
+				</Page>
+			</MantineProvider>
 		</ThemeProvider>
 	);
 };
