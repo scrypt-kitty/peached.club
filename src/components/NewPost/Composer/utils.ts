@@ -66,6 +66,71 @@ export const parseHTMLForUpload = (
 		.replace(/<li>/g, '<p>• ')
 		.replace(/<\/li>/g, '</p>');
 
+	let curImgIndex = curText.indexOf(HTML_IMG_START);
+	// add p tags around all images, if there are none
+	while (true) {
+		if (curImgIndex < 0) {
+			break;
+		}
+
+		const thisPart = curText.slice(curImgIndex);
+
+		const prevPartCheck2 = curText.slice(curImgIndex - 4, curImgIndex);
+		if (prevPartCheck2 === '</p>') {
+			curText = curText.slice(0, curImgIndex) + '<p>' + thisPart;
+			curImgIndex += 3;
+		} else {
+			const prevPartCheck1 = curText.slice(curImgIndex - 3, curImgIndex);
+			if (prevPartCheck1 !== '<p>') {
+				curText = curText.slice(0, curImgIndex) + '</p><p>' + thisPart;
+				curImgIndex += 7;
+			}
+		}
+
+		const relativeEndImgIndex = thisPart.indexOf(HTML_IMG_END);
+
+		// weird case
+		if (relativeEndImgIndex < 0) {
+			console.log('weird case');
+			break;
+		}
+
+		let nextPartStartIndex = curImgIndex + relativeEndImgIndex + 2;
+		const nextPartCheck1 = curText.slice(
+			nextPartStartIndex,
+			nextPartStartIndex + 3
+		);
+		const nextPartCheck2 = curText.slice(
+			nextPartStartIndex,
+			nextPartStartIndex + 4
+		);
+
+		const theRest = curText.slice(nextPartStartIndex);
+		if (nextPartCheck1 === '<p>') {
+			curText = curText.slice(0, nextPartStartIndex) + '</p>' + theRest;
+			nextPartStartIndex += 4;
+		} else {
+			if (nextPartCheck2 !== '</p>') {
+				curText =
+					curText.slice(0, nextPartStartIndex) +
+					'</p><p>' +
+					curText.slice(nextPartStartIndex);
+
+				nextPartStartIndex += 7;
+			}
+		}
+
+		const nextImgRelativeIndex = curText
+			.slice(nextPartStartIndex)
+			.indexOf(HTML_IMG_START);
+
+		if (nextImgRelativeIndex < 0) {
+			break;
+		}
+
+		curImgIndex = nextPartStartIndex + nextImgRelativeIndex;
+	}
+
 	while (curText.length > 0) {
 		const startTextIndex = curText.indexOf(HTML_P_START);
 
@@ -88,8 +153,25 @@ export const parseHTMLForUpload = (
 					uploadedImages
 				);
 				p = [...p, ...imageMessages];
-			} else {
+			}
+			// else if (startImgIndex > 0) {
+			// 	// get where each image begins
+			// 	let curIndex = 0, curImgIndex = startImgIndex;
+			// 	while (true) {
+			// 		if (curIndex >= elementContent.length) {
+			// 			break;
+			// 		}
+
+			// 		curImgIndex =
+
+			// 	}
+
+			// }
+			else {
 				// handle text
+
+				// create segments
+
 				const startLineBreakIndex = curText.indexOf(HTML_NEWLINE_START);
 				const lastPostPart = p[p.length - 1];
 				if (
