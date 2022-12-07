@@ -10,6 +10,8 @@ import { Comment } from './Comment/Comment';
 import { MModal as Modal } from '../../Theme/Mantine/Modal';
 import { AllComments, DeletePrompt } from './style';
 import { Text } from '../../Theme/Type';
+import { DEFAULT_AVATAR_SRC } from '../../constants';
+import { httpTize } from '../../utils/httpTize';
 
 interface SharedCommentsProps {
 	deleteComment: (id: string) => void;
@@ -87,14 +89,14 @@ export const Comments = (props: CommentsProps) => {
 	const getAvatar = (id: string) => {
 		// commenter is author
 		if (id === postAuthorId) {
-			return postAuthorAvatarSrc;
+			return httpTize(postAuthorAvatarSrc);
 		}
 		const res = mutualFriends.filter(friend => friend.id === id);
 		if (res.length === 0 || !res[0].avatarSrc) {
-			return '/defaultavatar.jpg';
+			return DEFAULT_AVATAR_SRC;
 		}
 
-		return res[0].avatarSrc;
+		return httpTize(res[0].avatarSrc);
 	};
 
 	const addReplyHandle = (username: string) => {
