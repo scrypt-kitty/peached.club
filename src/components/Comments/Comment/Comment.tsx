@@ -7,6 +7,7 @@ import {
 	MutualFriend,
 	User,
 } from '../../../api/interfaces';
+import { httpTize } from '../../../utils/httpTize';
 
 import Button from '../../../Theme/Button';
 import { ModalBackdrop } from '../../../Theme/Modal';
@@ -116,7 +117,11 @@ export const Comment: React.FC<CommentProps> = (props: CommentProps) => {
 				<AvatarArea>
 					<a href={`/friend/${props.author.id}`}>
 						<Avatar
-							src={props.author.avatarSrc ?? props.avatarSrc}
+							src={
+								props.author.avatarSrc
+									? httpTize(props.author.avatarSrc)
+									: props.avatarSrc
+							}
 							displayName={props.author.displayName}
 						/>
 					</a>

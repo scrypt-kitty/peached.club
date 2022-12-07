@@ -91,7 +91,7 @@ export const parseHTMLForUpload = (
 
 		// weird case
 		if (relativeEndImgIndex < 0) {
-			console.log('weird case');
+			console.error(`Hmm... an image was broken.`);
 			break;
 		}
 
@@ -153,25 +153,7 @@ export const parseHTMLForUpload = (
 					uploadedImages
 				);
 				p = [...p, ...imageMessages];
-			}
-			// else if (startImgIndex > 0) {
-			// 	// get where each image begins
-			// 	let curIndex = 0, curImgIndex = startImgIndex;
-			// 	while (true) {
-			// 		if (curIndex >= elementContent.length) {
-			// 			break;
-			// 		}
-
-			// 		curImgIndex =
-
-			// 	}
-
-			// }
-			else {
-				// handle text
-
-				// create segments
-
+			} else {
 				const startLineBreakIndex = curText.indexOf(HTML_NEWLINE_START);
 				const lastPostPart = p[p.length - 1];
 				if (
