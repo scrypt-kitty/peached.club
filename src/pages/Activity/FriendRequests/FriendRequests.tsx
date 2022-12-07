@@ -68,7 +68,7 @@ export const FriendRequests = (props: FriendRequestsProps) => {
 								avatarSrc={req.stream.avatarSrc}
 								onClickAccept={() => props.onClickAccept(req.id)}
 								onClickDecline={() => props.onClickDecline(req.id)}
-								onClickBlock={() => props.onClickBlock(req.id)}
+								onClickBlock={() => props.onClickBlock(req.stream.id)}
 								bio={req.stream.bio}
 							/>
 						))}
@@ -98,6 +98,12 @@ export const FriendRequests = (props: FriendRequestsProps) => {
 	);
 };
 
+enum ModalMessage {
+	DELETE = 'delete',
+	BLOCK = 'block',
+	NONE = '',
+}
+
 export const FriendRequestsPage = () => {
 	const {
 		inboundFriendRequests,
@@ -108,6 +114,7 @@ export const FriendRequestsPage = () => {
 	} = useContext(PeachContext);
 
 	const [isModalShowing, setIsModalShowing] = useState(false);
+	const [modalMessageType, setModalMessageType] = useState(ModalMessage.NONE);
 	const [errorMesssage, setErrorMessage] = useState('');
 	const [successMessage, setSuccessMessage] = useState('');
 
@@ -146,19 +153,18 @@ export const FriendRequestsPage = () => {
 		async (id: string) => {
 			const uri = `friend-request/${id}/decline`;
 			try {
-				const response = await makeApiCall<{ data: DefaultResponse }>({
+				const response = await makeApiCall<DefaultResponse>({
 					uri,
 					jwt,
 					method: 'POST',
 				});
-				if (!response || !response.data.success) {
+				if (!response || !response.success) {
 					throw Error('No');
-				} else {
-					setInboundFriendRequests(
-						inboundFriendRequests.filter(r => r.id !== id)
-					);
-					setSuccessMessage('Friend request was declined!');
 				}
+				setInboundFriendRequests(
+					inboundFriendRequests.filter(r => r.id !== id)
+				);
+				setSuccessMessage('Friend request was declined!');
 			} catch {
 				setErrorMessage('Oops! Please try again in a bit.');
 				console.error(
@@ -172,6 +178,7 @@ export const FriendRequestsPage = () => {
 	const onClickDecline = (id: string) => {
 		deleteFriendRequest(id);
 		setIsModalShowing(false);
+		setModalMessageType(ModalMessage.NONE);
 	};
 
 	const cancelFriendRequest = useCallback(
@@ -208,7 +215,45 @@ export const FriendRequestsPage = () => {
 		setIsModalShowing(false);
 	};
 
-	const onClickBlock = (id: string) => {};
+	const blockUser = useCallback(
+		async (id: string) => {
+			const uri = `stream/id/${id}/block`;
+			try {
+				const response = await makeApiCall<DefaultResponse>({
+					uri,
+					jwt,
+					method: 'POST',
+				});
+				if (!response || !response.success) {
+					throw Error('No');
+				} else {
+					setInboundFriendRequests(
+						inboundFriendRequests.filter(r => r.id !== id)
+					);
+					setSuccessMessage('User was blocked. ¡Hasta la vista!');
+				}
+			} catch {
+				setErrorMessage('Oops! Please try again in a bit.');
+				console.error(
+					`Error blocking user ${id}. Please contact peached.app@gmail.com.`
+				);
+			}
+		},
+		[jwt, inboundFriendRequests, outboundFriendRequests]
+	);
+
+	const onClickBlock = (id: string) => {
+		blockUser(id);
+		setIsModalShowing(false);
+		setModalMessageType(ModalMessage.NONE);
+	};
+
+	let modalMessage = '';
+	if (modalMessageType === ModalMessage.DELETE) {
+		modalMessage = `Delete friend request? 🥲`;
+	} else if (modalMessageType === ModalMessage.BLOCK) {
+		modalMessage = `Block user?`;
+	}
 
 	return (
 		<>
@@ -220,7 +265,7 @@ export const FriendRequestsPage = () => {
 			>
 				<Center>
 					<Stack>
-						<Text>Delete friend request? 🥲</Text>
+						<Text>{modalMessage}</Text>
 						<Flex>
 							<Button color='red'>Delete</Button>
 							<Space w='md' />

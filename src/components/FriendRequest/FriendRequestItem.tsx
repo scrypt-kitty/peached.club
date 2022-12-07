@@ -48,7 +48,7 @@ export const FriendRequestItem = (props: FriendRequestItemProps) => {
 				>
 					<IconX size={16} />
 				</ActionIcon>
-				{/* {onClickBlock && (
+				{onClickBlock && (
 					<ActionIcon
 						variant='filled'
 						color='gray'
@@ -56,7 +56,7 @@ export const FriendRequestItem = (props: FriendRequestItemProps) => {
 					>
 						<IconBan size={16} />
 					</ActionIcon>
-				)} */}
+				)}
 			</Flex>
 		</FriendRequestContainer>
 	);
